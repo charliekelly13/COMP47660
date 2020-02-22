@@ -1,6 +1,5 @@
 package universityWebApp.controller;
 
-
 import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Student;
 import universityWebApp.repository.StudentRepository;
@@ -24,11 +23,11 @@ public class WelcomeController {
         return "welcome";
     }
 
-    // Delete a Note
+    // Delete a Student
     @RequestMapping("/delete/{id}")
-    public String deleteBook(@PathVariable(value = "id") Long bookId, Model model) throws StudentNotFoundException {
-        Student student = studentRepository.findById(bookId)
-                .orElseThrow(() -> new StudentNotFoundException(bookId));
+    public String deleteBook(@PathVariable(value = "id") Long studentId, Model model) throws StudentNotFoundException {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException(studentId));
 
         studentRepository.delete(student);
 
