@@ -11,58 +11,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@SessionAttributes("name")
 public class WelcomeController {
+    private boolean login=false;
 
-    @Autowired
-    StudentRepository studentRepository;
 
-    @RequestMapping("/home")
+
+    @RequestMapping("/")
     public String viewHomePage(Model model) {
-        List<Student> listStudents = studentRepository.findAll();
-        model.addAttribute("listStudents", listStudents);
-        return "welcome";
+        if (!login){
+            return "login";
+        }
+        //List<Student> listStudents = studentRepository.findAll();
+        //model.addAttribute("listStudents", listStudents);
+        return "module";//maybe make it return welcome and make that be the modules
     }
 
-    // Delete a Student
-    @RequestMapping("/delete/{id}")
-    public String deleteBook(@PathVariable(value = "id") Long studentId, Model model) throws StudentNotFoundException {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new StudentNotFoundException(studentId));
-
-        studentRepository.delete(student);
-
-        return viewHomePage(model);
-
-    }
-    // Create a new Note
-    @RequestMapping("/new")
-    public String createBook() {
-        return "editform";
-    }
-
-    // Create a new Note
-    @PostMapping("/students")
-    public String createNote(@ModelAttribute("student") Student student, Model model) {
-        studentRepository.save(student);
-        return viewHomePage(model);
-    }
-
-    // Update a Note
-    @RequestMapping(value = "students/save", method = RequestMethod.POST)
-    public String updateNote(@ModelAttribute("student") Student student, Model model) throws StudentNotFoundException {
-
-        studentRepository.save(student);
-
-        return viewHomePage(model);
-    }
-
-    // Get a Single Note
-    @GetMapping("/students/{id}")
-    public String getNoteById(@PathVariable(value = "id") Long studentId, Model model) throws StudentNotFoundException {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new StudentNotFoundException(studentId));
-        model.addAttribute("student", student);
-        return "editform";
-    }
 
 }

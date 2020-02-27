@@ -10,18 +10,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes("name")
 public class LoginController {
 	
 	@Autowired
 	LoginService service;
 	
-	@RequestMapping(value="/", method = RequestMethod.GET)
+	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
 		return "login";
 	}
 	
-	@RequestMapping(value="/", method = RequestMethod.POST)
+	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String showWelcomePage(ModelMap model, @RequestParam String name, @RequestParam String password){
 		
 		boolean isValidUser = service.validateUser(name, password);
@@ -34,7 +33,7 @@ public class LoginController {
 		model.put("name", name);
 		model.put("password", password);
 		
-		return "welcome";
+		return "module";
 	}
 
 	@RequestMapping(value="/register",method = RequestMethod.POST)
