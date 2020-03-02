@@ -40,18 +40,18 @@ CREATE TABLE IF NOT EXISTS `university`.`modules` (
     REFERENCES `university`.`students` (`id`));
 
 CREATE TABLE IF NOT EXISTS `university`.`enrollment` (
-  `id_student` VARCHAR(45) NOT NULL,
-  `id_module` VARCHAR(45) NOT NULL,
+  `student_id` VARCHAR(45) NOT NULL,
+  `module_id` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id_student`, `id_module`),
   INDEX `Enrollment-Modules_idx` (`id_module` ASC) VISIBLE,
   CONSTRAINT `Enrollment-Modules`
-    FOREIGN KEY (`id_module`)
+    FOREIGN KEY (`module_id`)
     REFERENCES `university`.`modules` (`id`),
   CONSTRAINT `Enrollment-Student`
-    FOREIGN KEY (`id_student`)
+    FOREIGN KEY (`student_id`)
     REFERENCES `university`.`students` (`id`));
 
 CREATE TABLE IF NOT EXISTS `university`.`staff` (
-  `id_staff` INT NOT NULL,
+  `staff_id` INT NOT NULL,
   `staff_name` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id_staff`));
+  PRIMARY KEY (`staff_id`));
