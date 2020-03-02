@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Module;
 import universityWebApp.model.Student;
-import universityWebApp.repository.EnrolledRepository;
+import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.ModuleRepository;
 import universityWebApp.repository.StudentRepository;
 
@@ -24,5 +24,5 @@ public class StudentController {
     ModuleRepository moduleRepository;
 
     @Autowired
-    EnrolledRepository enrolledRepository;
+    EnrollmentRepository enrollmentRepository;
 }

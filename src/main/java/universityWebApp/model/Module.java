@@ -1,28 +1,21 @@
 package universityWebApp.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 @Table(name = "modules")
-//@NamedQuery(name = "Enrolled.findNameByModuleID",
-//        query = "select a.moduleName from Module a where a.id_module = ?1")
-//@NamedQuery(name = "Enrolled.findDescriptionByModuleID",
-//        query = "select a.moduleDescription from Module a where a.id_module = ?1")
-//@NamedQuery(name = "Enrolled.findCoordinatorByModuleID",
-//        query = "select a.coordinatorName from Module a where a.id_module = ?1")
-//@NamedQuery(name = "Enrolled.findEnrolledByModuleID",
-//        query = "select a.enrolledStudents from Module a where a.id_module = ?1")
-//@NamedQuery(name = "Enrolled.findMaximumByModuleID",
-//        query = "select a.maximumStudents from Module a where a.id_module = ?1")
 public class Module {
     //Todo  and view module statistics (number of enrolled students, grades distributions for previous editions of the module).
     @NotBlank
     private String moduleName;
+
     @Id
-    @GeneratedValue
     private String id;
 
     @NotBlank
@@ -43,6 +36,10 @@ public class Module {
         this.maximumStudents = maximumStudents;
     }
     public String getId(){ return id;}
+
+    public String getId() {
+        return id;
+    }
 
     public int getMaximumStudents() {
         return maximumStudents;
