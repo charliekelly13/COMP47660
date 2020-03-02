@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `university`.`modules` (
 CREATE TABLE IF NOT EXISTS `university`.`enrollment` (
   `student_id` VARCHAR(45) NOT NULL,
   `module_id` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id_student`, `module_id`),
+  PRIMARY KEY (`student_id`, `module_id`),
   CONSTRAINT `Enrollment-Modules`
     FOREIGN KEY (`module_id`)
     REFERENCES `university`.`modules` (`id`),
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `university`.`staff` (
   PRIMARY KEY (`coordinator_id`, `module_id`),
   CONSTRAINT `Coordinates-Modules`
     FOREIGN KEY (`module_id`)
-    REFERENCES `university`.`modules` (`module_id`),
+    REFERENCES `university`.`modules` (`id`),
   CONSTRAINT `Coordinates-Staff`
     FOREIGN KEY (`coordinator_id`)
     REFERENCES `university`.`staff` (`staff_id`));

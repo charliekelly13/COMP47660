@@ -37,10 +37,6 @@ public class Module {
     }
     public String getId(){ return id;}
 
-    public String getId() {
-        return id;
-    }
-
     public int getMaximumStudents() {
         return maximumStudents;
     }

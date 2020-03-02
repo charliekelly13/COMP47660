@@ -44,7 +44,7 @@ public class ModuleController {
             return("login");
         }
 
-        Module modules = moduleRepository.findById(moduleCode)
+        Module module = moduleRepository.findById(moduleCode)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleCode));
 
         model.addAttribute("module", module);
