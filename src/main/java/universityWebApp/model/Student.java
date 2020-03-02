@@ -14,7 +14,8 @@ public class Student {
     private String username;
     @NotBlank
     private String password;
-    @NotBlank
+    @Id
+    @GeneratedValue
     private Long id;
     @NotBlank
     private String student_first_name;

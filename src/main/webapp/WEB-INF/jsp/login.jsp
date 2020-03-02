@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>First Web Application</title>
+<title>Login</title>
 </head>
 
 <body>
@@ -11,6 +11,7 @@
 		Password : <input type="password" name="password" /> 
 		<input type="submit" />
 	</form>
+	<a href="/register">Register</a>
 </body>
 
 </html>

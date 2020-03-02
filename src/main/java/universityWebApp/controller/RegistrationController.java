@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class RegistrationController {
 
     @RequestMapping(value="/register",method = RequestMethod.GET)
-    public String showRegisterpage(ModelMap model){
-        return "registrationform";
+    public String showRegisterPage(ModelMap model) {
+        return "register";
     }
 
     @RequestMapping(value="/register",method = RequestMethod.POST)
-    public String showRegisterpage(ModelMap model){
-
-        return "registrationform";
+    public String postRegisterPage(ModelMap model) {
+        return "register";
     }
-
 }

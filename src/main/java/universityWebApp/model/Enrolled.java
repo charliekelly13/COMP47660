@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "enrolled")
 @IdClass(EnrolledId.class)
-@NamedQuery()//todo add query lol
+// @NamedQuery()//todo add query lol
 public class Enrolled {
     @Id
     @NotBlank
