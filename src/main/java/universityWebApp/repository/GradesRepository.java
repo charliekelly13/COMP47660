@@ -1,6 +1,4 @@
 package universityWebApp.repository;
 
-
-public interface StaffRepository {
-
+public interface GradesRepository {
 }

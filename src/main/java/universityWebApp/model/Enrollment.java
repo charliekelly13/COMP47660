@@ -10,12 +10,10 @@ import javax.validation.constraints.NotBlank;
         query = "select a.id_module from Enrolled a where a.id_student = ?1")
 @NamedQuery(name = "Enrolled.findByModuleID",
         query = "select a.id_student from Enrolled a where a.id_module = ?1")
-@NamedQuery(name = "Enrollment.insertEnrollment",
-        query = "INSERT INTO enrollment(student_id, grade, module_id), VALUES(?1,?2,?3);")
 public class Enrollment {
     @Id
     @NotBlank
-    private Long moduleId;
+    private String moduleId;
 
     @Id
     @NotBlank
@@ -23,7 +21,7 @@ public class Enrollment {
 
     public Enrollment(){super();}
 
-    public Enrollment(Long moduleId, String studentId){
+    public Enrollment(String moduleId, String studentId){
         super();
         this.moduleId = moduleId;
         this.studentId = studentId;
