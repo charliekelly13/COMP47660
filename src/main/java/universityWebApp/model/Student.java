@@ -6,9 +6,9 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "students")
 public class Student {
-    //name, surname,  student ID, address, phone number, email address, + username&password
     @NotBlank
     private String username;
+
     @NotBlank
     private String password;
 
@@ -36,6 +36,7 @@ public class Student {
     @NotBlank
     private String emailAddress;
 
+    @NotBlank
     private boolean feesPaid;
 
     public Student() {

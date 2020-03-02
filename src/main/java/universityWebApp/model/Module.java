@@ -27,13 +27,15 @@ public class Module {
 
     public Module() {}
 
-    public Module(String moduleName, String moduleDescription, String coordinatorName, int enrolledStudents, int maximumStudents) {
+    public Module(String id, String moduleName, String moduleDescription, String coordinatorName, int enrolledStudents, int maximumStudents) {
+        this.id = id;
         this.moduleName = moduleName;
         this.moduleDescription = moduleDescription;
         this.coordinatorName = coordinatorName;
         this.enrolledStudents = enrolledStudents;
         this.maximumStudents = maximumStudents;
     }
+    public String getId(){ return id;}
 
     public String getId() {
         return id;

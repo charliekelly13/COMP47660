@@ -19,10 +19,14 @@ public class HomeController {
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
     public String viewHomePage(Model model) {
-        List<Module> modules =  moduleRepository.findAll();
-        model.addAttribute("modules", modules);
-        return "home";
-    }
+        if (model.containsAttribute("LoggedIn")) {
+            List<Module> modules =  moduleRepository.findAll();
+            model.addAttribute("modules", modules);
 
+            return "home";
+        }
+
+        return "login";
+    }
 
 }
