@@ -16,7 +16,7 @@ public class Student {
     private String password;
     @Id
     @GeneratedValue
-    private Long id;
+    private String id;
     @NotBlank
     private String student_first_name;
     @NotBlank
@@ -35,7 +35,7 @@ public class Student {
         super();
     }
 
-    public Student(Long id, String student_first_name, String student_last_name, String gender, String address, String phoneNumber, String emailAddress) {
+    public Student(String id, String student_first_name, String student_last_name, String gender, String address, String phoneNumber, String emailAddress) {
         super();
         this.id = id;
         this.student_first_name = student_first_name;
@@ -46,7 +46,7 @@ public class Student {
         this.emailAddress = emailAddress;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

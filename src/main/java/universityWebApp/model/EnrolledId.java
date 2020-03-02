@@ -6,13 +6,13 @@ import java.util.Objects;
 public class EnrolledId implements Serializable {
 
 
-    Long id_module;
+    String id_module;
 
-    Long id_student;
+    String id_student;
 
     public EnrolledId(){}
 
-    public EnrolledId( Long id_module, Long id_student){
+    public EnrolledId( String id_module, String id_student){
         this.id_module = id_module;
         this.id_student = id_student;
     }
@@ -31,10 +31,10 @@ public class EnrolledId implements Serializable {
         return Objects.hash(id_module, id_student);
     }
 
-    public Long getId_student(){
+    public String getId_student(){
         return id_student;
     }
-    public Long getIid_module(){
+    public String getIid_module(){
         return id_module;
     }
 }
