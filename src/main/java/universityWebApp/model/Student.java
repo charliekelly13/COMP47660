@@ -1,7 +1,7 @@
 package universityWebApp.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -34,6 +34,7 @@ public class Student {
     @Id
     @GeneratedValue
     private String id;
+
     @NotBlank
     private String student_first_name;
     @NotBlank
