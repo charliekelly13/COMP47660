@@ -14,9 +14,9 @@ public class Module {
     //Todo  and view module statistics (number of enrolled students, grades distributions for previous editions of the module).
     @NotBlank
     private String moduleName;
+
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     @NotBlank
     private String moduleDescription;
@@ -33,6 +33,10 @@ public class Module {
         this.coordinatorName = coordinatorName;
         this.enrolledStudents = enrolledStudents;
         this.maximumStudents = maximumStudents;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public int getMaximumStudents() {

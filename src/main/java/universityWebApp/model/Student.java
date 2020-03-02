@@ -11,63 +11,133 @@ public class Student {
     private String username;
     @NotBlank
     private String password;
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private String id;
+
     @NotBlank
-    private String student_first_name;
+    private String firstName;
+
     @NotBlank
-    private String student_last_name;
+    private String lastName;
+
     @NotBlank
     private String gender;
+
+    @NotBlank
+    private String nationality;
+
     @NotBlank
     private String address;
+
     @NotBlank
     private String phoneNumber;
+
     @NotBlank
     private String emailAddress;
+
     private boolean feesPaid;
 
     public Student() {
         super();
     }
 
-    public Student(Long id, String student_first_name, String student_last_name, String gender, String address, String phoneNumber, String emailAddress) {
+    public Student(String id, String firstName, String lastName, String gender, String address, String phoneNumber, String emailAddress) {
         super();
         this.id = id;
-        this.student_first_name = student_first_name;
-        this.student_last_name = student_last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.gender = gender;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
     }
 
-    public Long getId() {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public String getStudent_first_name() {
-        return student_first_name;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getStudent_last_name() {
-        return student_last_name;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getGender() {
         return gender;
     }
 
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getEmailAddress() {
         return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public boolean isFeesPaid() {
+        return feesPaid;
+    }
+
+    public void setFeesPaid(boolean feesPaid) {
+        this.feesPaid = feesPaid;
     }
 }
