@@ -34,7 +34,7 @@ public class EnrolledId implements Serializable {
     public String getId_student(){
         return id_student;
     }
-    public String getIid_module(){
+    public String getId_module(){
         return id_module;
     }
 }
