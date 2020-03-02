@@ -33,14 +33,6 @@ public class LoginController {
 		model.put("name", name);
 		model.put("password", password);
 		
-		return "module";
+		return "welcome";
 	}
-
-	@RequestMapping(value="/register",method = RequestMethod.POST)
-	public String showRegisterpage(ModelMap model){
-
-
-		return "Registration";
-	}
-
 }

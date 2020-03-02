@@ -13,18 +13,14 @@ import java.util.List;
 @Controller
 @SessionAttributes("name")
 public class WelcomeController {
-    private boolean login=false;
 
 
-
-    @RequestMapping("/")
+    //this should show the modules a student is in but idk how to get that in the DB
+    @RequestMapping("/home")
     public String viewHomePage(Model model) {
-        if (!login){
-            return "login";
-        }
         //List<Student> listStudents = studentRepository.findAll();
         //model.addAttribute("listStudents", listStudents);
-        return "module";//maybe make it return welcome and make that be the modules
+        return "welcome";
     }
 
 
