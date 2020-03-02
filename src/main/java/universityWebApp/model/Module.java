@@ -1,22 +1,29 @@
 package universityWebApp.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
 @Table(name = "modules")
+//@NamedQuery(name = "Enrolled.findNameByModuleID",
+//        query = "select a.moduleName from Module a where a.id_module = ?1")
+//@NamedQuery(name = "Enrolled.findDescriptionByModuleID",
+//        query = "select a.moduleDescription from Module a where a.id_module = ?1")
+//@NamedQuery(name = "Enrolled.findCoordinatorByModuleID",
+//        query = "select a.coordinatorName from Module a where a.id_module = ?1")
+//@NamedQuery(name = "Enrolled.findEnrolledByModuleID",
+//        query = "select a.enrolledStudents from Module a where a.id_module = ?1")
+//@NamedQuery(name = "Enrolled.findMaximumByModuleID",
+//        query = "select a.maximumStudents from Module a where a.id_module = ?1")
 public class Module {
     //Todo  and view module statistics (number of enrolled students, grades distributions for previous editions of the module).
     @NotBlank
     private String moduleName;
     @Id
     @GeneratedValue
-    private Long id;
+    private String id;
 
     @NotBlank
     private String moduleDescription;
@@ -27,13 +34,15 @@ public class Module {
 
     public Module() {}
 
-    public Module(String moduleName, String moduleDescription, String coordinatorName, int enrolledStudents, int maximumStudents) {
+    public Module(String id, String moduleName, String moduleDescription, String coordinatorName, int enrolledStudents, int maximumStudents) {
+        this.id = id;
         this.moduleName = moduleName;
         this.moduleDescription = moduleDescription;
         this.coordinatorName = coordinatorName;
         this.enrolledStudents = enrolledStudents;
         this.maximumStudents = maximumStudents;
     }
+    public String getId(){ return id;}
 
     public int getMaximumStudents() {
         return maximumStudents;

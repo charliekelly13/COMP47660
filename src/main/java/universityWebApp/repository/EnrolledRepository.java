@@ -3,6 +3,8 @@ package universityWebApp.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import universityWebApp.exception.ModuleNotFoundException;
+import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Enrolled;
 import universityWebApp.model.EnrolledId;
 import universityWebApp.model.Student;
@@ -11,7 +13,10 @@ import java.util.List;
 
 @Repository
 public interface EnrolledRepository extends JpaRepository<Enrolled, EnrolledId> {
-    //TODO
-    //@Query("select a.id_author from Authorship a where a.id_book = ?1")
-    //List<Long> findAuthorByBookId(Long book_id) throws AuthorNotFoundException;
+
+    @Query("select a.id_module from Enrolled a where a.id_student = ?1")
+    List<String> findByStudentID(String book_id) throws ModuleNotFoundException;
+
+    @Query("select a.id_student from Enrolled a where a.id_module = ?1")
+    List<String> findByModuleID(String book_id) throws StudentNotFoundException;
 }

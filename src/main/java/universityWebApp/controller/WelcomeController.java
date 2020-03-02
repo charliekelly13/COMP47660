@@ -20,9 +20,13 @@ public class WelcomeController {
     @RequestMapping("/")
     public String viewHomePage(Model model) {
         //model.addAttribute("listModules", listModules);
-        System.out.println(model);
-        return "home";
-    }
 
+        if (model.containsAttribute("LoggedIn")) {
+            System.out.println(model);
+            return "home";
+        }
+
+        return "login";
+    }
 
 }
