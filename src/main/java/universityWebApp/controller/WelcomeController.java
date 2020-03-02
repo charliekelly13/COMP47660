@@ -1,6 +1,7 @@
 package universityWebApp.controller;
 
 import universityWebApp.exception.StudentNotFoundException;
+import universityWebApp.model.Module;
 import universityWebApp.model.Student;
 import universityWebApp.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +12,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@SessionAttributes("name")
+@SessionAttributes("loggedIn")
 public class WelcomeController {
 
 
     //this should show the modules a student is in but idk how to get that in the DB
-    @RequestMapping("/home")
+    @RequestMapping("/")
     public String viewHomePage(Model model) {
-        //List<Student> listStudents = studentRepository.findAll();
-        //model.addAttribute("listStudents", listStudents);
-        return "welcome";
+        //model.addAttribute("listModules", listModules);
+        System.out.println(model);
+        return "home";
     }
 
 
