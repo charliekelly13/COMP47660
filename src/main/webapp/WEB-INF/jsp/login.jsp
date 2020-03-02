@@ -7,11 +7,11 @@
 <body>
 	<font color="red">${errorMessage}</font>
 	<form method="post">
-		Name : <input type="text" name="name" />
-		Password : <input type="password" name="password" /> 
-		<input type="submit" />
+		Name : <input type="text" name="name" /><br>
+		Password : <input type="password" name="password" /> <br>
+		<input type="submit"value="Submit" /><br>
 	</form>
-	<a href="/register">Register</a>
+	Don't have an account? <a href="/register">Register</a>
 </body>
 
 </html>
