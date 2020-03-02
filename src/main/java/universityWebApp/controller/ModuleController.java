@@ -47,7 +47,7 @@ public class ModuleController {
         Module modules = moduleRepository.findById(moduleCode)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleCode));
 
-        model.addAttribute("modules", modules);
+        model.addAttribute("module", module);
 
         return "modulePage";
     }
