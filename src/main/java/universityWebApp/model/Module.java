@@ -1,8 +1,6 @@
 package universityWebApp.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -13,6 +11,7 @@ public class Module {
     private String moduleName;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String moduleCode;
@@ -37,6 +36,11 @@ public class Module {
         this.coordinatorId = coordinatorId;
         this.enrolledStudents = enrolledStudents;
         this.maximumStudents = maximumStudents;
+    }
+
+
+    public long getId() {
+        return id;
     }
 
     public String getModuleCode() {
