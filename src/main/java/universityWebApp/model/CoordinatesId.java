@@ -1,8 +1,9 @@
 package universityWebApp.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class CoordinatesId {
+public class CoordinatesId implements Serializable {
 
     String moduleId;
 

@@ -11,25 +11,18 @@
     <table border="1" cellpadding="5">
         <caption><h2>All Modules</h2></caption>
         <tr>
-            <th>ID</th>
-            <th>Description</th>
-            <th>Co-ordinator</th>
-            <th>Enrollment</th>
+            <th>Module code</th>
+            <th>Module name</th>
             <th></th>
         </tr>
+
         <c:forEach var="module" items="${modules}">
             <tr>
-                <td><c:out value="${module.id}" /></td>
+                <td><c:out value="${module.moduleCode}" /></td>
 
-                <td><c:out value="${module.moduleDescription}" /></td>
+                <td><c:out value="${module.moduleName}" /></td>
 
-                <td><c:out value="${module.coordinatorId}" /></td>
-                <td>
-                    <c:out value="${module.enrolledStudents}" />/<c:out value="${module.maximumStudents}" />
-                </td>
-                <td>
-                    <a href="/modules/${module.id}">View details</a>
-                </td>
+                <td><a href="/modules/${module.id}">View details</a></td>
             </tr>
         </c:forEach>
     </table>

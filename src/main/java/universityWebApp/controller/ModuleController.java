@@ -38,18 +38,18 @@ public class ModuleController {
     /**
      * This endpoint gets a specific module's details if it exists
      */
-    @RequestMapping(value="modules/{moduleCode}",method= RequestMethod.GET)
-    public String getModule(@PathVariable("moduleCode") String moduleCode, Model model) throws ModuleNotFoundException {
+    @RequestMapping(value="modules/{id}",method= RequestMethod.GET)
+    public String getModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
 
-        Module module = moduleRepository.findById(moduleCode)
-                .orElseThrow(() -> new ModuleNotFoundException(moduleCode));
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
         model.addAttribute("module", module);
 
-        return "modulePage";
+        return "module";
     }
 
 }

@@ -6,10 +6,10 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "enrollment")
 @IdClass(EnrollmentId.class)
-@NamedQuery(name = "Enrolled.findByStudentID",
-        query = "select a.id_module from Enrolled a where a.id_student = ?1")
-@NamedQuery(name = "Enrolled.findByModuleID",
-        query = "select a.id_student from Enrolled a where a.id_module = ?1")
+@NamedQuery(name = "Enrollment.findByStudentID",
+        query = "select a.moduleId from Enrollment a where a.studentId = ?1")
+@NamedQuery(name = "Enrollment.findByModuleID",
+        query = "select a.studentId from Enrollment a where a.moduleId = ?1")
 public class Enrollment {
     @Id
     @NotBlank

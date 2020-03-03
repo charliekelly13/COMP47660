@@ -1,8 +1,9 @@
 package universityWebApp.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class GradeId {
+public class GradeId implements Serializable {
 
 
     String moduleId;

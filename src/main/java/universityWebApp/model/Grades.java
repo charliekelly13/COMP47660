@@ -6,12 +6,11 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "grades")
 @IdClass(GradeId.class)
 @NamedQuery(name = "Grades.findByStudentID",
-        query = "select a.grade from Grades a where a.student_id = ?1")
+        query = "select a.grade from Grades a where a.studentId = ?1")
 @NamedQuery(name = "Grades.findByModuleID",
-        query = "select a.grade from Grades a where a.module_id = ?1")
+        query = "select a.grade from Grades a where a.moduleId = ?1")
 @NamedQuery(name = "Grades.findByModuleAndStudentID",
-        query = "select a.grade from Grades a where a.module_id = ?1 && a.student_id = ?2")
-
+        query = "select a.grade from Grades a where a.moduleId = ?1 and a.studentId = ?2")
 public class Grades {
     @Id
     @NotBlank

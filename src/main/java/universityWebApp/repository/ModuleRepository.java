@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import universityWebApp.model.Module;
 
 @Repository
-public interface ModuleRepository extends JpaRepository<Module, String> {
+public interface ModuleRepository extends JpaRepository<Module, Long> {
 
 }

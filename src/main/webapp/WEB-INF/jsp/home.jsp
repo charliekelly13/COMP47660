@@ -10,39 +10,25 @@
         <h1>Home</h1>
 
         <table border="1" cellpadding="5">
-            <caption><h2>Modules</h2></caption>
+            <caption><h2>All Modules</h2></caption>
             <tr>
-                <th>ID</th>
-                <th>Description</th>
-                <th>Co-ordinator</th>
-                <th>Enrollment</th>
+                <th>Module code</th>
+                <th>Module name</th>
                 <th></th>
             </tr>
-        <c:forEach var="module" items="${modules}">
-            <tr>
-                <td><c:out value="${module.id}" /></td>
 
-                <td><c:out value="${module.moduleDescription}" /></td>
+            <c:forEach var="module" items="${modules}">
+                <tr>
+                    <td><c:out value="${module.moduleCode}" /></td>
 
-                <td><c:out value="${module.coordinatorId}" /></td>
-                <td>
-                    <c:out value="${module.enrolledStudents}" />/<c:out value="${module.maximumStudents}" />
-                </td>
-                <td>
-                    <a href="/modules/${module.id}">View details</a>
-                </td>
-            </tr>
-        </c:forEach>
+                    <td><c:out value="${module.moduleName}" /></td>
+
+                    <td><a href="/modules/${module.id}">View details</a></td>
+                </tr>
+            </c:forEach>
         </table>
     </div>
 
     <a href="./logout">Log out</a>
 </body>
 </html>
-
-<%--this.moduleName = moduleName;--%>
-<%--this.moduleDescription = moduleDescription;--%>
-<%-- module id --%>
-<%--this.coordinatorName = coordinatorName;--%>
-<%--this.enrolledStudents = enrolledStudents;--%>
-<%--this.maximumStudents = maximumStudents;--%>
