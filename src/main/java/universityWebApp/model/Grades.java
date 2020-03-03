@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class Grades {
     @Id
     @NotBlank
-    private String moduleId;
+    private long moduleId;
     @Id
     @NotBlank
     private String grade;
@@ -27,7 +27,7 @@ public class Grades {
         super();
     }
 
-    public Grades(String moduleId, String studentId, String grade) {
+    public Grades(long moduleId, String studentId, String grade) {
         super();
         this.moduleId = moduleId;
         this.grade = grade;

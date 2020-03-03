@@ -4,22 +4,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import universityWebApp.exception.ModuleNotFoundException;
+import universityWebApp.model.Enrollment;
+import universityWebApp.model.Grades;
 import universityWebApp.model.Module;
+import universityWebApp.repository.EnrollmentRepository;
+import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
 
 import java.util.List;
 
 @Controller
-@SessionAttributes("loggedIn")
+@SessionAttributes({"loggedIn","studentId","isStaff"})
 public class ModuleController {
 
     @Autowired
     ModuleRepository moduleRepository;
+
+    @Autowired
+    EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    GradesRepository gradesRepository;
 
     /**
      * This endpoint returns all modules(?)
@@ -48,6 +55,62 @@ public class ModuleController {
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
         model.addAttribute("module", module);
+
+        return "module";
+    }
+
+
+    /**
+     * enroll student in a module
+     */
+    @RequestMapping(value="modules/{id}/enroll",method= RequestMethod.POST)
+    public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
+
+
+        Enrollment enrollment= new Enrollment(moduleId, (String) model.getAttribute("studentId"));
+
+        enrollmentRepository.save(enrollment);
+
+        return "module";
+    }
+
+    /**
+     * enroll student in a module
+     */
+    @RequestMapping(value="modules/{id}/unenroll",method= RequestMethod.POST)
+    public String unEnroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
+
+        //todo make this check if the student is actually enrolled
+        Enrollment enrollment= new Enrollment(moduleId, (String) model.getAttribute("studentId"));
+
+        enrollmentRepository.delete(enrollment);
+
+        return "module";
+    }
+
+
+    /**
+     * enroll student in a module
+     */
+    @RequestMapping(value="modules/{id}/grade",method= RequestMethod.POST)
+    public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID,@RequestParam String grade) throws ModuleNotFoundException {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
+        if(!model.containsAttribute("Staff") || !(boolean) model.getAttribute("isStaff")){
+            //not member of staff so can't change grades
+        }
+
+
+        Grades grades= new Grades(moduleId, studentID,grade);
+
+        gradesRepository.save(grades);
 
         return "module";
     }
