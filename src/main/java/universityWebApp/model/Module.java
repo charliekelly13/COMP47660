@@ -5,9 +5,6 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "modules")
-
-@NamedQuery(name = "Module.insertModule",
-        query = "INSERT INTO modules(id, module_name, module_description, coordinator_name, enrolled_students, maximum_students), VALUES(?1,?2,?3,?4,?4,?5,?6)")
 public class Module {
     //Todo  and view module statistics (number of enrolled students, grades distributions for previous editions of the module).
     @NotBlank

@@ -5,9 +5,6 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "students")
-
-@NamedQuery(name = "Student.insertStudent",
-        query = "INSERT INTO students(id, first_name, last_name, gender, address, phone_number, email_address, fees_paid), VALUES(?1,?2,?3,?4,?5,?6,?7,?8);")
 public class Student {
     @NotBlank
     private String username;
