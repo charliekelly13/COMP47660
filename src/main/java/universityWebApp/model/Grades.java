@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
         query = "select a.grade from Grades a where a.moduleId = ?1")
 @NamedQuery(name = "Grades.findByModuleAndStudentID",
         query = "select a.grade from Grades a where a.moduleId = ?1 and a.studentId = ?2")
+
 public class Grades {
     @Id
     @NotBlank
