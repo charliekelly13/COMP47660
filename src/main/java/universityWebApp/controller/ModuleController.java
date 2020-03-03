@@ -24,15 +24,15 @@ public class ModuleController {
     /**
      * This endpoint returns all modules(?)
      */
-    @RequestMapping(value="modules/",method= RequestMethod.GET)
+    @RequestMapping(value="modules",method= RequestMethod.GET)
     public String getModules(ModelMap model) {
-        if (!model.containsAttribute("LoggedIn")) {
-            return("login");
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
         }
 
         List<Module> modules = moduleRepository.findAll();
         model.addAttribute("modules", modules);
-        return "module";
+        return "modules";
     }
 
     /**
@@ -40,8 +40,8 @@ public class ModuleController {
      */
     @RequestMapping(value="modules/{moduleCode}",method= RequestMethod.GET)
     public String getModule(@PathVariable("moduleCode") String moduleCode, Model model) throws ModuleNotFoundException {
-        if (!model.containsAttribute("LoggedIn")) {
-            return("login");
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
         }
 
         Module module = moduleRepository.findById(moduleCode)

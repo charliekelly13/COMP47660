@@ -2,8 +2,6 @@ package universityWebApp.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 @Table(name = "modules")
@@ -16,26 +14,45 @@ public class Module {
     private String moduleName;
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private String moduleCode;
+    private String moduleYear;
 
     @NotBlank
     private String moduleDescription;
+
     @NotBlank
-    private String coordinatorName;
+    private String coordinatorId;
+
     private int enrolledStudents;
     private int maximumStudents;
 
     public Module() {}
 
-    public Module(String id, String moduleName, String moduleDescription, String coordinatorName, int enrolledStudents, int maximumStudents) {
-        this.id = id;
+    public Module(String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int enrolledStudents, int maximumStudents) {
+        this.moduleCode = moduleCode;
+        this.moduleYear = moduleYear;
         this.moduleName = moduleName;
         this.moduleDescription = moduleDescription;
-        this.coordinatorName = coordinatorName;
+        this.coordinatorId = coordinatorId;
         this.enrolledStudents = enrolledStudents;
         this.maximumStudents = maximumStudents;
     }
-    public String getId(){ return id;}
+
+
+    public long getId() {
+        return id;
+    }
+
+    public String getModuleCode() {
+        return moduleCode;
+    }
+
+    public String getModuleYear() {
+        return moduleYear;
+    }
 
     public int getMaximumStudents() {
         return maximumStudents;
@@ -49,8 +66,8 @@ public class Module {
         return enrolledStudents;
     }
 
-    public String getCoordinatorName() {
-        return coordinatorName;
+    public String getCoordinatorId() {
+        return coordinatorId;
     }
 
     public String getModuleDescription() {
