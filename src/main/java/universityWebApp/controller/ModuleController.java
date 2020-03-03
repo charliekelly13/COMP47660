@@ -96,7 +96,7 @@ public class ModuleController {
 
 
     /**
-     * enroll student in a module
+     * set a students grades if your a coordinator
      */
     @RequestMapping(value="modules/{id}/grade",method= RequestMethod.POST)
     public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID,@RequestParam String grade) throws ModuleNotFoundException {
