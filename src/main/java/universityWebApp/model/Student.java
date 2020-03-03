@@ -5,6 +5,8 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "students")
+@NamedQuery(name= "Student.findPasswordByUsername",
+        query= "select a.password from Student a where a.username =?1")
 public class Student {
     @NotBlank
     private String username;
