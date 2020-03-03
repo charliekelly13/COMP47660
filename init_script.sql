@@ -17,20 +17,20 @@ CREATE TABLE IF NOT EXISTS `university`.`students` (
   UNIQUE (`username`));
 
 CREATE TABLE IF NOT EXISTS `university`.`modules` (
-  `id` VARCHAR(45) NOT NULL,
+  `id` BIGINT NOT NULL,
+  `modeule_code` VARCHAR(45) NOT NULL,
   `module_name` VARCHAR(45) NOT NULL,
   `module_description` VARCHAR(45) NOT NULL,
   `maximum_students` INT NOT NULL,
   `enrolled_students` INT NOT NULL,
   `coordinator_id` VARCHAR(45) NOT NULL,
-  `coordinator_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE (`id`));
     
     CREATE TABLE IF NOT EXISTS `university`.`grades` (
   `student_id` VARCHAR(45) NOT NULL,
   `grade` VARCHAR(2) NOT NULL,
-  `module_id` VARCHAR(45) NOT NULL,
+  `module_id` BIGINT NOT NULL,
   PRIMARY KEY (`student_id`, `module_id`),
   CONSTRAINT `Grade-Module`
     FOREIGN KEY (`module_id`)
@@ -41,8 +41,8 @@ CREATE TABLE IF NOT EXISTS `university`.`modules` (
 
 CREATE TABLE IF NOT EXISTS `university`.`enrollment` (
   `student_id` VARCHAR(45) NOT NULL,
-  `module_id` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id_student`, `module_id`),
+  `module_id` BIGINT NOT NULL,
+  PRIMARY KEY (`student_id`, `module_id`),
   CONSTRAINT `Enrollment-Modules`
     FOREIGN KEY (`module_id`)
     REFERENCES `university`.`modules` (`id`),
