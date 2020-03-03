@@ -67,3 +67,4 @@ CREATE TABLE IF NOT EXISTS `university`.`staff` (
   CONSTRAINT `Coordinates-Staff`
     FOREIGN KEY (`coordinator_id`)
     REFERENCES `university`.`staff` (`staff_id`));
+

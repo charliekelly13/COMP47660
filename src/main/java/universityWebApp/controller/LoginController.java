@@ -38,4 +38,11 @@ public class LoginController {
 		
 		return "welcome";
 	}
+
+	@RequestMapping(value="/logout", method = RequestMethod.GET)
+	public String logOut(ModelMap model) {
+		model.put("loggedIn", false);
+
+		return "log_out";
+	}
 }

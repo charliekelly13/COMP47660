@@ -5,6 +5,8 @@
 </head>
 
 <body>
+	<h1>Log in</h1>
+	<h4>You must log in to view this page.</h4>
 	<font color="red">${errorMessage}</font>
 	<form method="post">
 		Name : <input type="text" name="name" /><br>
