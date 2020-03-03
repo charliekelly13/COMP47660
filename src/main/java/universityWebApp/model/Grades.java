@@ -9,6 +9,8 @@ import javax.validation.constraints.NotBlank;
         query = "select a.grade from Grades a where a.student_id = ?1")
 @NamedQuery(name = "Grades.findByModuleID",
         query = "select a.grade from Grades a where a.module_id = ?1")
+@NamedQuery(name = "Grades.findByModuleAndStudentID",
+        query = "select a.grade from Grades a where a.module_id = ?1 && a.student_id = ?2")
 
 public class Grades {
     @Id
@@ -25,7 +27,7 @@ public class Grades {
         super();
     }
 
-    public Grades(String moduleId, String studentId) {
+    public Grades(String moduleId, String studentId, String grade) {
         super();
         this.moduleId = moduleId;
         this.grade = grade;
