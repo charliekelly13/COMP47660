@@ -5,9 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import universityWebApp.exception.ModuleNotFoundException;
-import universityWebApp.model.Enrollment;
-import universityWebApp.model.Grades;
+import universityWebApp.exception.*;
+import universityWebApp.model.*;
 import universityWebApp.model.Module;
 import universityWebApp.repository.CoordinatesRepository;
 import universityWebApp.repository.EnrollmentRepository;
@@ -16,8 +15,7 @@ import universityWebApp.repository.ModuleRepository;
 
 import java.util.List;
 
-@Controller
-@SessionAttributes({"loggedIn", "studentId", "isStaff"})
+@SessionAttributes({"student","loggedIn","isStaff"})
 public class ModuleController {
 
     @Autowired
@@ -67,35 +65,58 @@ public class ModuleController {
     /**
      * enroll student in a module
      */
-    @RequestMapping(value = "modules/{id}/enroll", method = RequestMethod.POST)
-    public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+    @RequestMapping(value="modules/{id}/enrol",method= RequestMethod.GET)
+    public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException,
+            ModuleFullException, StudentNotFoundException, FeesNotPaidException, StudentAlreadyEnrolledException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
 
+        Student student = (Student) model.getAttribute("student");
+        Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
-        Enrollment enrollment = new Enrollment(moduleId, (String) model.getAttribute("studentId"));
+        if (enrollmentRepository.findById(new EnrollmentId(moduleId, student.getId())).isPresent()) {
+            throw new StudentAlreadyEnrolledException(student.getId(), moduleId);
+        }
+
+        if (!student.hasPaidFees()) {
+            throw new FeesNotPaidException();
+        }
+
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ModuleNotFoundException(moduleId));
+
+
+        long countEnrolledStudents = enrollmentRepository.findByModuleID(moduleId).size();
+
+        if (countEnrolledStudents >= module.getMaximumStudents()) {
+            throw new ModuleFullException(moduleId);
+        }
 
         enrollmentRepository.save(enrollment);
+
+        model.addAttribute("module", module);
 
         return "module";
     }
 
     /**
-     * enroll student in a module
+     * enrol student in a module
      */
-    @RequestMapping(value = "modules/{id}/unenroll", method = RequestMethod.POST)
+    @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.GET)
     public String unEnroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
 
-        //todo make this check if the student is actually enrolled
-        Enrollment enrollment = new Enrollment(moduleId, (String) model.getAttribute("studentId"));
+        Student student = (Student) model.getAttribute("student");
+
+        Enrollment enrollment = new Enrollment(moduleId, student.getId());
+
 
         enrollmentRepository.delete(enrollment);
 
-        return "module";
+        return "home";
     }
 
 
@@ -107,7 +128,8 @@ public class ModuleController {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
-        if (!model.containsAttribute("Staff") || !(boolean) model.getAttribute("isStaff")) {
+      
+        if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
             //not member of staff so can't change grades
         }
 

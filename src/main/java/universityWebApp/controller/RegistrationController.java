@@ -24,8 +24,6 @@ public class RegistrationController {
 
     @RequestMapping(value="/register",method = RequestMethod.POST)
     public String postRegisterPage(ModelMap model, Student student) {
-        System.out.println("woo");
-      //  Student registerStudent = new Student(studentId,firstName,surname,gender,address,phoneNumber,emailAddress);
         studentRepository.save(student);
 
         return "register_confirmation";

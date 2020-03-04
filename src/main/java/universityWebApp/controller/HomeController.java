@@ -2,6 +2,7 @@ package universityWebApp.controller;
 
 import universityWebApp.exception.ModuleNotFoundException;
 import universityWebApp.model.Module;
+import universityWebApp.model.Student;
 import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"loggedIn","studentId"})
+@SessionAttributes({"loggedIn","student", "name"})
 public class HomeController {
 
     @Autowired
@@ -29,12 +30,16 @@ public class HomeController {
             return ("redirect_to_login");
         }
 
-        List<Long> enrolledModules = enrollmentRepository.findByStudentID((String)model.getAttribute("studentId"));
+        Student student = (Student) model.getAttribute("student");
+
+        List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
         List<Module> modules = new ArrayList<>();
+
         for (Long moduleId: enrolledModules) {
             modules.add(moduleRepository.findById(moduleId)
                     .orElseThrow(() -> new ModuleNotFoundException(moduleId)));
         }
+
         model.addAttribute("modules", modules);
 
         return "home";

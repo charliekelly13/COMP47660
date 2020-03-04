@@ -2,6 +2,7 @@ package universityWebApp.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "enrollment")
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotBlank;
         query = "select a.studentId from Enrollment a where a.moduleId = ?1")
 public class Enrollment {
     @Id
-    @NotBlank
+    @NotNull
     private long moduleId;
 
     @Id

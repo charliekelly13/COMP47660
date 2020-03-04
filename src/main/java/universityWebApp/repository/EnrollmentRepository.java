@@ -15,6 +15,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
     @Query("select a.moduleId from Enrollment a where a.studentId = ?1")
     List<Long> findByStudentID(String student_id) throws ModuleNotFoundException;
 
-    @Query("select a.studentId from Enrollment a where a.moduleId = ?1")
-    List<String> findByModuleID(String module_id) throws StudentNotFoundException;
+    @Query("select a from Enrollment a where a.moduleId = ?1")
+    List<Enrollment> findByModuleID(long moduleId) throws StudentNotFoundException;
 }
