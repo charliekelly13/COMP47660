@@ -67,7 +67,7 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}", method = RequestMethod.POST)
-    public String setModule(@PathVariable("id") long moduleId, @RequestParam String updatedDescription,Model model) throws ModuleNotFoundException {
+    public String setModule(@PathVariable("id") long moduleId, Module module,Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
@@ -76,8 +76,9 @@ public class ModuleController {
         }
 
 
-        Module module = moduleRepository.getOne(moduleId);
-        module.setModuleDescription(updatedDescription);
+        Module oldModule = moduleRepository.getOne(moduleId);
+        moduleRepository.delete(oldModule);
+
         moduleRepository.save(module);
 
         model.addAttribute("module", module);
