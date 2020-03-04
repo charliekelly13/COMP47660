@@ -9,6 +9,7 @@ import universityWebApp.exception.ModuleNotFoundException;
 import universityWebApp.model.Enrollment;
 import universityWebApp.model.Grades;
 import universityWebApp.model.Module;
+import universityWebApp.repository.CoordinatesRepository;
 import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
@@ -27,6 +28,9 @@ public class ModuleController {
 
     @Autowired
     GradesRepository gradesRepository;
+
+    @Autowired
+    CoordinatesRepository coordinatesRepository;
 
     /**
      * This endpoint returns all modules(?)
@@ -54,10 +58,6 @@ public class ModuleController {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
-        Grades grades = gradesRepository.findByModuleAndStudentID(moduleId, (String) model.getAttribute("studentId"));
-        if (grades != null) {
-            model.addAttribute("grades", grades);
-        }
         model.addAttribute("module", module);
 
         return "module";
@@ -111,12 +111,13 @@ public class ModuleController {
             //not member of staff so can't change grades
         }
 
+        if (model.getAttribute("studentId") == coordinatesRepository.findByModuleID(moduleId)) {
+            Grades grades = new Grades(moduleId, studentID, grade);
+            gradesRepository.save(grades);
+            return "module";
+        }
 
-        Grades grades = new Grades(moduleId, studentID, grade);
-
-        gradesRepository.save(grades);
-
-        return "module";
+        return "unauthorised";
     }
 
 }
