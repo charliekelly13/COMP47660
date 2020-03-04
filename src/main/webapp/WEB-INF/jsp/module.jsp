@@ -16,7 +16,6 @@
     <form method="post" action="${module.id}/${status}" class="inline">
         <button type="submit">${status}</button>
     </form>
-<%--private int maximumStudents;--%>
 <a href="./logout">Log out</a>
 </body>
 </html>
