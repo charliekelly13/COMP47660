@@ -138,7 +138,7 @@ public class Student {
         this.emailAddress = emailAddress;
     }
 
-    public boolean isFeesPaid() {
+    public boolean hasPaidFees() {
         return feesPaid;
     }
 

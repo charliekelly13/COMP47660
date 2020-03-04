@@ -5,13 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import universityWebApp.exception.ModuleFullException;
-import universityWebApp.exception.ModuleNotFoundException;
-import universityWebApp.exception.StudentNotFoundException;
-import universityWebApp.model.Enrollment;
-import universityWebApp.model.Grades;
+import universityWebApp.exception.*;
+import universityWebApp.model.*;
 import universityWebApp.model.Module;
-import universityWebApp.model.Student;
 import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
@@ -67,17 +63,26 @@ public class ModuleController {
      * enroll student in a module
      */
     @RequestMapping(value="modules/{id}/enrol",method= RequestMethod.GET)
-    public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException, ModuleFullException, StudentNotFoundException {
+    public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException,
+            ModuleFullException, StudentNotFoundException, FeesNotPaidException, StudentAlreadyEnrolledException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
 
         Student student = (Student) model.getAttribute("student");
+        Enrollment enrollment = new Enrollment(moduleId, student.getId());
+
+        if (enrollmentRepository.findById(new EnrollmentId(moduleId, student.getId())).isPresent()) {
+            throw new StudentAlreadyEnrolledException(student.getId(), moduleId);
+        }
+
+        if (!student.hasPaidFees()) {
+            throw new FeesNotPaidException();
+        }
 
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
-        Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
         long countEnrolledStudents = enrollmentRepository.findByModuleID(moduleId).size();
 
@@ -103,12 +108,11 @@ public class ModuleController {
 
         Student student = (Student) model.getAttribute("student");
 
-        //todo make this check if the student is actually enrolled
         Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
         enrollmentRepository.delete(enrollment);
 
-        return "module";
+        return "home";
     }
 
 

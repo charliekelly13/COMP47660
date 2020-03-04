@@ -9,7 +9,7 @@ public class EnrollmentId implements Serializable {
 
     String studentId;
 
-    public EnrollmentId(){}
+    public EnrollmentId() {}
 
     public EnrollmentId(long id_module, String id_student){
         this.moduleId = id_module;
