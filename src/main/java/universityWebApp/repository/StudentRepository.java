@@ -13,7 +13,7 @@ public interface StudentRepository extends JpaRepository<Student, String> {
 
     String findPasswordByUsername(String username);
 
-    @Query("select a.id from Student a where a.username = ?1")
-    String findStudentIdByUsername(String username);
+    @Query("select a from Student a where a.username = ?1")
+    Student findStudentByUsername(String username);
 }
 
