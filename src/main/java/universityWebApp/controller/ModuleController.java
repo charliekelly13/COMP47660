@@ -1,10 +1,12 @@
 package universityWebApp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import universityWebApp.exception.*;
 import universityWebApp.model.*;
 import universityWebApp.model.Module;
@@ -61,6 +63,27 @@ public class ModuleController {
         return "module";
     }
 
+    /**
+     * This endpoint gets a specific module's details if it exists
+     */
+    @RequestMapping(value = "modules/{id}", method = RequestMethod.POST)
+    public String setModule(@PathVariable("id") long moduleId, @RequestParam String updatedDescription,Model model) throws ModuleNotFoundException {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
+        if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
+
+
+        Module module = moduleRepository.getOne(moduleId);
+        module.setModuleDescription(updatedDescription);
+        moduleRepository.save(module);
+
+        model.addAttribute("module", module);
+
+        return "module";
+    }
 
     /**
      * enroll student in a module
@@ -130,7 +153,7 @@ public class ModuleController {
         }
       
         if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
-            //not member of staff so can't change grades
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
         if (model.getAttribute("studentId") == coordinatesRepository.findByModuleID(moduleId)) {
@@ -139,7 +162,7 @@ public class ModuleController {
             return "module";
         }
 
-        return "unauthorised";
+        throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
     }
 
 }

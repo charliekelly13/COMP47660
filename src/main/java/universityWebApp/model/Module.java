@@ -70,4 +70,8 @@ public class Module {
     public String getModuleDescription() {
         return moduleDescription;
     }
+
+    public void setModuleDescription(String description){
+        moduleDescription=description;
+    }
 }
