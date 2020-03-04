@@ -6,9 +6,14 @@
     <title>${module.moduleCode}: ${module.moduleName}</title>
 </head>
 <body>
-<div align="center">
     <h1>${module.moduleCode}: ${module.moduleName}</h1>
-</div>
+    <p>
+        Academic year: ${module.moduleYear}<br/>
+        Description: ${module.moduleDescription}<br/>
+        Co-ordinator: ${coordinator}<br/>
+        ${amountOfStudents} out of ${module.maximumStudents} places available
+    </p>
+<%--private int maximumStudents;--%>
 <a href="./logout">Log out</a>
 </body>
 </html>

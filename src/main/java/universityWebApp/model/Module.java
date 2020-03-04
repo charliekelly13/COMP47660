@@ -23,18 +23,16 @@ public class Module {
     @NotBlank
     private String coordinatorId;
 
-    private int enrolledStudents;
     private int maximumStudents;
 
     public Module() {}
 
-    public Module(String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int enrolledStudents, int maximumStudents) {
+    public Module(String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int maximumStudents) {
         this.moduleCode = moduleCode;
         this.moduleYear = moduleYear;
         this.moduleName = moduleName;
         this.moduleDescription = moduleDescription;
         this.coordinatorId = coordinatorId;
-        this.enrolledStudents = enrolledStudents;
         this.maximumStudents = maximumStudents;
     }
 
@@ -57,10 +55,6 @@ public class Module {
 
     public String getModuleName() {
         return moduleName;
-    }
-
-    public int getEnrolledStudents() {
-        return enrolledStudents;
     }
 
     public String getCoordinatorId() {

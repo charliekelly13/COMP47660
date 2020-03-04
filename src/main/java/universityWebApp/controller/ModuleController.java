@@ -15,6 +15,7 @@ import universityWebApp.repository.ModuleRepository;
 
 import java.util.List;
 
+@Controller
 @SessionAttributes({"student","loggedIn","isStaff"})
 public class ModuleController {
 
@@ -58,6 +59,9 @@ public class ModuleController {
 
         model.addAttribute("module", module);
 
+        //todo: needs to look up the staff db
+        addModuleViewDetailsToModel(model, module);
+
         return "module";
     }
 
@@ -95,9 +99,19 @@ public class ModuleController {
 
         enrollmentRepository.save(enrollment);
 
-        model.addAttribute("module", module);
+        addModuleViewDetailsToModel(model, module);
 
         return "module";
+    }
+
+    private void addModuleViewDetailsToModel(Model model, Module module) throws ModuleNotFoundException {
+        model.addAttribute("module", module);
+
+        model.addAttribute("coordinator", "John Dunnion");
+
+        long numberOfStudentsEnrolled = enrollmentRepository.findByModuleID(module.getId()).size();
+
+        model.addAttribute("amountOfStudents", numberOfStudentsEnrolled);
     }
 
     /**
