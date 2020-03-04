@@ -1,10 +1,15 @@
 package universityWebApp.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import universityWebApp.model.Grades;
+
 
 import java.util.List;
 
-public interface GradesRepository {
+@Repository
+public interface GradesRepository extends JpaRepository<Grades, Long> {
 
     @Query("select a.grade from Grades a where a.studentId = ?1")
     List<String> findByStudentID(String student_id);

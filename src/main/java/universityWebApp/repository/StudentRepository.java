@@ -10,6 +10,11 @@ import java.util.List;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, String> {
     @Query("select a.password from Student a where a.username = ?1")
-    List<String> findPasswordByUsername(String username);
+
+    String findPasswordByUsername(String username);
+
+    @Query("select a.studentId from Student a where a.username = ?1")
+    String findStudentIdByUsername(String username);
+
 }
 

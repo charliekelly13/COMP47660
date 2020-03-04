@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 public class Enrollment {
     @Id
     @NotBlank
-    private String moduleId;
+    private long moduleId;
 
     @Id
     @NotBlank
@@ -21,7 +21,7 @@ public class Enrollment {
 
     public Enrollment(){super();}
 
-    public Enrollment(String moduleId, String studentId){
+    public Enrollment(long moduleId, String studentId){
         super();
         this.moduleId = moduleId;
         this.studentId = studentId;
