@@ -78,7 +78,6 @@ public class ModuleController {
 
         Module oldModule = moduleRepository.getOne(moduleId);
         moduleRepository.delete(oldModule);
-
         moduleRepository.save(module);
 
         model.addAttribute("module", module);
