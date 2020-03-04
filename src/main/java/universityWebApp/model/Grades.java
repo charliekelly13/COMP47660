@@ -18,7 +18,7 @@ public class Grades {
     private long moduleId;
     @Id
     @NotBlank
-    private String grade;
+    private int grade;
     @Id
     @NotBlank
     private String studentId;
@@ -27,7 +27,7 @@ public class Grades {
         super();
     }
 
-    public Grades(long moduleId, String studentId, String grade) {
+    public Grades(long moduleId, String studentId, int grade) {
         super();
         this.moduleId = moduleId;
         this.grade = grade;

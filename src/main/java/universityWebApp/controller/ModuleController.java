@@ -15,6 +15,7 @@ import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -174,7 +175,7 @@ public class ModuleController {
      * set a students grades if your a coordinator
      */
     @RequestMapping(value = "modules/{id}/grade", method = RequestMethod.POST)
-    public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
+    public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID, @RequestParam int grade) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
@@ -192,4 +193,101 @@ public class ModuleController {
         throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
     }
 
+    @RequestMapping(value = "modules/{id}/stat", method = RequestMethod.POST)
+    public HashMap<String, Integer> getGradeStats(@PathVariable("id") String moduleCode, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
+//        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+//            return ("redirect_to_login");
+//        }
+
+        List<Long> moduleIds = moduleRepository.findIDByCode(moduleCode);
+        HashMap<String, Integer> gradeRange = new HashMap<>();
+        gradeRange.put("0-5",0);
+        gradeRange.put("5-10",0);
+        gradeRange.put("10-15",0);
+        gradeRange.put("15-20",0);
+        gradeRange.put("20-25",0);
+        gradeRange.put("25-30",0);
+        gradeRange.put("30-35",0);
+        gradeRange.put("35-40",0);
+        gradeRange.put("40-45",0);
+        gradeRange.put("45-50",0);
+        gradeRange.put("50-55",0);
+        gradeRange.put("55-60",0);
+        gradeRange.put("60-65",0);
+        gradeRange.put("65-70",0);
+        gradeRange.put("70-75",0);
+        gradeRange.put("75-80",0);
+        gradeRange.put("80-85",0);
+        gradeRange.put("85-90",0);
+        gradeRange.put("90-95",0);
+        gradeRange.put("95-100",0);
+        int temp;
+        for(long id: moduleIds) {
+            for(int g:gradesRepository.findByModuleID(id)){
+                if(g>=0&&g<5){
+                    gradeRange.put("0-5",gradeRange.get("0-5")+1);
+                }
+                else if(g>=5&&g<10){
+                    gradeRange.put("5-10",gradeRange.get("5-10")+1);
+                }
+                else if(g>=10&&g<15){
+                    gradeRange.put("10-15",gradeRange.get("10-15")+1);
+                }
+                else if(g>=15&&g<20){
+                    gradeRange.put("15-20",gradeRange.get("15-20")+1);
+                }
+                else if(g>=20&&g<25){
+                    gradeRange.put("20-25",gradeRange.get("20-25")+1);
+                }
+                else if(g>=25&&g<30){
+                    gradeRange.put("25-30",gradeRange.get("25-30")+1);
+                }
+                else if(g>=30&&g<35){
+                    gradeRange.put("30-35",gradeRange.get("30-35")+1);
+                }
+                else if(g>=35&&g<40){
+                    gradeRange.put("35-40",gradeRange.get("35-40")+1);
+                }
+                else if(g>=40&&g<45){
+                    gradeRange.put("40-45",gradeRange.get("40-45")+1);
+                }
+                else if(g>=45&&g<50){
+                    gradeRange.put("45-50",gradeRange.get("45-50")+1);
+                }
+                else if(g>=50&&g<55){
+                    gradeRange.put("50-55",gradeRange.get("50-55")+1);
+                }
+                else if(g>=55&&g<60){
+                    gradeRange.put("55-60",gradeRange.get("55-60")+1);
+                }
+                else if(g>=60&&g<65){
+                    gradeRange.put("60-65",gradeRange.get("60-65")+1);
+                }
+                else if(g>=65&&g<70){
+                    gradeRange.put("65-70",gradeRange.get("65-70")+1);
+                }
+                else if(g>=70&&g<75){
+                    gradeRange.put("70-75",gradeRange.get("70-75")+1);
+                }
+                else if(g>=75&&g<80){
+                    gradeRange.put("75-80",gradeRange.get("75-80")+1);
+                }
+                else if(g>=80&&g<85){
+                    gradeRange.put("80-85",gradeRange.get("80-85")+1);
+                }
+                else if(g>=85&&g<90){
+                    gradeRange.put("85-90",gradeRange.get("85-90")+1);
+                }
+                else if(g>=90&&g<95){
+                    gradeRange.put("90-95",gradeRange.get("90-95")+1);
+                }
+                else if(g>=95&&g<100){
+                    gradeRange.put("95-100",gradeRange.get("95-100")+1);
+                }
+            }
+        }
+        return gradeRange;
+
+        //throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+    }
 }

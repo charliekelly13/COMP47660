@@ -5,6 +5,9 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "modules")
+@NamedQuery(name = "Module.findByIDfromCode",
+        query = "select a.id from Module a where a.moduleCode = ?1")
+
 public class Module {
     //Todo  and view module statistics (number of enrolled students, grades distributions for previous editions of the module).
     @NotBlank

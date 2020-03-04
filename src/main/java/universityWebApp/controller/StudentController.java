@@ -9,6 +9,7 @@ import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Module;
 import universityWebApp.model.Student;
 import universityWebApp.repository.EnrollmentRepository;
+import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
 import universityWebApp.repository.StudentRepository;
 
@@ -25,4 +26,7 @@ public class StudentController {
 
     @Autowired
     EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    GradesRepository gradesRepository;
 }

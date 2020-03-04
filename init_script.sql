@@ -24,12 +24,13 @@ CREATE TABLE IF NOT EXISTS `university`.`modules` (
   `maximum_students` INT NOT NULL,
   `enrolled_students` INT NOT NULL,
   `coordinator_id` VARCHAR(45) NOT NULL,
+  `terminated` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE (`id`));
     
     CREATE TABLE IF NOT EXISTS `university`.`grades` (
   `student_id` VARCHAR(45) NOT NULL,
-  `grade` VARCHAR(2) NOT NULL,
+  `grade` INT NOT NULL,
   `module_id` BIGINT NOT NULL,
   PRIMARY KEY (`student_id`, `module_id`),
   CONSTRAINT `Grade-Module`
