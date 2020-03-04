@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import universityWebApp.exception.*;
 import universityWebApp.model.*;
 import universityWebApp.model.Module;
+import universityWebApp.repository.CoordinatesRepository;
 import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
 
 import java.util.List;
 
-@Controller
 @SessionAttributes({"student","loggedIn","isStaff"})
 public class ModuleController {
 
@@ -27,10 +27,13 @@ public class ModuleController {
     @Autowired
     GradesRepository gradesRepository;
 
+    @Autowired
+    CoordinatesRepository coordinatesRepository;
+
     /**
      * This endpoint returns all modules(?)
      */
-    @RequestMapping(value="modules",method= RequestMethod.GET)
+    @RequestMapping(value = "modules", method = RequestMethod.GET)
     public String getModules(ModelMap model) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
@@ -44,7 +47,7 @@ public class ModuleController {
     /**
      * This endpoint gets a specific module's details if it exists
      */
-    @RequestMapping(value="modules/{id}",method= RequestMethod.GET)
+    @RequestMapping(value = "modules/{id}", method = RequestMethod.GET)
     public String getModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
@@ -110,6 +113,7 @@ public class ModuleController {
 
         Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
+
         enrollmentRepository.delete(enrollment);
 
         return "home";
@@ -119,21 +123,23 @@ public class ModuleController {
     /**
      * set a students grades if your a coordinator
      */
-    @RequestMapping(value="modules/{id}/grade",method= RequestMethod.POST)
-    public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID,@RequestParam String grade) throws ModuleNotFoundException {
+    @RequestMapping(value = "modules/{id}/grade", method = RequestMethod.POST)
+    public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
+      
         if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
             //not member of staff so can't change grades
         }
 
+        if (model.getAttribute("studentId") == coordinatesRepository.findByModuleID(moduleId)) {
+            Grades grades = new Grades(moduleId, studentID, grade);
+            gradesRepository.save(grades);
+            return "module";
+        }
 
-        Grades grades= new Grades(moduleId, studentID, grade);
-
-        gradesRepository.save(grades);
-
-        return "module";
+        return "unauthorised";
     }
 
 }
