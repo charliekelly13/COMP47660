@@ -1,6 +1,7 @@
 package universityWebApp.controller;
 
 import universityWebApp.exception.ModuleNotFoundException;
+import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Module;
 import universityWebApp.model.Student;
 import universityWebApp.repository.EnrollmentRepository;
@@ -10,11 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.rmi.StubNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"loggedIn","student", "name"})
+@SessionAttributes({"loggedIn","student"})
 public class HomeController {
 
     @Autowired
@@ -25,7 +27,7 @@ public class HomeController {
 
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
-    public String viewHomePage(Model model) throws ModuleNotFoundException {
+    public String viewHomePage(Model model) throws StudentNotFoundException, ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }

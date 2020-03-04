@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface CoordinatesRepository extends JpaRepository<Coordinates, CoordinatesId> {
 
-    @Query("select a.moduleId from Coordinates a where a.staffid = ?1")
+    @Query("select a.moduleId from Coordinates a where a.staffId = ?1")
     long findByStaffID(String staffId) throws ModuleNotFoundException;
 
-    @Query("select a.staffId from Enrollment a where a.moduleId = ?1")
+    @Query("select a.staffId from Coordinates a where a.moduleId = ?1")
     String findByModuleID(long module_id);
 }
