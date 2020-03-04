@@ -26,13 +26,13 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/login", method = RequestMethod.POST)
-	public String showWelcomePage(ModelMap model, @RequestParam String name, @RequestParam String password){
-		
-		if (password != studentRepository.findPasswordByUsername(name)) {
+	public String showWelcomePage(ModelMap model, @RequestParam String name, @RequestParam String password) {
+		if (!password.equals(studentRepository.findPasswordByUsername(name))) {
 			model.put("errorMessage", "Invalid Credentials");
 			return "login";
 		}
-		model.put("studentId",studentRepository.findStudentIdByUsername(name));
+
+		model.put("studentId", studentRepository.findStudentIdByUsername(name));
 		model.put("name", name);
 		model.put("password", password);
 

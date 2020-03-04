@@ -2,6 +2,7 @@ package universityWebApp.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "students")
@@ -38,7 +39,7 @@ public class Student {
     @NotBlank
     private String emailAddress;
 
-    @NotBlank
+    @NotNull
     private boolean feesPaid;
 
     public Student() {
@@ -54,6 +55,7 @@ public class Student {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
+        this.feesPaid = false;
     }
 
     public String getUsername() {

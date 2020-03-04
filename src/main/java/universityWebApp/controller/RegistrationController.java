@@ -23,13 +23,11 @@ public class RegistrationController {
     }
 
     @RequestMapping(value="/register",method = RequestMethod.POST)
-    public String postRegisterPage(ModelMap model, @RequestParam String name,@RequestParam String surname,
-                                   @RequestParam String ID,@RequestParam String address,
-                                   @RequestParam String phoneNumber, @RequestParam String emailAddress) {
+    public String postRegisterPage(ModelMap model, Student student) {
+        System.out.println("woo");
+      //  Student registerStudent = new Student(studentId,firstName,surname,gender,address,phoneNumber,emailAddress);
+        studentRepository.save(student);
 
-        Student registerStudent = new Student(ID,name,surname,null,address,phoneNumber,emailAddress);
-        studentRepository.save(registerStudent);
-
-        return "registerConfirmation";
+        return "register_confirmation";
     }
 }
