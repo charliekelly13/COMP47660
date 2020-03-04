@@ -8,9 +8,9 @@
 <body>
     <div align="center">
         <h1>Home</h1>
-
+        <p>Welcome ${name}</p>
         <table border="1" cellpadding="5">
-            <caption><h2>All Modules</h2></caption>
+            <caption><h2>Your Enrolled Modules</h2></caption>
             <tr>
                 <th>Module code</th>
                 <th>Module name</th>

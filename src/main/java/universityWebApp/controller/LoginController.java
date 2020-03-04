@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes("loggedIn")
+@SessionAttributes({"loggedIn", "isStaff", "studentId", "name"})
 public class LoginController {
 	
 	@Autowired
@@ -32,11 +32,13 @@ public class LoginController {
 			return "login";
 		}
 
+
 		model.put("studentId", studentRepository.findStudentIdByUsername(name));
 		model.put("name", name);
 		model.put("password", password);
 
 		model.put("loggedIn", true);
+		model.put("isStaff", false);
 		
 		return "welcome";
 	}

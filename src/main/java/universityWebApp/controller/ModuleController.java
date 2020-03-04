@@ -16,7 +16,7 @@ import universityWebApp.repository.ModuleRepository;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"loggedIn","studentId","isStaff"})
+@SessionAttributes({"studentId","loggedIn","isStaff"})
 public class ModuleController {
 
     @Autowired
@@ -63,24 +63,28 @@ public class ModuleController {
     /**
      * enroll student in a module
      */
-    @RequestMapping(value="modules/{id}/enroll",method= RequestMethod.POST)
+    @RequestMapping(value="modules/{id}/enrol",method= RequestMethod.GET)
     public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
 
-
-        Enrollment enrollment= new Enrollment(moduleId, (String) model.getAttribute("studentId"));
+        Enrollment enrollment = new Enrollment(moduleId, (String) model.getAttribute("studentId"));
 
         enrollmentRepository.save(enrollment);
+
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ModuleNotFoundException(moduleId));
+
+        model.addAttribute("module", module);
 
         return "module";
     }
 
     /**
-     * enroll student in a module
+     * enrol student in a module
      */
-    @RequestMapping(value="modules/{id}/unenroll",method= RequestMethod.POST)
+    @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.GET)
     public String unEnroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");

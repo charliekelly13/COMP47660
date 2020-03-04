@@ -5,14 +5,13 @@ import java.util.Objects;
 
 public class EnrollmentId implements Serializable {
 
+    long moduleId;
 
-    Long moduleId;
-
-    Long studentId;
+    String studentId;
 
     public EnrollmentId(){}
 
-    public EnrollmentId( Long id_module, Long id_student){
+    public EnrollmentId(long id_module, String id_student){
         this.moduleId = id_module;
         this.studentId = id_student;
     }
@@ -22,7 +21,7 @@ public class EnrollmentId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EnrollmentId authorshipId = (EnrollmentId) o;
-        return moduleId.equals(authorshipId.moduleId) &&
+        return moduleId == authorshipId.moduleId &&
                 studentId.equals(authorshipId.studentId);
     }
 
@@ -31,19 +30,19 @@ public class EnrollmentId implements Serializable {
         return Objects.hash(moduleId, studentId);
     }
 
-    public Long getModuleId() {
+    public long getModuleId() {
         return moduleId;
     }
 
-    public void setModuleId(Long moduleId) {
+    public void setModuleId(long moduleId) {
         this.moduleId = moduleId;
     }
 
-    public Long getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Long studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 }
