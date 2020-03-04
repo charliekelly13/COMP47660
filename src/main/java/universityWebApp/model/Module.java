@@ -71,7 +71,4 @@ public class Module {
         return moduleDescription;
     }
 
-    public void setModuleDescription(String description){
-        moduleDescription=description;
-    }
 }
