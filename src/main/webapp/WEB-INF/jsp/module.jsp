@@ -13,6 +13,9 @@
         Co-ordinator: ${coordinator}<br/>
         ${amountOfStudents} out of ${module.maximumStudents} places available
     </p>
+    <form method="post" action="${module.id}/${status}" class="inline">
+        <button type="submit">${status}</button>
+    </form>
 <%--private int maximumStudents;--%>
 <a href="./logout">Log out</a>
 </body>

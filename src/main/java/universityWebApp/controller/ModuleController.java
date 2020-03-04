@@ -16,7 +16,7 @@ import universityWebApp.repository.ModuleRepository;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"student","loggedIn","isStaff"})
+@SessionAttributes({"student","loggedIn","isStaff","status","enrolled"})
 public class ModuleController {
 
     @Autowired
@@ -59,19 +59,25 @@ public class ModuleController {
 
         model.addAttribute("module", module);
 
+        EnrollmentId enrollmentId = new EnrollmentId(moduleId, ((Student) model.getAttribute("student")).getId());
+
+        if (enrollmentRepository.findById(enrollmentId).isPresent()) {
+            model.addAttribute("status", "unenrol");
+        } else {
+            model.addAttribute("status", "enrol");
+        }
         //todo: needs to look up the staff db
         addModuleViewDetailsToModel(model, module);
 
         return "module";
     }
 
-
     /**
      * enroll student in a module
      */
-    @RequestMapping(value="modules/{id}/enrol",method= RequestMethod.GET)
+    @RequestMapping(value="modules/{id}/enrol", method=RequestMethod.POST)
     public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException,
-            ModuleFullException, StudentNotFoundException, FeesNotPaidException, StudentAlreadyEnrolledException {
+            ModuleFullException, FeesNotPaidException, StudentAlreadyEnrolledException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
@@ -101,7 +107,33 @@ public class ModuleController {
 
         addModuleViewDetailsToModel(model, module);
 
-        return "module";
+        model.addAttribute("status", "enrol");
+
+        return "enrollment_status";
+    }
+
+    /**
+     * enrol student in a module
+     */
+    @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.POST)
+    public String unEnroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
+
+        Student student = (Student) model.getAttribute("student");
+
+        Enrollment enrollment = new Enrollment(moduleId, student.getId());
+
+        enrollmentRepository.delete(enrollment);
+
+        model.addAttribute("status", "unenrol");
+
+        Module module = moduleRepository.findById(moduleId).get();
+
+        addModuleViewDetailsToModel(model, module);
+
+        return "enrollment_status";
     }
 
     private void addModuleViewDetailsToModel(Model model, Module module) throws ModuleNotFoundException {
@@ -113,26 +145,6 @@ public class ModuleController {
 
         model.addAttribute("amountOfStudents", numberOfStudentsEnrolled);
     }
-
-    /**
-     * enrol student in a module
-     */
-    @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.GET)
-    public String unEnroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
-        Student student = (Student) model.getAttribute("student");
-
-        Enrollment enrollment = new Enrollment(moduleId, student.getId());
-
-
-        enrollmentRepository.delete(enrollment);
-
-        return "home";
-    }
-
 
     /**
      * set a students grades if your a coordinator
