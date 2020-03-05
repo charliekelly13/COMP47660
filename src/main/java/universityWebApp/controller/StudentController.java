@@ -13,6 +13,7 @@ import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
 import universityWebApp.repository.StudentRepository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -29,4 +30,30 @@ public class StudentController {
 
     @Autowired
     GradesRepository gradesRepository;
+    /**
+     * This endpoint returns all distribution of gender
+     */
+    @RequestMapping(value = "student", method = RequestMethod.GET)
+    public HashMap getModules(ModelMap model) {
+
+        List<Student> students = studentRepository.findAll();
+        HashMap<String, Integer> genderDis = new HashMap();
+        genderDis.put("Male", 0);
+        genderDis.put("Female", 0);
+        genderDis.put("Other", 0);
+        String gen;
+        for(Student s: students){
+            gen=s.getGender();
+            if(gen.equals("Male")){
+                genderDis.put("Male", genderDis.get("Male")+1);
+            }
+            else if(gen.equals("Female")){
+                genderDis.put("Female", genderDis.get("Female")+1);
+            }
+            else if(gen.equals("Other")){
+                genderDis.put("Other", genderDis.get("Other")+1);
+            }
+        }
+        return genderDis;
+    }
 }
