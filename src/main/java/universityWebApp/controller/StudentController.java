@@ -34,7 +34,7 @@ public class StudentController {
      * This endpoint returns all distribution of gender
      */
     @RequestMapping(value = "student", method = RequestMethod.GET)
-    public HashMap getModules(ModelMap model) {
+    public HashMap getGenderDistribtuion() {
 
         List<Student> students = studentRepository.findAll();
         HashMap<String, Integer> genderDis = new HashMap();
@@ -55,5 +55,25 @@ public class StudentController {
             }
         }
         return genderDis;
+    }
+
+    /**
+     * This endpoint returns all distribution of student nationality
+     */
+    @RequestMapping(value = "student", method = RequestMethod.GET)
+    public HashMap getNationalityDistribution() {
+        List<Student> students = studentRepository.findAll();
+        HashMap<String, Integer> nationalDis = new HashMap();
+        String nat;
+        for(Student s: students){
+            nat=s.getNationality();
+            if(nationalDis.containsKey(nat)){
+                nationalDis.put(nat, nationalDis.get(nat)+1);
+            }
+            else{
+                nationalDis.put(nat, 0);;
+            }
+        }
+        return nationalDis;
     }
 }
