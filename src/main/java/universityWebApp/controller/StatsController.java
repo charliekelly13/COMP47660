@@ -1,5 +1,6 @@
 package universityWebApp.controller;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import universityWebApp.model.Staff;
@@ -17,7 +18,7 @@ public class StatsController {
      * This endpoint returns all distribution of gender
      */
     @RequestMapping(value = "stats/getGenderDistribution", method = RequestMethod.GET)
-    public HashMap getGenderDistribtuion() {
+    public HashMap getGenderDistribtuion(Model model) {
 
         List<Staff> staff = staffRepository.findAll();
         HashMap<String, Integer> genderDis = new HashMap();
@@ -56,8 +57,8 @@ public class StatsController {
     /**
      * This endpoint returns all distribution of staff nationality
      */
-    @RequestMapping(value = "staff", method = RequestMethod.GET)
-    public HashMap getNationalityDistribution() {
+    @RequestMapping(value = "stats/getNationalityDisribution", method = RequestMethod.GET)
+    public HashMap getNationalityDistribution(Model model) {
         List<Staff> staff = staffRepository.findAll();
         HashMap<String, Integer> nationalDis = new HashMap();
         String nat;
