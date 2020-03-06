@@ -1,5 +1,6 @@
 package universityWebApp.controller;
 
+import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 import universityWebApp.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class LoginController {
 
 	@Autowired
 	StudentRepository studentRepository;
+
+	@Autowired
+	StaffRepository staffRepository;
 	
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
@@ -28,10 +32,18 @@ public class LoginController {
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String showWelcomePage(ModelMap model, @RequestParam String name, @RequestParam String password) {
 		if (!password.equals(studentRepository.findPasswordByUsername(name))) {
-			model.put("errorMessage", "Invalid Credentials");
-			return "login";
-		}
+			if (!password.equals(staffRepository.findPasswordByUsername(name))) {
+				model.put("errorMessage", "Invalid Credentials");
+				return "login";
+			} else {
+				model.put("staff", studentRepository.findStudentByUsername(name));
 
+				model.put("loggedIn", true);
+				model.put("isStaff", true);
+
+				return "welcome";
+			}
+		}
 
 		model.put("student", studentRepository.findStudentByUsername(name));
 

@@ -2,6 +2,7 @@ package universityWebApp.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "modules")
@@ -14,10 +15,12 @@ public class Module {
     private String moduleName;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank
     private String moduleCode;
+
+    @NotBlank
     private String moduleYear;
 
     @NotBlank
@@ -26,11 +29,13 @@ public class Module {
     @NotBlank
     private String coordinatorId;
 
+    @NotNull
     private int maximumStudents;
 
     public Module() {}
 
-    public Module(String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int maximumStudents) {
+    public Module(long id, String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int maximumStudents) {
+        this.id = id;
         this.moduleCode = moduleCode;
         this.moduleYear = moduleYear;
         this.moduleName = moduleName;
