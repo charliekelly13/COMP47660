@@ -15,11 +15,13 @@ public class StatsController {
     StaffRepository staffRepository;
     StudentRepository studentRepository;
     /**
-     * This endpoint returns all distribution of gender
+     * This endpoint returns all distribution of user gender
      */
-    @RequestMapping(value = "stats/getGenderDistribution", method = RequestMethod.GET)
-    public HashMap getGenderDistribtuion(Model model) {
-
+    @RequestMapping(value = "stats", method = RequestMethod.GET)
+    public String getGenderDistribtuion(Model model) {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
         List<Staff> staff = staffRepository.findAll();
         HashMap<String, Integer> genderDis = new HashMap();
         genderDis.put("Male", 0);
@@ -51,14 +53,18 @@ public class StatsController {
                 genderDis.put("Other", genderDis.get("Other")+1);
             }
         }
-        return genderDis;
+        model.addAttribute(genderDis);
+        return "stats";
     }
 
     /**
-     * This endpoint returns all distribution of staff nationality
+     * This endpoint returns all distribution of user nationality
      */
-    @RequestMapping(value = "stats/getNationalityDisribution", method = RequestMethod.GET)
-    public HashMap getNationalityDistribution(Model model) {
+    @RequestMapping(value = "stats", method = RequestMethod.GET)
+    public String getNationalityDistribution(Model model) {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
         List<Staff> staff = staffRepository.findAll();
         HashMap<String, Integer> nationalDis = new HashMap();
         String nat;
@@ -81,6 +87,7 @@ public class StatsController {
                 nationalDis.put(nat, 0);;
             }
         }
-        return nationalDis;
+        model.addAttribute(nationalDis);
+        return "stats";
     }
 }
