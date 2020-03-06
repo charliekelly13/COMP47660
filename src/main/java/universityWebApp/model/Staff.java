@@ -4,12 +4,12 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 public class Staff {
+
     @NotBlank
     private String username;
 
     @NotBlank
     private String password;
-
     @Id
     private String id;
 
@@ -25,6 +25,7 @@ public class Staff {
     @NotBlank
     private String nationality;
 
+
     @NotBlank
     private String address;
 
@@ -33,10 +34,11 @@ public class Staff {
 
     @NotBlank
     private String emailAddress;
-
+  
     public Staff() {
         super();
     }
+
 
     public Staff(String id, String firstName, String lastName, String gender, String address, String phoneNumber, String emailAddress) {
         super();
@@ -87,5 +89,6 @@ public class Staff {
 
     public String getEmailAddress() {
         return emailAddress;
+
     }
 }
