@@ -10,11 +10,11 @@ public class GradeId implements Serializable {
 
     String studentId;
 
-    String grade;
+    int grade;
 
     public GradeId(){}
 
-    public GradeId( String moduleId, String grade, String studentId){
+    public GradeId( String moduleId, int grade, String studentId){
         this.moduleId = moduleId;
         this.studentId = studentId;
         this.grade = grade;
@@ -42,11 +42,11 @@ public class GradeId implements Serializable {
         this.moduleId = moduleId;
     }
 
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 

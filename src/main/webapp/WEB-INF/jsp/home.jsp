@@ -8,7 +8,7 @@
 <body>
     <div align="center">
         <h1>Home</h1>
-        <p>Welcome ${name}</p>
+        <p>Welcome ${student.firstName}!</p>
         <table border="1" cellpadding="5">
             <caption><h2>Your Enrolled Modules</h2></caption>
             <tr>
