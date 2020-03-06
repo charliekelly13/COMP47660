@@ -1,5 +1,6 @@
 package universityWebApp.controller;
 
+import org.springframework.web.bind.support.SessionStatus;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 import universityWebApp.service.LoginService;
@@ -53,10 +54,8 @@ public class LoginController {
 	}
 
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
-	public String logOut(ModelMap model) {
-		model.put("loggedIn", false);
-		model.remove("student");
-		model.remove("isStaff");
+	public String logOut(SessionStatus status) {
+		status.setComplete();
 
 		return "logout";
 	}
