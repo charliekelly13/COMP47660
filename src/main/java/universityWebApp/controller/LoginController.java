@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@SessionAttributes({"loggedIn", "isStaff", "student"})
+@SessionAttributes({"loggedIn", "isStaff", "student", "staff"})
 public class LoginController {
 	
 	@Autowired
@@ -28,7 +28,7 @@ public class LoginController {
 	public String showLoginPage(ModelMap model){
 		return "login";
 	}
-	
+
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String showWelcomePage(ModelMap model, @RequestParam String name, @RequestParam String password) {
 		if (!password.equals(studentRepository.findPasswordByUsername(name))) {
@@ -36,11 +36,10 @@ public class LoginController {
 				model.put("errorMessage", "Invalid Credentials");
 				return "login";
 			} else {
-				model.put("staff", studentRepository.findStudentByUsername(name));
-
+				model.put("staff", staffRepository.findStaffByUsername(name));
 				model.put("loggedIn", true);
 				model.put("isStaff", true);
-
+        
 				return "welcome";
 			}
 		}
@@ -49,7 +48,7 @@ public class LoginController {
 
 		model.put("loggedIn", true);
 		model.put("isStaff", false);
-		
+
 		return "welcome";
 	}
 
