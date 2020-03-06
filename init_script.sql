@@ -18,11 +18,10 @@ CREATE TABLE IF NOT EXISTS `university`.`students` (
 
 CREATE TABLE IF NOT EXISTS `university`.`modules` (
   `id` BIGINT NOT NULL,
-  `modeule_code` VARCHAR(45) NOT NULL,
+  `module_code` VARCHAR(45) NOT NULL,
   `module_name` VARCHAR(45) NOT NULL,
   `module_description` VARCHAR(45) NOT NULL,
   `maximum_students` INT NOT NULL,
-  `enrolled_students` INT NOT NULL,
   `coordinator_id` VARCHAR(45) NOT NULL,
   `terminated` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
@@ -52,13 +51,17 @@ CREATE TABLE IF NOT EXISTS `university`.`enrollment` (
     REFERENCES `university`.`students` (`id`));
 
 CREATE TABLE IF NOT EXISTS `university`.`staff` (
-  `staff_id` VARCHAR(45) NOT NULL,
+  `staff_id` BIGINT NOT NULL,
   `staff_name` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `nationality` VARCHAR(45) NOT NULL, 
+  `gender` VARCHAR(6) NOT NULL,
   PRIMARY KEY (`staff_id`),
   UNIQUE (`staff_id`));
   
   CREATE TABLE IF NOT EXISTS `university`.`coordinates`(
-  `coordinator_id` VARCHAR(45) NOT NULL,
+  `coordinator_id` BIGINT NOT NULL,
   `module_id` VARCHAR(45) NOT NULL,
   UNIQUE (`module_id`),
   PRIMARY KEY (`coordinator_id`, `module_id`),

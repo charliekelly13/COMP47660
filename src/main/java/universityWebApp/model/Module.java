@@ -25,7 +25,7 @@ public class Module {
 
     @NotBlank
     private String coordinatorId;
-
+    @NotBlank
     private int maximumStudents;
 
     public Module() {}
