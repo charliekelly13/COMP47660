@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
         query = "select a.id from Module a where a.moduleCode = ?1")
 
 public class Module {
-    //Todo  and view module statistics (number of enrolled students, grades distributions for previous editions of the module).
     @NotBlank
     private String moduleName;
 
@@ -73,4 +72,31 @@ public class Module {
         return moduleDescription;
     }
 
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setModuleCode(String moduleCode) {
+        this.moduleCode = moduleCode;
+    }
+
+    public void setModuleYear(String moduleYear) {
+        this.moduleYear = moduleYear;
+    }
+
+    public void setModuleDescription(String moduleDescription) {
+        this.moduleDescription = moduleDescription;
+    }
+
+    public void setCoordinatorId(String coordinatorId) {
+        this.coordinatorId = coordinatorId;
+    }
+
+    public void setMaximumStudents(int maximumStudents) {
+        this.maximumStudents = maximumStudents;
+    }
 }
