@@ -37,10 +37,9 @@ public class LoginController {
 				return "login";
 			} else {
 				model.put("staff", staffRepository.findStaffByUsername(name));
-
 				model.put("loggedIn", true);
 				model.put("isStaff", true);
-
+        
 				return "welcome";
 			}
 		}

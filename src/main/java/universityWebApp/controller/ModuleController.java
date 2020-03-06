@@ -14,6 +14,7 @@ import universityWebApp.repository.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @SessionAttributes({"student", "loggedIn", "isStaff", "status", "enrolled"})
@@ -81,21 +82,42 @@ public class ModuleController {
         return "module";
     }
 
-    /**
-     * This endpoint gets a specific module's details if it exists
-     */
-    @RequestMapping(value = "modules/{id}", method = RequestMethod.POST)
-    public String editModule(@PathVariable("id") long moduleId, Module module, Model model) throws ModuleNotFoundException {
+    @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.GET)
+    public String editModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
-        if (!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")) {
+
+        if (!(Boolean) model.getAttribute("isStaff")) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
+        Optional<Module> module = moduleRepository.findById(moduleId);
+
+        if (!module.isPresent()) {
+            throw new ModuleNotFoundException(moduleId);
+        }
+
+        model.addAttribute("module", module.get());
+
+        return "edit_module";
+    }
+
+    /**
+     * This endpoint gets a specific module's details if it exists
+     */
+    @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
+    public String editModule(ModelMap model, Module module, @PathVariable("id") long moduleId) throws ModuleNotFoundException {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
+
+        if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
+            throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
+        }
 
         Module oldModule = moduleRepository.getOne(moduleId);
-        moduleRepository.delete(oldModule);
+        //moduleRepository.delete(oldModule);
         moduleRepository.save(module);
 
         model.addAttribute("module", module);
@@ -146,8 +168,9 @@ public class ModuleController {
     /**
      * enrol student in a module
      */
-    @RequestMapping(value = "modules/{id}/unenrol", method = RequestMethod.POST)
-    public String unEnroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+    @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.POST)
+    public String unEnrol(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }

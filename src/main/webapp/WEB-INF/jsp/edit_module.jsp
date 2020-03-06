@@ -2,52 +2,47 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
-<head>
-    <title>Edit Module</title>
-</head>
-<body>
-<div align="center">
-    <form action="save" method="post">
-        <table border="1" cellpadding="5">
+    <head>
+        <title>Edit Module</title>
+    </head>
+    <body>
+        <div align="center">
             <caption>
                 <h2>
                     Edit Module
                 </h2>
             </caption>
-            <input type="hidden" name="id" value="<c:out value='${module.id}' />"  />
-            <tr>
+            <form method="post">
+<%--                id: <input type="text" name="id" /><br>--%>
+<%--                moduleCode: <input type="text" name="moduleCode" /><br>--%>
+<%--                moduleYear: <input type="text" name="moduleYear" /><br>--%>
+<%--                moduleName: <input type="text" name="moduleName" /><br>--%>
+<%--                moduleDescription: <input type="text" name="moduleDescription" /><br>--%>
+<%--                maximumStudents: <input type="text" name="maximumStudents" /><br>--%>
+<%--                <input type="submit" value="Submit" /><br>--%>
+                <input type="hidden" name="id" value="${module.id}"  />
 
+                <input type="text" name="moduleCode"
+                       value="${module.moduleCode}"/><br/>
 
-                <%--<td><c:out value="${module.id}" /></td>--%>
+                <input type="text" name="moduleYear"
+                       value="${module.moduleYear}"/><br/>
 
-                <%--<td><c:out value="${module.moduleDescription}" /></td>--%>
+                <input type="text" name="moduleName"
+                       value="${module.moduleName}"/><br/>
 
-                <%--<td><c:out value="${module.coordinatorName}" /></td>--%>
-                <%--<td>--%>
-                <%--    <c:out value="${module.enrolledStudents}" />/<c:out value="${module.maximumStudents}" />--%>
-                <th>Description: </th>
-                <td>
-                    <input type="text" name="moduleDescription" size="45"
-                           value="<c:out value='${module.moduleDescription}' />"
-                    />
-                </td>
-            </tr>
-            <tr>
-                <th>ISBN: </th>
-                <td>
-                    <input type="text" name="isbn" size="45"
-                           value="<c:out value='${book.isbn}' />"
-                    />
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">
-                    <input type="submit" value="Save" />
-                </td>
-            </tr>
-        </table>
-    </form>
-</div>
-<a href="./logout">Log out</a>
-</body>
+                <input type="text" name="moduleDescription"
+                       value="${module.moduleDescription}"/><br/>
+
+                <input type="number" name="maximumStudents" size="45"
+                       value="${module.maximumStudents}"/><br/>
+
+                <input type="hidden" name="coordinatorId" size="45"
+                       value="45335"/><br/>
+
+                <input type="submit" value="Submit" /><br>
+            </form>
+        </div>
+        <a href="./logout">Log out</a>
+    </body>
 </html>

@@ -8,14 +8,19 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "staff")
 public class Staff {
+  
+    @Id
+    @NotBlank
+    private String id;
+
+    @NotBlank
+    private String name;
 
     @NotBlank
     private String username;
 
     @NotBlank
     private String password;
-    @Id
-    private String id;
 
     @NotBlank
     private String firstName;
@@ -42,7 +47,6 @@ public class Staff {
     public Staff() {
         super();
     }
-
 
     public Staff(String id, String firstName, String lastName, String gender, String address, String phoneNumber, String emailAddress) {
         super();
@@ -93,6 +97,6 @@ public class Staff {
 
     public String getEmailAddress() {
         return emailAddress;
-
     }
 }
+
