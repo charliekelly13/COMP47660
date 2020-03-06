@@ -107,7 +107,7 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
-    public String editModule(ModelMap model, Module module, @PathVariable("id") long moduleId) throws ModuleNotFoundException {
+    public String editModule(ModelMap model, Module module) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
@@ -116,7 +116,7 @@ public class ModuleController {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
-        Module oldModule = moduleRepository.getOne(moduleId);
+        Module oldModule = moduleRepository.getOne(module.getId());
         //moduleRepository.delete(oldModule);
         moduleRepository.save(module);
 
