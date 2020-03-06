@@ -194,10 +194,10 @@ public class ModuleController {
     }
 
     @RequestMapping(value = "modules/{id}/stat", method = RequestMethod.POST)
-    public HashMap<String, Integer> getGradeStats(@PathVariable("id") String moduleCode, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
-//        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-//            return ("redirect_to_login");
-//        }
+    public String getGradeStats(@PathVariable("id") String moduleCode, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
+        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            return ("redirect_to_login");
+        }
 
         List<Long> moduleIds = moduleRepository.findIDByCode(moduleCode);
         HashMap<String, Integer> gradeRange = new HashMap<>();
@@ -286,8 +286,8 @@ public class ModuleController {
                 }
             }
         }
-        return gradeRange;
+        model.addAttribute(gradeRange);
+        return "module";
 
-        //throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
     }
 }
