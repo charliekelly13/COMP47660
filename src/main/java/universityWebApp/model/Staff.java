@@ -1,8 +1,12 @@
 package universityWebApp.model;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+@Entity
+@Table(name = "staff")
 public class Staff {
 
     @NotBlank

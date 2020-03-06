@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"loggedIn", "student"})
+@SessionAttributes({"loggedIn", "student", "staff"})
 public class HomeController {
 
     @Autowired
