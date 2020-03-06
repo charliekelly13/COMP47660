@@ -13,7 +13,7 @@ import java.util.List;
 public interface CoordinatesRepository extends JpaRepository<Coordinates, CoordinatesId> {
 
     @Query("select a.moduleId from Coordinates a where a.staffId = ?1")
-    long findByStaffID(String staffId) throws ModuleNotFoundException;
+    List<Long> findByStaffID(String staffId) throws ModuleNotFoundException;
 
     @Query("select a.staffId from Coordinates a where a.moduleId = ?1")
     String findByModuleID(long module_id);

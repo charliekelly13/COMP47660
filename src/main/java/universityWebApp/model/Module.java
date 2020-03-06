@@ -2,6 +2,7 @@ package universityWebApp.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "modules")
@@ -9,15 +10,16 @@ import javax.validation.constraints.NotBlank;
         query = "select a.id from Module a where a.moduleCode = ?1")
 
 public class Module {
-    //Todo  and view module statistics (number of enrolled students, grades distributions for previous editions of the module).
     @NotBlank
     private String moduleName;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank
     private String moduleCode;
+
+    @NotBlank
     private String moduleYear;
 
     @NotBlank
@@ -30,7 +32,8 @@ public class Module {
 
     public Module() {}
 
-    public Module(String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int maximumStudents) {
+    public Module(long id, String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int maximumStudents) {
+        this.id = id;
         this.moduleCode = moduleCode;
         this.moduleYear = moduleYear;
         this.moduleName = moduleName;
@@ -68,4 +71,31 @@ public class Module {
         return moduleDescription;
     }
 
+    public void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setModuleCode(String moduleCode) {
+        this.moduleCode = moduleCode;
+    }
+
+    public void setModuleYear(String moduleYear) {
+        this.moduleYear = moduleYear;
+    }
+
+    public void setModuleDescription(String moduleDescription) {
+        this.moduleDescription = moduleDescription;
+    }
+
+    public void setCoordinatorId(String coordinatorId) {
+        this.coordinatorId = coordinatorId;
+    }
+
+    public void setMaximumStudents(int maximumStudents) {
+        this.maximumStudents = maximumStudents;
+    }
 }
