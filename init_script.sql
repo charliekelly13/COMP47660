@@ -51,24 +51,28 @@ CREATE TABLE IF NOT EXISTS `university`.`enrollment` (
     REFERENCES `university`.`students` (`id`));
 
 CREATE TABLE IF NOT EXISTS `university`.`staff` (
-  `staff_id` BIGINT NOT NULL,
-  `staff_name` VARCHAR(45) NOT NULL,
+  `id` BIGINT NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
-  `nationality` VARCHAR(45) NOT NULL, 
+  `nationality` VARCHAR(45) NOT NULL,
+  `address` VARCHAR(45) NOT NULL,
+  `phone_number` VARCHAR(45) NOT NULL,
+  `email_address` VARCHAR(45) NOT NULL, 
   `gender` VARCHAR(6) NOT NULL,
-  PRIMARY KEY (`staff_id`),
-  UNIQUE (`staff_id`));
+  PRIMARY KEY (`id`),
+  UNIQUE (`id`));
   
   CREATE TABLE IF NOT EXISTS `university`.`coordinates`(
   `coordinator_id` BIGINT NOT NULL,
-  `module_id` VARCHAR(45) NOT NULL,
+  `module_id` BIGINT NOT NULL,
   UNIQUE (`module_id`),
   PRIMARY KEY (`coordinator_id`, `module_id`),
   CONSTRAINT `Coordinates-Modules`
     FOREIGN KEY (`module_id`)
-    REFERENCES `university`.`modules` (`module_id`),
+    REFERENCES `university`.`modules` (`id`),
   CONSTRAINT `Coordinates-Staff`
     FOREIGN KEY (`coordinator_id`)
-    REFERENCES `university`.`staff` (`staff_id`));
+    REFERENCES `university`.`staff` (`id`));
 

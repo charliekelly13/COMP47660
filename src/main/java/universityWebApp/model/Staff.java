@@ -33,8 +33,7 @@ public class Staff {
 
     @NotBlank
     private String nationality;
-
-
+    
     @NotBlank
     private String address;
 
