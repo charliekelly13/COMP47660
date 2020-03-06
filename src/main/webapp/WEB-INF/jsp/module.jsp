@@ -11,7 +11,8 @@
         Academic year: ${module.moduleYear}<br/>
         Description: ${module.moduleDescription}<br/>
         Co-ordinator: ${coordinator}<br/>
-        ${amountOfStudents} out of ${module.maximumStudents} places available
+        ${amountOfStudents} out of ${module.maximumStudents} places available<br/>
+        Grade: ${grade ? grade : "?"}
     </p>
     <form method="post" action="${module.id}/${status}" class="inline">
         <button type="submit">${status}</button>
