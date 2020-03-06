@@ -54,18 +54,6 @@ public class StatsController {
             }
         }
         model.addAttribute(genderDis);
-        return "stats";
-    }
-
-    /**
-     * This endpoint returns all distribution of user nationality
-     */
-    @RequestMapping(value = "stats", method = RequestMethod.GET)
-    public String getNationalityDistribution(Model model) {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-        List<Staff> staff = staffRepository.findAll();
         HashMap<String, Integer> nationalDis = new HashMap();
         String nat;
         for(Staff s: staff){
@@ -77,7 +65,6 @@ public class StatsController {
                 nationalDis.put(nat, 0);;
             }
         }
-        List<Student> student = studentRepository.findAll();
         for(Student s: student){
             nat=s.getNationality();
             if(nationalDis.containsKey(nat)){
@@ -90,4 +77,5 @@ public class StatsController {
         model.addAttribute(nationalDis);
         return "stats";
     }
+
 }

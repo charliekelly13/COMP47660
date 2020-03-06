@@ -2,7 +2,6 @@ package universityWebApp.model;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class Staff {
     @Id
@@ -17,15 +16,6 @@ public class Staff {
     @NotBlank
     private String nationality;
 
-//    @NotBlank
-//    private String address;
-//
-//    @NotBlank
-//    private String phoneNumber;
-//
-//    @NotBlank
-//    private String emailAddress;
-
     public Staff() {
         super();
     }
@@ -35,9 +25,6 @@ public class Staff {
         this.id = id;
         this.name = name;
         this.gender = gender;
-//        this.address = address;
-//        this.phoneNumber = phoneNumber;
-//        this.emailAddress = emailAddress;
     }
 
     public String getId() {
@@ -71,29 +58,4 @@ public class Staff {
     public void setNationality(String nationality) {
         this.nationality = nationality;
     }
-
-//    public String getAddress() {
-//        return address;
-//    }
-//
-//    public void setAddress(String address) {
-//        this.address = address;
-//    }
-//
-//    public String getPhoneNumber() {
-//        return phoneNumber;
-//    }
-//
-//    public void setPhoneNumber(String phoneNumber) {
-//        this.phoneNumber = phoneNumber;
-//    }
-//
-//    public String getEmailAddress() {
-//        return emailAddress;
-//    }
-//
-//    public void setEmailAddress(String emailAddress) {
-//        this.emailAddress = emailAddress;
-//    }
-
 }
