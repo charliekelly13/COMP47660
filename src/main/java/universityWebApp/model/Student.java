@@ -16,7 +16,6 @@ public class Student {
     private String password;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @NotBlank

@@ -9,7 +9,6 @@ public class Staff {
   
     @Id
     @NotBlank
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @NotBlank
