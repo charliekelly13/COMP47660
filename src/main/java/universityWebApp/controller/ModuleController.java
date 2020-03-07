@@ -91,7 +91,7 @@ public class ModuleController {
             return ("redirect_to_login");
         }
 
-        if (!(Boolean) model.getAttribute("isStaff")) {
+        if (!(boolean) model.getAttribute("isStaff")) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 

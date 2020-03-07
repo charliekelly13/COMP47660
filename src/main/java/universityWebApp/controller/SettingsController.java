@@ -50,6 +50,9 @@ public class SettingsController {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("login");
         }
+        if (model.containsAttribute("isStaff")){
+            //staff can't deactivate
+        }
 
         Student student = (Student) model.getAttribute("student");
 

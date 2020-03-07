@@ -27,7 +27,7 @@ public class StatsController {
      * This endpoint returns all distribution of user details
      */
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
-    public String getUserDistribtuion(Model model) {
+    public String getUserDistribution(Model model) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
