@@ -16,5 +16,5 @@ public interface CoordinatesRepository extends JpaRepository<Coordinates, Coordi
     List<Long> findByStaffID(String staffId) throws ModuleNotFoundException;
 
     @Query("select a.staffId from Coordinates a where a.moduleId = ?1")
-    String findByModuleID(Long module_id);
+    String findByModuleID(long module_id);
 }
