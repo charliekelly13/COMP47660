@@ -4,9 +4,18 @@
 <html>
 <head>
     <title>Home</title>
+    <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
     <div align="center">
+        <div id="header">
+            <img src="img/logo.png" width="200" alt="Logo"/>
+            <div align="right">
+                <a href="/settings">Settings</a>
+                <a href="/logout">Log out</a>
+            </div>
+        </div>
         <h1>Home</h1>
         <p>Welcome ${student.firstName}!</p>
         <table border="1" cellpadding="5">
@@ -28,7 +37,5 @@
             </c:forEach>
         </table>
     </div>
-
-    <a href="./logout">Log out</a>
 </body>
 </html>
