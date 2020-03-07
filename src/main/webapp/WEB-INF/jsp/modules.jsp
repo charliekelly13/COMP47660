@@ -4,8 +4,8 @@
 <html>
 <head>
     <title>All Modules</title>
-    <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
 </head>
 <body>
     <div id="header">

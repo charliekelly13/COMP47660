@@ -30,7 +30,8 @@ public class Module {
 
     @NotBlank
     private String coordinatorId;
-    @NotBlank
+
+    @NotNull
     private int maximumStudents;
 
     public Module() {}
