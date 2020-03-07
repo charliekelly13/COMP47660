@@ -5,13 +5,13 @@ import java.util.Objects;
 
 public class CoordinatesId implements Serializable {
 
-    String moduleId;
+    long moduleId;
 
     String staffId;
 
     public CoordinatesId(){}
 
-    public CoordinatesId( String moduleId, String staffId){
+    public CoordinatesId( long moduleId, String staffId){
         this.moduleId = moduleId;
         this.staffId = staffId;
     }
@@ -21,7 +21,7 @@ public class CoordinatesId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoordinatesId coordinatesId = (CoordinatesId) o;
-        return moduleId.equals(coordinatesId.moduleId) &&
+        return moduleId == coordinatesId.moduleId &&
                 staffId.equals(coordinatesId.staffId);
     }
 
@@ -30,11 +30,11 @@ public class CoordinatesId implements Serializable {
         return Objects.hash(moduleId, staffId);
     }
 
-    public String getModuleId() {
+    public long getModuleId() {
         return moduleId;
     }
 
-    public void setModuleId(String moduleId) {
+    public void setModuleId(long moduleId) {
         this.moduleId = moduleId;
     }
 
