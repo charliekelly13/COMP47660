@@ -4,8 +4,17 @@
 <html>
 <head>
     <title>Statistics</title>
+    <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
+    <div id="header">
+        <img src="img/logo.png" width="200" alt="Logo"/>
+        <div align="right">
+            <a href="/settings">Settings</a>
+            <a href="/logout">Log out</a>
+        </div>
+    </div>
 <h1>University Statistics</h1>
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>

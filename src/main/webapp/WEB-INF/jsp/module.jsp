@@ -4,8 +4,17 @@
 <html>
 <head>
     <title>${module.moduleCode}: ${module.moduleName}</title>
+    <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
+    <div id="header">
+        <img src="img/logo.png" width="200" alt="Logo"/>
+        <div align="right">
+            <a href="/settings">Settings</a>
+            <a href="/logout">Log out</a>
+        </div>
+    </div>
     <h1>${module.moduleCode}: ${module.moduleName}</h1>
     <p>
         Academic year: ${module.moduleYear}<br/>
@@ -17,6 +26,5 @@
     <form method="post" action="${module.id}/${status}" class="inline">
         <button type="submit">${status}</button>
     </form>
-<a href="./logout">Log out</a>
 </body>
 </html>

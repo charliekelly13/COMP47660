@@ -1,19 +1,28 @@
 <html>
 
-<head>
-<title>Login</title>
-</head>
+	<head>
+		<title>Login</title>
+		<link href="https://fonts.googleapis.com/css2" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+	</head>
 
-<body>
-	<h1>Log in</h1>
-	<h4>You must log in to view this page.</h4>
-	<font color="red">${errorMessage}</font>
-	<form method="post">
-		Name : <input type="text" name="name" /><br>
-		Password : <input type="password" name="password" /> <br>
-		<input type="submit"value="Submit" /><br>
-	</form>
-	Don't have an account? <a href="/register">Register</a>
-</body>
+	<body>
+		<div id="header">
+			<img src="img/logo.png" width="200" alt="Logo"/>
+			<div align="right">
+				<a href="/register">Register</a>
+				<a href="/login">Log-in</a>
+			</div>
+		</div>
 
+		<h1>Log in</h1>
+		<h4>You must log in to view this page.</h4>
+		<font color="red">${errorMessage}</font>
+		<form method="post">
+			Name:  <input type="text" name="name" /><br>
+			Password: <input type="password" name="password" /> <br>
+			<input type="submit"value="Submit" /><br>
+		</form>
+		Don't have an account? <a href="/register">Register</a>
+	</body>
 </html>
