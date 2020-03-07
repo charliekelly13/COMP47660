@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `university`.`modules` (
   `module_name` VARCHAR(45) NOT NULL,
   `module_year` VARCHAR(45) NOT NULL,
   `module_description` VARCHAR(45) NOT NULL,
+  `coordinator_id` VARCHAR(45) NOT NULL,
   `maximum_students` INT NOT NULL,
   `terminated` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
