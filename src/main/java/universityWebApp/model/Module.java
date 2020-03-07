@@ -13,7 +13,8 @@ public class Module {
     @NotBlank
     private String moduleName;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private long id;
 
     @NotBlank
