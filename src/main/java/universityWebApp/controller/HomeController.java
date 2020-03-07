@@ -46,7 +46,7 @@ public class HomeController {
         } else if (model.containsAttribute("staff")) {
             Staff staff = (Staff) model.getAttribute("staff");
 
-            List<Module> coordinatedModules = moduleRepository.findIDByCoordinator(staff.getId());
+            List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
 
             model.addAttribute("modules", coordinatedModules);
         }

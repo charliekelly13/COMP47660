@@ -13,6 +13,6 @@ public interface ModuleRepository extends JpaRepository<Module, Long> {
     List<Long> findIDByCode(String moduleCode);
 
     @Query("select a from Module a where a.coordinatorId = ?1")
-    List<Module> findIDByCoordinator(String coordinatorId);
+    List<Module> findModulesByCoordinatorIds(String coordinatorId);
 
 }
