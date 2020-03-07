@@ -67,14 +67,13 @@ CREATE TABLE IF NOT EXISTS `university`.`staff` (
   UNIQUE(`USERNAME`));
   
   CREATE TABLE IF NOT EXISTS `university`.`coordinates`(
-  `coordinator_id` VARCHAR(45) NOT NULL,
+  `staff_id` VARCHAR(45) NOT NULL,
   `module_id` BIGINT NOT NULL,
   UNIQUE (`module_id`),
-  PRIMARY KEY (`coordinator_id`, `module_id`),
+  PRIMARY KEY (`staff_id`, `module_id`),
   CONSTRAINT `Coordinates-Modules`
     FOREIGN KEY (`module_id`)
     REFERENCES `university`.`modules` (`id`),
   CONSTRAINT `Coordinates-Staff`
-    FOREIGN KEY (`coordinator_id`)
+    FOREIGN KEY (`staff_id`)
     REFERENCES `university`.`staff` (`id`));
-
