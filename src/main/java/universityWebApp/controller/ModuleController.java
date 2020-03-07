@@ -63,12 +63,15 @@ public class ModuleController {
 
         model.addAttribute("module", module);
 
-        EnrollmentId enrollmentId = new EnrollmentId(moduleId, ((Student) model.getAttribute("student")).getId());
 
-        if (enrollmentRepository.findById(enrollmentId).isPresent()) {
-            model.addAttribute("status", "unenrol");
-        } else {
-            model.addAttribute("status", "enrol");
+        if(model.containsAttribute("student")) {
+            EnrollmentId enrollmentId = new EnrollmentId(moduleId, ((Student) model.getAttribute("student")).getId());
+
+            if (enrollmentRepository.findById(enrollmentId).isPresent()) {
+                model.addAttribute("status", "unenrol");
+            } else {
+                model.addAttribute("status", "enrol");
+            }
         }
         //todo: needs to look up the staff db
         //addModuleViewDetailsToModel(model, module);
