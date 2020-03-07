@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 @Table(name = "modules")
 @NamedQuery(name = "Module.findByIDfromCode",
         query = "select a.id from Module a where a.moduleCode = ?1")
+@NamedQuery(name = "Module.findIDByCoordinator",
+        query = "select a.id from Module a where a.coordinatorId = ?1")
 
 public class Module {
     @NotBlank
