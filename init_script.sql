@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `university`.`students` (
   `gender` VARCHAR(45) NOT NULL,
   `phone_number` VARCHAR(45) NOT NULL,
   `email_address` VARCHAR(45) NOT NULL,
+  `address` VARCHAR(45) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
@@ -77,3 +78,4 @@ CREATE TABLE IF NOT EXISTS `university`.`staff` (
   CONSTRAINT `Coordinates-Staff`
     FOREIGN KEY (`staff_id`)
     REFERENCES `university`.`staff` (`id`));
+ 
