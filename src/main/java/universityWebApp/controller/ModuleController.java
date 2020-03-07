@@ -30,9 +30,6 @@ public class ModuleController {
     GradesRepository gradesRepository;
 
     @Autowired
-    CoordinatesRepository coordinatesRepository;
-
-    @Autowired
     StaffRepository staffRepository;
 
     /**
@@ -73,8 +70,8 @@ public class ModuleController {
         //todo: needs to look up the staff db
         //addModuleViewDetailsToModel(model, module);
 
-        String coordinatorID = coordinatesRepository.findByModuleID(moduleId);
-        Staff coordinator = staffRepository.findStaffById(coordinatorID);
+        //String coordinatorID = moduleRepository.findIDByCoordinator(moduleId);
+        Staff coordinator = staffRepository.findStaffById(module.getCoordinatorId());
         model.addAttribute("coordinator", coordinator.getFirstName() + " " + coordinator.getLastName());
         long numberOfStudentsEnrolled = enrollmentRepository.findByModuleID(module.getId()).size();
         model.addAttribute("amountOfStudents", numberOfStudentsEnrolled);
@@ -212,8 +209,9 @@ public class ModuleController {
         if (!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
-
-        if (model.getAttribute("studentId") == coordinatesRepository.findByModuleID(moduleId)) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new ModuleNotFoundException(moduleId));
+        if (model.getAttribute("studentId") == module.getCoordinatorId()) {
             Grades grades = new Grades(moduleId, studentID, grade);
             gradesRepository.save(grades);
             return "module";

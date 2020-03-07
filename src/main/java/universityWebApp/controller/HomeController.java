@@ -5,7 +5,6 @@ import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Module;
 import universityWebApp.model.Staff;
 import universityWebApp.model.Student;
-import universityWebApp.repository.CoordinatesRepository;
 import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.rmi.StubNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

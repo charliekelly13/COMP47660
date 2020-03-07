@@ -11,4 +11,8 @@ import java.util.List;
 public interface ModuleRepository extends JpaRepository<Module, Long> {
     @Query("select a.id from Module a where a.moduleCode = ?1")
     List<Long> findIDByCode(String moduleCode);
+
+    @Query("select a.id from Module a where a.coordinatorId = ?1")
+    List<Long> findIDByCoordinator(String coordinatorId);
+
 }

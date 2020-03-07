@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `university`.`modules` (
   `module_year` VARCHAR(45) NOT NULL,
   `module_description` VARCHAR(45) NOT NULL,
   `maximum_students` INT NOT NULL,
-  `coordinator_id` VARCHAR(45) NOT NULL,
   `terminated` TINYINT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE (`id`));
@@ -78,4 +77,21 @@ CREATE TABLE IF NOT EXISTS `university`.`staff` (
   CONSTRAINT `Coordinates-Staff`
     FOREIGN KEY (`staff_id`)
     REFERENCES `university`.`staff` (`id`));
- 
+    
+INSERT INTO `students`
+VALUES ("1", "DARA", "CLARKE", 1, "IRISH", "MALE", "0867543241", "DARA@GMAIL.COM","old road", "DARA6", "PAS$W0R__D");
+
+INSERT INTO `modules`
+VALUES (1, "COMP30970", "SECURE SOFTWARE ENGINEERING", "2019", "GOOD", "500", 1);
+
+INSERT INTO `grades`
+VALUES ("1", 100, 1);
+
+INSERT INTO `enrollment`
+VALUES ("1","1");
+
+INSERT INTO `staff`
+VALUES ("1", "Liliana", "Pasquila", "l1", "Pswword", "Italian", "addle road", "34568", "l@ucd.ie", "Female");
+
+INSERT INTO `coordinates`
+VALUES ("1",1);
