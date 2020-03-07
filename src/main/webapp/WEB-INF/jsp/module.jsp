@@ -4,12 +4,12 @@
 <html>
 <head>
     <title>${module.moduleCode}: ${module.moduleName}</title>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css">
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
     <div id="header">
-        <img src="img/logo.png" width="200" alt="Logo"/>
+        <img src="../../img/logo.png" width="200" alt="Logo"/>
         <div align="right">
             <a href="/settings">Settings</a>
             <a href="/logout">Log out</a>
@@ -21,7 +21,8 @@
         Description: ${module.moduleDescription}<br/>
         Co-ordinator: ${coordinator}<br/>
         ${amountOfStudents} out of ${module.maximumStudents} places available<br/>
-        Grade: ${grade ? grade : "?"}
+        ${grade}
+        Grade: ${grade}
     </p>
     <form method="post" action="${module.id}/${status}" class="inline">
         <button type="submit">${status}</button>

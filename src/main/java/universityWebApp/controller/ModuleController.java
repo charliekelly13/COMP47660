@@ -69,11 +69,19 @@ public class ModuleController {
             } else {
                 model.addAttribute("status", "enrol");
             }
+
+            Student student = ((Student) model.getAttribute("student"));
+            Grade grade = gradesRepository.findByModuleAndStudentID(moduleId, student.getId());
+
+            if (grade != null) {
+                model.addAttribute("grade", grade.getGrade());
+            } else {
+                model.addAttribute("grade", "Not yet graded");
+            }
         }
         //todo: needs to look up the staff db
         //addModuleViewDetailsToModel(model, module);
 
-        //String coordinatorID = moduleRepository.findIDByCoordinator(moduleId);
         Staff coordinator = staffRepository.findStaffById(module.getCoordinatorId());
         model.addAttribute("coordinator", coordinator.getFirstName() + " " + coordinator.getLastName());
         long numberOfStudentsEnrolled = enrollmentRepository.findByModuleID(module.getId()).size();
@@ -107,7 +115,7 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
-    public String editModule(ModelMap model, Module module) {
+    public String editModule(ModelMap model, Module module, @RequestParam long moduleId) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
@@ -116,8 +124,6 @@ public class ModuleController {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
-        Module oldModule = moduleRepository.getOne(module.getId());
-        //moduleRepository.delete(oldModule);
         moduleRepository.save(module);
 
         model.addAttribute("module", module);
@@ -215,7 +221,7 @@ public class ModuleController {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
         if (model.getAttribute("studentId") == module.getCoordinatorId()) {
-            Grades grades = new Grades(moduleId, studentID, grade);
+            Grade grades = new Grade(moduleId, studentID, grade);
             gradesRepository.save(grades);
             return "module";
         }

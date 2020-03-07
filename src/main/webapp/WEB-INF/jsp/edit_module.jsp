@@ -5,14 +5,14 @@
     <head>
         <title>Edit Module</title>
         <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="../../css/main.css">
     </head>
     <body>
         <div id="header">
-            <img src="img/logo.png" width="200" alt="Logo"/>
+            <img src="../../img/logo.png" width="200" alt="Logo"/>
             <div align="right">
-                <a href="/settings">Settings</a>
-                <a href="/logout">Log out</a>
+                <a href="../../settings">Settings</a>
+                <a href="../../logout">Log out</a>
             </div>
         </div>
         <div align="center">
@@ -22,13 +22,6 @@
                 </h2>
             </caption>
             <form method="post">
-<%--                id: <input type="text" name="id" /><br>--%>
-<%--                moduleCode: <input type="text" name="moduleCode" /><br>--%>
-<%--                moduleYear: <input type="text" name="moduleYear" /><br>--%>
-<%--                moduleName: <input type="text" name="moduleName" /><br>--%>
-<%--                moduleDescription: <input type="text" name="moduleDescription" /><br>--%>
-<%--                maximumStudents: <input type="text" name="maximumStudents" /><br>--%>
-<%--                <input type="submit" value="Submit" /><br>--%>
                 <input type="hidden" name="id" value="${module.id}"  />
 
                 <input type="text" name="moduleCode"

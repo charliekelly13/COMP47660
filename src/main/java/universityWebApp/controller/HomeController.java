@@ -46,15 +46,9 @@ public class HomeController {
         } else if (model.containsAttribute("staff")) {
             Staff staff = (Staff) model.getAttribute("staff");
 
-            List<Long> coordinatedModules = moduleRepository.findIDByCoordinator(staff.getId());
-            List<Module> modules = new ArrayList<>();
+            List<Module> coordinatedModules = moduleRepository.findIDByCoordinator(staff.getId());
 
-            for (Long moduleId : coordinatedModules) {
-                modules.add(moduleRepository.findById(moduleId)
-                        .orElseThrow(() -> new ModuleNotFoundException(moduleId)));
-            }
-
-            model.addAttribute("modules", modules);
+            model.addAttribute("modules", coordinatedModules);
         }
 
         return "home";
