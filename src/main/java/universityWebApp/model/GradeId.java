@@ -6,7 +6,7 @@ import java.util.Objects;
 public class GradeId implements Serializable {
 
 
-    String moduleId;
+    long moduleId;
 
     String studentId;
 
@@ -14,7 +14,7 @@ public class GradeId implements Serializable {
 
     public GradeId(){}
 
-    public GradeId( String moduleId, int grade, String studentId){
+    public GradeId( long moduleId, int grade, String studentId){
         this.moduleId = moduleId;
         this.studentId = studentId;
         this.grade = grade;
@@ -25,7 +25,7 @@ public class GradeId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GradeId gradeId = (GradeId) o;
-        return moduleId.equals(gradeId.moduleId) &&
+        return (moduleId==gradeId.moduleId) &&
                 studentId.equals(gradeId.studentId);
     }
 
@@ -34,11 +34,11 @@ public class GradeId implements Serializable {
         return Objects.hash(moduleId, studentId, grade);
     }
 
-    public String getModuleId() {
+    public long getModuleId() {
         return moduleId;
     }
 
-    public void setModuleId(String moduleId) {
+    public void setModuleId(long moduleId) {
         this.moduleId = moduleId;
     }
 

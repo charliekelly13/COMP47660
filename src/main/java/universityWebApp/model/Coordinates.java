@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 public class Coordinates {
     @Id
     @NotBlank
-    private String moduleId;
+    private long moduleId;
     @Id
     @NotBlank
     private String staffId;
@@ -21,7 +21,7 @@ public class Coordinates {
         super();
     }
 
-    public Coordinates(String moduleId, String studentId) {
+    public Coordinates(long moduleId, String studentId) {
         super();
         this.moduleId = moduleId;
         this.staffId = staffId;
