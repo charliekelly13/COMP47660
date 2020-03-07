@@ -25,9 +25,6 @@ public class HomeController {
     @Autowired
     EnrollmentRepository enrollmentRepository;
 
-    @Autowired
-    CoordinatesRepository coordinatesRepository;
-
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
     public String viewHomePage(Model model) throws StudentNotFoundException, ModuleNotFoundException {
@@ -49,7 +46,7 @@ public class HomeController {
         } else if (model.containsAttribute("staff")) {
             Staff staff = (Staff) model.getAttribute("staff");
 
-            List<Long> coordinatedModules = coordinatesRepository.findByStaffID(staff.getId());
+            List<Long> coordinatedModules = moduleRepository.findIDByCoordinator(staff.getId());
             List<Module> modules = new ArrayList<>();
 
             for (Long moduleId : coordinatedModules) {
