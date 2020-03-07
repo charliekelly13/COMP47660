@@ -1,8 +1,6 @@
 package universityWebApp.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity
@@ -11,6 +9,7 @@ public class Staff {
   
     @Id
     @NotBlank
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @NotBlank
