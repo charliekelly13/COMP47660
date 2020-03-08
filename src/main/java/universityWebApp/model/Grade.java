@@ -23,7 +23,7 @@ public class Grade {
     private int grade;
 
     @Id
-    @NotNull
+    @NotEmpty
     private String studentId;
 
     public long getModuleId() {

@@ -67,17 +67,6 @@ CREATE TABLE IF NOT EXISTS `university`.`staff` (
   UNIQUE (`id`),
   UNIQUE(`USERNAME`));
   
-  CREATE TABLE IF NOT EXISTS `university`.`coordinates`(
-  `staff_id` VARCHAR(45) NOT NULL,
-  `module_id` BIGINT NOT NULL,
-  UNIQUE (`module_id`),
-  PRIMARY KEY (`staff_id`, `module_id`),
-  CONSTRAINT `Coordinates-Modules`
-    FOREIGN KEY (`module_id`)
-    REFERENCES `university`.`modules` (`id`),
-  CONSTRAINT `Coordinates-Staff`
-    FOREIGN KEY (`staff_id`)
-    REFERENCES `university`.`staff` (`id`));
     
 INSERT INTO `students`
 VALUES ("1", "DARA", "CLARKE", 1, "IRISH", "MALE", "0867543241", "DARA@GMAIL.COM","old road", "DARA6", "PAS$W0R__D");
@@ -93,6 +82,3 @@ VALUES ("1","1");
 
 INSERT INTO `staff`
 VALUES ("1", "Liliana", "Pasquila", "l1", "Pswword", "Italian", "addle road", "34568", "l@ucd.ie", "Female");
-
-INSERT INTO `coordinates`
-VALUES ("1",1);
