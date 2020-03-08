@@ -51,7 +51,6 @@
     <!-- Create a div where the graph will take place -->
 
 
-
     // set the color scale
     var color = d3.scaleOrdinal()
         .domain(${gender})
@@ -92,7 +91,6 @@
         .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
         .style("text-anchor", "middle")
         .style("font-size", 17)
-
 </script>
 
 <script>

@@ -2,6 +2,8 @@ package universityWebApp.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Entity
 @Table(name = "grades")
 @IdClass(GradeId.class)
@@ -14,15 +16,14 @@ import javax.validation.constraints.NotBlank;
 
 public class Grade {
     @Id
-    @NotBlank
+    @NotNull
     private long moduleId;
 
-    @Id
-    @NotBlank
+    @NotNull
     private int grade;
 
     @Id
-    @NotBlank
+    @NotEmpty
     private String studentId;
 
     public long getModuleId() {

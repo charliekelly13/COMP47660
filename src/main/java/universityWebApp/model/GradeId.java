@@ -10,14 +10,11 @@ public class GradeId implements Serializable {
 
     String studentId;
 
-    int grade;
-
     public GradeId(){}
 
-    public GradeId( long moduleId, int grade, String studentId){
+    public GradeId( long moduleId, String studentId){
         this.moduleId = moduleId;
         this.studentId = studentId;
-        this.grade = grade;
     }
 
     @Override
@@ -31,7 +28,7 @@ public class GradeId implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(moduleId, studentId, grade);
+        return Objects.hash(moduleId, studentId);
     }
 
     public long getModuleId() {
@@ -40,14 +37,6 @@ public class GradeId implements Serializable {
 
     public void setModuleId(long moduleId) {
         this.moduleId = moduleId;
-    }
-
-    public int getGrade() {
-        return grade;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
     }
 
     public String getStudentId() {
