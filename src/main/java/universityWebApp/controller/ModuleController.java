@@ -147,7 +147,7 @@ public class ModuleController {
 
         model.addAttribute("module", module);
 
-        return "module";
+        return "redirect_to_module";
     }
 
     /**
@@ -243,9 +243,10 @@ public class ModuleController {
         Staff coordinator = ((Staff) model.getAttribute("staff"));
 
         if (coordinator.getId().equals(module.getCoordinatorId())) {
-            Grade grades = new Grade(moduleId, studentID, grade);
-            gradesRepository.deleteById(new GradeId(moduleId, studentID));
-            gradesRepository.save(grades);
+            if (gradesRepository.findById(new GradeId(moduleId, studentID)).isPresent()) {
+                gradesRepository.deleteById(new GradeId(moduleId, studentID));
+            }
+            gradesRepository.save(new Grade(moduleId, studentID, grade));
             return "grade_confirmation";
         }
 

@@ -11,6 +11,8 @@
     <div id="header">
         <img src="img/logo.png" width="200" alt="Logo"/>
         <div align="right">
+            <a href="/">Home</a>
+            <a href="/modules">All Modules</a>
             <a href="/settings">Settings</a>
             <a href="/logout">Log out</a>
         </div>
@@ -54,7 +56,7 @@
     // set the color scale
     var color = d3.scaleOrdinal()
         .domain(${gender})
-        .range(["#1E90FF", "#FF69B4"])
+        .range(["#bdbdbd", "#1E90FF", "#FF69B4"])
 
     // Compute the position of each group on the pie:
     var pie = d3.pie()

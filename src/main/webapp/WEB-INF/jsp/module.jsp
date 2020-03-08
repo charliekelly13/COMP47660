@@ -11,6 +11,8 @@
     <div id="header">
         <img src="../../img/logo.png" width="200" alt="Logo"/>
         <div align="right">
+            <a href="/">Home</a>
+            <a href="/modules">All Modules</a>
             <a href="/settings">Settings</a>
             <a href="/logout">Log out</a>
         </div>
@@ -23,6 +25,7 @@
         ${amountOfStudents} student enrolled out of ${module.maximumStudents} available places<br/>
         <c:choose>
             <c:when test="${isStaff}">
+                <a href="${module.id}/edit">Edit module details</a>
                 <h3>Add grade</h3>
                 <form method="post" action="${module.id}/grade" class="inline">
                     Student ID: <input type="text" name="studentID"/>

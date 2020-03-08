@@ -12,11 +12,13 @@
 <div id="header">
     <img src="../../../img/logo.png" width="200" alt="Logo"/>
     <div align="right">
+        <a href="/">Home</a>
+        <a href="/modules">All Modules</a>
         <a href="/settings">Settings</a>
         <a href="/logout">Log out</a>
     </div>
 </div>
-<p>Grade successfully inputted. <a href="/modules/${module.moduleId}">Click here</a> to return to the module page.</p>
+<p>Grade successfully inputted. <a href="/modules/${module.id}">Click here</a> to return to the module page.</p>
 </body>
 
 </html>
