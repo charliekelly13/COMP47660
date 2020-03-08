@@ -4,12 +4,12 @@
 <html>
 <head>
     <title>All Modules</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
 </head>
 <body>
     <div id="header">
-        <img src="img/logo.png" width="200" alt="Logo"/>
+        <img src="../img/logo.png" width="200" alt="Logo"/>
         <div align="right">
             <a href="/settings">Settings</a>
             <a href="/logout">Log out</a>
@@ -17,6 +17,13 @@
     </div>
     <div align="center">
         <h1>Home</h1>
+        Search:
+
+        <form method="get" class="inline">
+            <input type="text" name="searchTerm"/>
+            <button>Search</button>
+        </form>
+
         <table border="1" cellpadding="5">
             <caption><h2>All Modules</h2></caption>
             <tr>

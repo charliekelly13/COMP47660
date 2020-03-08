@@ -12,12 +12,10 @@ import universityWebApp.model.*;
 import universityWebApp.model.Module;
 import universityWebApp.repository.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
-@SessionAttributes({"student", "loggedIn", "isStaff", "status", "enrolled"})
+@SessionAttributes({"student", "loggedIn", "isStaff", "status", "enrolled", "staff", "module"})
 public class ModuleController {
 
     @Autowired
@@ -36,14 +34,35 @@ public class ModuleController {
      * This endpoint returns all modules
      */
     @RequestMapping(value = "modules", method = RequestMethod.GET)
-    public String getModules(ModelMap model) {
+    public String getModules(ModelMap model, @RequestParam(defaultValue="") String searchTerm) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
 
         List<Module> modules = moduleRepository.findAll();
-        model.addAttribute("modules", modules);
+
+        if (searchTerm.isEmpty()) {
+            model.addAttribute("modules", modules);
+        } else {
+            List<Module> filteredModules = new ArrayList<>();
+            searchTerm = searchTerm.toLowerCase();
+            for (Module module : modules) {
+                Staff coordinator = staffRepository.findStaffById(module.getCoordinatorId());
+
+                if (coordinator.getFirstName().toLowerCase().contains(searchTerm) ||
+                        coordinator.getLastName().toLowerCase().contains(searchTerm) ||
+                        module.getModuleCode().toLowerCase().contains(searchTerm) ||
+                        module.getModuleName().toLowerCase().contains(searchTerm) ||
+                        module.getModuleDescription().toLowerCase().contains(searchTerm)
+                        || module.getModuleYear().toLowerCase().contains(searchTerm)) {
+                    filteredModules.add(module);
+                }
+            }
+            model.addAttribute("modules", filteredModules);
+        }
+
         return "modules";
+
     }
 
     /**
@@ -79,13 +98,13 @@ public class ModuleController {
                 model.addAttribute("grade", "Not yet graded");
             }
         }
-        //todo: needs to look up the staff db
-        //addModuleViewDetailsToModel(model, module);
 
         Staff coordinator = staffRepository.findStaffById(module.getCoordinatorId());
         model.addAttribute("coordinator", coordinator.getFirstName() + " " + coordinator.getLastName());
         long numberOfStudentsEnrolled = enrollmentRepository.findByModuleID(module.getId()).size();
         model.addAttribute("amountOfStudents", numberOfStudentsEnrolled);
+
+        model.addAttribute("gradeMap", getGradeMap(module.getModuleCode()));
 
         return "module";
     }
@@ -218,93 +237,115 @@ public class ModuleController {
         if (!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
+
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
-        if (model.getAttribute("studentId") == module.getCoordinatorId()) {
+        Staff coordinator = ((Staff) model.getAttribute("staff"));
+
+        if (coordinator.getId().equals(module.getCoordinatorId())) {
             Grade grades = new Grade(moduleId, studentID, grade);
+            gradesRepository.deleteById(new GradeId(moduleId, studentID));
             gradesRepository.save(grades);
-            return "module";
+            return "grade_confirmation";
         }
 
         throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value = "modules/{id}/stat", method = RequestMethod.POST)
+    @RequestMapping(value = "modules/{id}/", method = RequestMethod.POST)
     public String getGradeStats(@PathVariable("id") String moduleCode, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
         }
 
+
+        model.addAttribute("gradeMap", getGradeMap(moduleCode));
+
+        return "module";
+    }
+
+    private void populateGradeMap(Map<String, Integer> gradeMap) {
+        gradeMap.put("0-5", 0);
+        gradeMap.put("5-10", 0);
+        gradeMap.put("10-15", 0);
+        gradeMap.put("15-20", 0);
+        gradeMap.put("20-25", 0);
+        gradeMap.put("25-30", 0);
+        gradeMap.put("30-35", 0);
+        gradeMap.put("35-40", 0);
+        gradeMap.put("40-45", 0);
+        gradeMap.put("45-50", 0);
+        gradeMap.put("50-55", 0);
+        gradeMap.put("55-60", 0);
+        gradeMap.put("60-65", 0);
+        gradeMap.put("65-70", 0);
+        gradeMap.put("70-75", 0);
+        gradeMap.put("75-80", 0);
+        gradeMap.put("80-85", 0);
+        gradeMap.put("85-90", 0);
+        gradeMap.put("90-95", 0);
+        gradeMap.put("95-100", 0);
+    }
+
+    private Map<String, Integer> getGradeMap(String moduleCode) {
         List<Long> moduleIds = moduleRepository.findIDByCode(moduleCode);
-        HashMap<String, Integer> gradeRange = new HashMap<>();
-        gradeRange.put("0-5", 0);
-        gradeRange.put("5-10", 0);
-        gradeRange.put("10-15", 0);
-        gradeRange.put("15-20", 0);
-        gradeRange.put("20-25", 0);
-        gradeRange.put("25-30", 0);
-        gradeRange.put("30-35", 0);
-        gradeRange.put("35-40", 0);
-        gradeRange.put("40-45", 0);
-        gradeRange.put("45-50", 0);
-        gradeRange.put("50-55", 0);
-        gradeRange.put("55-60", 0);
-        gradeRange.put("60-65", 0);
-        gradeRange.put("65-70", 0);
-        gradeRange.put("70-75", 0);
-        gradeRange.put("75-80", 0);
-        gradeRange.put("80-85", 0);
-        gradeRange.put("85-90", 0);
-        gradeRange.put("90-95", 0);
-        gradeRange.put("95-100", 0);
-        int temp;
+        Map<String, Integer> gradeRange = new  TreeMap<>();
+
+        populateGradeMap(gradeRange);
+
         for (long id : moduleIds) {
-            for (int g : gradesRepository.findByModuleID(id)) {
-                if (g >= 0 && g < 5) {
-                    gradeRange.put("0-5", gradeRange.get("0-5") + 1);
-                } else if (g >= 5 && g < 10) {
-                    gradeRange.put("5-10", gradeRange.get("5-10") + 1);
-                } else if (g >= 10 && g < 15) {
-                    gradeRange.put("10-15", gradeRange.get("10-15") + 1);
-                } else if (g >= 15 && g < 20) {
-                    gradeRange.put("15-20", gradeRange.get("15-20") + 1);
-                } else if (g >= 20 && g < 25) {
-                    gradeRange.put("20-25", gradeRange.get("20-25") + 1);
-                } else if (g >= 25 && g < 30) {
-                    gradeRange.put("25-30", gradeRange.get("25-30") + 1);
-                } else if (g >= 30 && g < 35) {
-                    gradeRange.put("30-35", gradeRange.get("30-35") + 1);
-                } else if (g >= 35 && g < 40) {
-                    gradeRange.put("35-40", gradeRange.get("35-40") + 1);
-                } else if (g >= 40 && g < 45) {
-                    gradeRange.put("40-45", gradeRange.get("40-45") + 1);
-                } else if (g >= 45 && g < 50) {
-                    gradeRange.put("45-50", gradeRange.get("45-50") + 1);
-                } else if (g >= 50 && g < 55) {
-                    gradeRange.put("50-55", gradeRange.get("50-55") + 1);
-                } else if (g >= 55 && g < 60) {
-                    gradeRange.put("55-60", gradeRange.get("55-60") + 1);
-                } else if (g >= 60 && g < 65) {
-                    gradeRange.put("60-65", gradeRange.get("60-65") + 1);
-                } else if (g >= 65 && g < 70) {
-                    gradeRange.put("65-70", gradeRange.get("65-70") + 1);
-                } else if (g >= 70 && g < 75) {
-                    gradeRange.put("70-75", gradeRange.get("70-75") + 1);
-                } else if (g >= 75 && g < 80) {
-                    gradeRange.put("75-80", gradeRange.get("75-80") + 1);
-                } else if (g >= 80 && g < 85) {
-                    gradeRange.put("80-85", gradeRange.get("80-85") + 1);
-                } else if (g >= 85 && g < 90) {
-                    gradeRange.put("85-90", gradeRange.get("85-90") + 1);
-                } else if (g >= 90 && g < 95) {
-                    gradeRange.put("90-95", gradeRange.get("90-95") + 1);
-                } else if (g >= 95 && g < 100) {
-                    gradeRange.put("95-100", gradeRange.get("95-100") + 1);
+            for (Grade g : gradesRepository.findGradesByModuleId(id)) {
+                int gradeScore = g.getGrade();
+
+                String bucket = "";
+
+                if (gradeScore >= 0 && gradeScore < 5) {
+                    bucket = "0-5";
+                } else if (gradeScore >= 5 && gradeScore < 10) {
+                    bucket = "5-10";
+                } else if (gradeScore >= 10 && gradeScore < 15) {
+                    bucket = "10-15";
+                } else if (gradeScore >= 15 && gradeScore < 20) {
+                    bucket = "15-20";
+                } else if (gradeScore >= 20 && gradeScore < 25) {
+                    bucket = "20-25";
+                } else if (gradeScore >= 25 && gradeScore < 30) {
+                    bucket = "25-30";
+                } else if (gradeScore >= 30 && gradeScore < 35) {
+                    bucket = "30-35";
+                } else if (gradeScore >= 35 && gradeScore < 40) {
+                    bucket = "35-40";
+                } else if (gradeScore >= 40 && gradeScore < 45) {
+                    bucket = "40-45";
+                } else if (gradeScore >= 45 && gradeScore < 50) {
+                    bucket = "45-50";
+                } else if (gradeScore >= 50 && gradeScore < 55) {
+                    bucket = "50-55";
+                } else if (gradeScore >= 55 && gradeScore < 60) {
+                    bucket = "55-60";
+                } else if (gradeScore >= 60 && gradeScore < 65) {
+                    bucket = "60-65";
+                } else if (gradeScore >= 65 && gradeScore < 70) {
+                    bucket = "65-70";
+                } else if (gradeScore >= 70 && gradeScore < 75) {
+                    bucket = "70-75";
+                } else if (gradeScore >= 75 && gradeScore < 80) {
+                    bucket = "75-80";
+                } else if (gradeScore >= 80 && gradeScore < 85) {
+                    bucket = "80-85";
+                } else if (gradeScore >= 85 && gradeScore < 90) {
+                    bucket = "85-90";
+                } else if (gradeScore >= 90 && gradeScore < 95) {
+                    bucket = "90-95";
+                } else if (gradeScore >= 95 && gradeScore <= 100) {
+                    bucket = "95-100";
                 }
+
+                gradeRange.put(bucket, gradeRange.get(bucket) + 1);
+
             }
         }
-        model.addAttribute(gradeRange);
-        return "module";
 
+        return gradeRange;
     }
 }

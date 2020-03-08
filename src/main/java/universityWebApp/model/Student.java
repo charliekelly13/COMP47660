@@ -110,6 +110,10 @@ public class Student {
         return nationality;
     }
 
+    public boolean isFeesPaid() {
+        return feesPaid;
+    }
+
     public void setNationality(String nationality) {
         this.nationality = nationality;
     }
