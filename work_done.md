@@ -7,3 +7,8 @@ Darragh Clarke:
 Oisín Quinn:
 * Built all .jsp pages for the front-end
 * Worked on module enrollment, module searching and various other smaller contributions to the back-end
+
+Charles Kelly: 
+* Set up the database andthe script to create it
+* Worked on create the repositories and the corresponding queries
+* Assited Darragh with the backend java functionality.
