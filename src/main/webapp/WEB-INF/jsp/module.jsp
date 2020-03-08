@@ -23,26 +23,38 @@
         Academic year: ${module.moduleYear}<br/>
         Description: ${module.moduleDescription}<br/>
         Co-ordinator: ${coordinator}<br/>
-        ${amountOfStudents} student enrolled out of ${module.maximumStudents} available places<br/>
+        <c:if test="${module.terminated}">
+            <b>Module is terminated.</b><br/>
+        </c:if>
+    ${amountOfStudents} student enrolled out of ${module.maximumStudents} available places<br/>
         <c:choose>
             <c:when test="${isStaff}">
                 <a href="${module.id}/edit">Edit module details</a>
-                <h3>Add grade</h3>
-                <form method="post" action="${module.id}/grade" class="inline">
-                    Student ID: <input type="text" name="studentID"/>
-                    Grade (as percentage): <input type="text" name="grade"/>
-                    <button type="submit">Submit grade</button>
-                </form>
-                <br />
+                <c:if test="${module.terminated}">
+                    <h3>Add grade</h3>
+                    <form method="post" action="${module.id}/grade" class="inline">
+                        Student ID: <input type="text" name="studentID"/>
+                        Grade (as percentage): <input type="text" name="grade"/>
+                        <button type="submit">Submit grade</button>
+                    </form>
+                    <br />
+                </c:if>
             </c:when>
             <c:otherwise>
                 <form method="post" action="${module.id}/${status}" class="inline">
                     <c:choose>
-                        <c:when test="${student.feesPaid}">
-                            <button type="submit">${status}</button>
+                        <c:when test="${module.terminated}">
+                            Students can't enrol in a terminated module.
                         </c:when>
                         <c:otherwise>
-                            <font color="red">You must pay your fees before enroling in a module.</font>
+                            <c:choose>
+                                <c:when test="${student.feesPaid}">
+                                    <button type="submit">${status}</button>
+                                </c:when>
+                                <c:otherwise>
+                                    <font color="red">You must pay your fees before enroling in a module.</font>
+                                </c:otherwise>
+                            </c:choose>
                         </c:otherwise>
                     </c:choose>
                 </form>

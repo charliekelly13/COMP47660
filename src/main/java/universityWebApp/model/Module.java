@@ -78,8 +78,6 @@ public class Module {
         return moduleDescription;
     }
 
-    public boolean getIfModuleTerminated(){return terminated;}
-
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
     }
@@ -108,6 +106,11 @@ public class Module {
         this.maximumStudents = maximumStudents;
     }
 
-    public void setIfModuleTerminated(boolean terminated){this.terminated=terminated;}
+    public boolean isTerminated() {
+        return terminated;
+    }
 
+    public void setTerminated(boolean terminated) {
+        this.terminated = terminated;
+    }
 }
