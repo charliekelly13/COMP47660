@@ -1,4 +1,4 @@
-# One Last Height – Work Done
+# One Last Heist – Work Done
 
 Darragh Clarke:
 * Worked on setting up controller classes as well as various endpoints for the program. 
