@@ -1,6 +1,0 @@
-Darragh Clarke: -Worked on setting up controller classes as well as various endpoints for the program. 
-		-Worked on some of how the java backend interacted with the database.
-
-Charles Kelly: -Set up the database andthe script to create it
-	       -Worked on create the repositories and the corresponding queries
-	       -Assited Darragh with the backend java functionality.
