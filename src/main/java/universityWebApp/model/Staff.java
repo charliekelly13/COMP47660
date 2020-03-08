@@ -12,9 +12,6 @@ public class Staff {
     private String id;
 
     @NotBlank
-    private String name;
-
-    @NotBlank
     private String username;
 
     @NotBlank

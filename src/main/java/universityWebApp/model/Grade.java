@@ -17,6 +17,14 @@ public class Grade {
     @NotBlank
     private long moduleId;
 
+    @Id
+    @NotBlank
+    private int grade;
+
+    @Id
+    @NotBlank
+    private String studentId;
+
     public long getModuleId() {
         return moduleId;
     }
@@ -40,13 +48,6 @@ public class Grade {
     public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
-
-    @Id
-    @NotBlank
-    private int grade;
-    @Id
-    @NotBlank
-    private String studentId;
 
     public Grade() {
         super();
