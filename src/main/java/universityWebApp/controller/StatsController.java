@@ -33,29 +33,33 @@ public class StatsController {
         }
 
         JSONObject staffGender = new JSONObject();
-        staffGender.put("male", 0);
-        staffGender.put("female", 0);
-        staffGender.put("other", 0);
+        staffGender.put("Male", 0);
+        staffGender.put("Female", 0);
+        staffGender.put("Other", 0);
 
         JSONObject gender = new JSONObject();
-        gender.put("male", 0);
-        gender.put("female", 0);
-        gender.put("other", 0);
+        gender.put("Male", 0);
+        gender.put("Female", 0);
+        gender.put("Other", 0);
 
 
         for(Staff s: staffRepository.findAll()) {
-            gender.put(s.getGender().toLowerCase(), (Integer) gender.get(s.getGender().toLowerCase()) + 1);
-            staffGender.put(s.getGender().toLowerCase(), (Integer) staffGender.get(s.getGender().toLowerCase()) + 1);
+            String genderValue = s.getGender().substring(0,1).toUpperCase() + s.getGender().substring(1).toLowerCase();
+
+            gender.put(genderValue, (Integer) gender.get(genderValue) + 1);
+            staffGender.put(genderValue, (Integer) staffGender.get(genderValue) + 1);
         }
 
         JSONObject studentGender = new JSONObject();
-        studentGender.put("male", 0);
-        studentGender.put("female", 0);
-        studentGender.put("other", 0);
+        studentGender.put("Male", 0);
+        studentGender.put("Female", 0);
+        studentGender.put("Other", 0);
 
         for(Student s: studentRepository.findAll()) {
-            gender.put(s.getGender().toLowerCase(), (Integer) gender.get(s.getGender().toLowerCase()) + 1);
-            studentGender.put(s.getGender().toLowerCase(), (Integer) studentGender.get(s.getGender().toLowerCase()) + 1);
+            String genderValue = s.getGender().substring(0,1).toUpperCase() + s.getGender().substring(1).toLowerCase();
+
+            gender.put(genderValue, (Integer) gender.get(genderValue) + 1);
+            studentGender.put(genderValue, (Integer) studentGender.get(genderValue) + 1);
         }
 
         model.addAttribute("staff_gender", staffGender);
@@ -67,30 +71,34 @@ public class StatsController {
         JSONObject studentNationality = new JSONObject();
 
         for(Staff s : staffRepository.findAll()) {
-            if (nationality.has(s.getNationality())) {
-                nationality.put(s.getNationality(), (Integer) nationality.get(s.getNationality()) + 1);
+            String nationalityValue = s.getNationality().substring(0,1).toUpperCase() + s.getNationality().substring(1).toLowerCase();
+
+            if (nationality.has(nationalityValue)) {
+                nationality.put(nationalityValue, (Integer) nationality.get(nationalityValue) + 1);
             } else {
-                nationality.put(s.getNationality(), 1);
+                nationality.put(nationalityValue, 1);
             }
 
-            if (staffNationality.has(s.getNationality())) {
-                staffNationality.put(s.getNationality(), (Integer) staffNationality.get(s.getNationality()) + 1);
+            if (staffNationality.has(nationalityValue)) {
+                staffNationality.put(nationalityValue, (Integer) staffNationality.get(nationalityValue) + 1);
             } else {
-                staffNationality.put(s.getNationality(), 1);
+                staffNationality.put(nationalityValue, 1);
             }
         }
 
         for(Student s : studentRepository.findAll()) {
-            if (nationality.has(s.getNationality())) {
-                nationality.put(s.getNationality(), (Integer) nationality.get(s.getNationality()) + 1);
+            String nationalityValue = s.getNationality().substring(0,1).toUpperCase() + s.getNationality().substring(1).toLowerCase();
+
+            if (nationality.has(nationalityValue)) {
+                nationality.put(nationalityValue, (Integer) nationality.get(nationalityValue) + 1);
             } else {
-                nationality.put(s.getNationality(), 1);
+                nationality.put(nationalityValue, 1);
             }
 
-            if (studentNationality.has(s.getNationality())) {
-                studentNationality.put(s.getNationality(), (Integer) studentNationality.get(s.getNationality()) + 1);
+            if (studentNationality.has(nationalityValue)) {
+                studentNationality.put(nationalityValue, (Integer) studentNationality.get(nationalityValue) + 1);
             } else {
-                studentNationality.put(s.getNationality(), 1);
+                studentNationality.put(nationalityValue, 1);
             }
         }
 

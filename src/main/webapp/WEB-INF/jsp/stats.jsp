@@ -117,7 +117,13 @@
             .data(data_ready)
             .enter()
             .append('text')
-            .text(function(d){ return d.data.key + ": " + d.data.value})
+            .text(function(d){
+                if (d.data.value > 0) {
+                    return d.data.key + ": " + d.data.value
+                } else {
+                    return '';
+                }
+            })
             .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
             .style("text-anchor", "middle")
             .style("font-size", 17)
@@ -313,7 +319,13 @@
             .data(data_ready)
             .enter()
             .append('text')
-            .text(function(d){ return d.data.key + ": " + d.data.value})
+            .text(function(d){
+                if (d.data.value > 0) {
+                    return d.data.key + ": " + d.data.value
+                } else {
+                    return '';
+                }
+            })
             .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
             .style("text-anchor", "middle")
             .style("font-size", 17)
