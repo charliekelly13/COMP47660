@@ -240,6 +240,7 @@ public class ModuleController {
 
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
+        
         Staff coordinator = ((Staff) model.getAttribute("staff"));
 
         if (coordinator.getId().equals(module.getCoordinatorId())) {

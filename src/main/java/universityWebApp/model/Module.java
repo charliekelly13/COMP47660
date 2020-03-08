@@ -34,16 +34,19 @@ public class Module {
     @NotNull
     private int maximumStudents;
 
+    @NotNull
+    private boolean terminated;
+
     public Module() {}
 
-    public Module(long id, String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int maximumStudents) {
-        this.id = id;
+    public Module(String moduleCode, String moduleYear, String moduleName, String moduleDescription, String coordinatorId, int maximumStudents, boolean terminated) {
         this.moduleCode = moduleCode;
         this.moduleYear = moduleYear;
         this.moduleName = moduleName;
         this.moduleDescription = moduleDescription;
         this.coordinatorId = coordinatorId;
         this.maximumStudents = maximumStudents;
+        this.terminated = terminated;
     }
 
 
@@ -75,6 +78,8 @@ public class Module {
         return moduleDescription;
     }
 
+    public boolean getIfModuleTerminated(){return terminated;}
+
     public void setModuleName(String moduleName) {
         this.moduleName = moduleName;
     }
@@ -102,4 +107,7 @@ public class Module {
     public void setMaximumStudents(int maximumStudents) {
         this.maximumStudents = maximumStudents;
     }
+
+    public void setIfModuleTerminated(boolean terminated){this.terminated=terminated;}
+
 }
