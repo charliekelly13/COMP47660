@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import universityWebApp.model.Staff;
 import universityWebApp.model.Student;
+import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
 @Controller
@@ -17,15 +19,22 @@ public class RegistrationController {
     @Autowired
     StudentRepository studentRepository;
 
-    @RequestMapping(value="/register",method = RequestMethod.GET)
+    @Autowired
+    StaffRepository staffRepository;
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String showRegisterPage(ModelMap model) {
         return "register";
     }
 
-    @RequestMapping(value="/register",method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegisterPage(ModelMap model, Student student) {
-        studentRepository.save(student);
-
-        return "register_confirmation";
+        if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
+            studentRepository.save(student);
+            return "register_confirmation";
+        } else {
+            model.put("errorMessage", "Username Already Exists");
+            return "register";
+        }
     }
 }
