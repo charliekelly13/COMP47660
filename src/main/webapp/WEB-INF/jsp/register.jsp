@@ -17,10 +17,10 @@
     <font color="red">${errorMessage}</font>
     <form method="post">
         <%--    name, surname,  student ID, address, phone number, email address--%>
-        First name: <input type="text" name="firstName"/><br>
-        Surname: <input type="text" name="lastName"/><br>
-        Student ID: <input type="text" name="id"/><br>
-        Nationality: <select name="nationality">
+        First name: <input type="text" name="firstName" required/><br>
+        Surname: <input type="text" name="lastName" required/><br>
+        Student ID: <input type="text" name="id" required/><br>
+        Nationality: <select name="nationality" required>
             <option value="">-- select one --</option>
             <option value="afghan">Afghan</option>
             <option value="albanian">Albanian</option>
@@ -215,17 +215,17 @@
             <option value="zambian">Zambian</option>
             <option value="zimbabwean">Zimbabwean</option>
         </select><br>
-        Phone number: <input type="text" name="phoneNumber"/><br>
-        Email Address: <input type="email" name="emailAddress"/><br>
+        Phone number: <input type="text" name="phoneNumber" required/><br>
+        Email Address: <input type="email" name="emailAddress" required/><br>
         Gender:
-        <select name="gender">
+        <select name="gender" required>
             <option value="male" selected>Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
         </select><br/>
-        Address: <input type="text" name="address"/><br>
-        Username: <input type="text" name="username"/><br>
-        Password: <input type="password" name="password"/><br>
+        Address: <input type="text" name="address" required/><br>
+        Username: <input type="text" name="username" required/><br>
+        Password: <input type="password" name="password" required/><br>
         <input type="submit" value="Submit"/><br>
     </form>
     Already have an account? <a href="/login">Login</a>
