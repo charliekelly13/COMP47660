@@ -71,14 +71,50 @@ CREATE TABLE IF NOT EXISTS `university`.`staff` (
 INSERT INTO `students`
 VALUES ("1", "DARA", "CLARKE", 1, "IRISH", "MALE", "0867543241", "DARA@GMAIL.COM","old road", "DARA6", "PAS$W0R__D");
 
+INSERT INTO `students`
+VALUES ("2", "Oisin", "Laker", 0, "CANADIAN", "MALE", "0845443241", "oISIN@GMAIL.COM","NEW road", "oISIN4", "$W0R__D");
+
+INSERT INTO `students`
+VALUES ("3", "Charles", "Rcif", 1, "SPANISH", "MALE", "123156", "CHARLIEEE@GMAIL.COM","MEDIUM road", "C3", "PAS$");
+
+INSERT INTO `students`
+VALUES ("4", "Teliia", "Foghorn", 0, "FRENCH", "FEMALE", "845775", "THEGOAT@GMAIL.COM","road", "C4", "PASSWORD");
+
 INSERT INTO `modules`
 VALUES (1, "COMP30970", "SECURE SOFTWARE ENGINEERING", "2019", "GOOD", "1","500", 1);
+
+INSERT INTO `modules`
+VALUES (2, "COMP30432", "CONTEMPORARY SOFTWARE ENGINEERING", "2019", "GOOD", "1","500", 1);
+
+INSERT INTO `modules`
+VALUES (3,"ENG10970", "ELECTRICAL ENGINEERING", "2020", "ENGINEERING", "2","100", 0);
 
 INSERT INTO `grades`
 VALUES ("1", 100, 1);
 
+INSERT INTO `grades`
+VALUES ("3", 0, 1);
+
+INSERT INTO `grades`
+VALUES ("4", 10, 2);
+
 INSERT INTO `enrollment`
-VALUES ("1","1");
+VALUES ("1",1);
+
+INSERT INTO `enrollment`
+VALUES ("1",2);
+
+INSERT INTO `enrollment`
+VALUES ("2",2);
+
+INSERT INTO `enrollment`
+VALUES ("3",1);
+
+INSERT INTO `enrollment`
+VALUES ("4",2);
 
 INSERT INTO `staff`
-VALUES ("1", "Liliana", "Pasquila", "l1", "Pswword", "Italian", "addle road", "34568", "l@ucd.ie", "Female");
+VALUES ("1", "Lucy", "Barnet", "l1", "Pswword", "Italian", "addle road", "34568", "l@ucd.ie", "Female");
+
+INSERT INTO `staff`
+VALUES ("2", "Andrew", "Louis", "A1", "LEXAGRAPH", "Russian", "bakers avenue", "123456789", "a@ucd.ie", "Male");
