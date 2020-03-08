@@ -1,0 +1,2 @@
+Darragh Clarke: -Worked on setting up controller classes as well as various endpoints for the program. 
+		-Worked on some of how the java backend interacted with the database.
