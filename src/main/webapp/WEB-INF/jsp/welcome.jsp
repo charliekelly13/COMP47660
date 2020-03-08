@@ -12,11 +12,12 @@
     <div align="right">
         <a href="/">Home</a>
         <a href="/modules">All Modules</a>
+        <a href="/stats">Stats</a>
         <a href="/settings">Settings</a>
         <a href="/logout">Log out</a>
     </div>
 </div>
-Welcome!! <a href="/">Click here</a> to view your modules.
+Welcome! <a href="/">Click here</a> to view your current modules.
 <a href="./logout">Log out</a>
 </body>
 

@@ -14,6 +14,7 @@
         <div align="right">
             <a href="/">Home</a>
             <a href="/modules">All Modules</a>
+            <a href="/stats">Stats</a>
             <a href="/settings">Settings</a>
             <a href="/logout">Log out</a>
         </div>

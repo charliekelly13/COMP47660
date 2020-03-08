@@ -13,15 +13,25 @@
         <div align="right">
             <a href="/">Home</a>
             <a href="/modules">All Modules</a>
+            <a href="/stats">Stats</a>
             <a href="/settings">Settings</a>
             <a href="/logout">Log out</a>
         </div>
     </div>
     <h1>Settings</h1>
 
-    <h3>De-activate your account</h3>
-    <form action="settings/deactivate" method="post">
-        <input type="submit" value="Deactivate" />
-    </form>
+    <c:choose>
+        <c:when test="${isStaff}">
+            <h3>No settings are currently available for staff.</h3>
+        </c:when>
+        <c:otherwise>
+            <h3>De-activate your account</h3>
+            <form action="settings/deactivate" method="post">
+                <input type="submit" value="Deactivate" />
+            </form>
+            <br />
+        </c:otherwise>
+    </c:choose>
+
 </body>
 </html>
