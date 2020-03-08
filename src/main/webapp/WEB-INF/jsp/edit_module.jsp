@@ -11,6 +11,8 @@
         <div id="header">
             <img src="../../img/logo.png" width="200" alt="Logo"/>
             <div align="right">
+                <a href="../../">Home</a>
+                <a href="../../modules">All Modules</a>
                 <a href="../../settings">Settings</a>
                 <a href="../../logout">Log out</a>
             </div>
@@ -40,7 +42,7 @@
                        value="${module.maximumStudents}"/><br/>
 
                 <input type="hidden" name="coordinatorId" size="45"
-                       value="45335"/><br/>
+                       value="${module.coordinatorId}"/><br/>
 
                 <input type="submit" value="Submit" /><br>
             </form>
