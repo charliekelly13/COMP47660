@@ -59,6 +59,8 @@ public class SettingsController {
             enrollmentRepository.delete(new Enrollment(moduleId,student.getId()));
         }
 
+        gradesRepository.deleteInBatch(gradesRepository.findByStudentID(student.getId()));
+
         studentRepository.delete(student);
 
         status.setComplete();

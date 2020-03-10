@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface GradesRepository extends JpaRepository<Grade, GradeId> {
 
-    @Query("select a.grade from Grade a where a.studentId = ?1")
-    List<Integer> findByStudentID(String studentId);
+    @Query("select a from Grade a where a.studentId = ?1")
+    List<Grade> findByStudentID(String studentId);
 
     @Query("select a from Grade a where a.moduleId = ?1")
     List<Grade> findGradesByModuleId(long moduleId);
