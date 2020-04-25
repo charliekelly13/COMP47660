@@ -1,5 +1,7 @@
 package universityWebApp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -30,12 +32,15 @@ public class ModuleController {
     @Autowired
     StaffRepository staffRepository;
 
+    Logger logger = LoggerFactory.getLogger(ModuleController.class);
+
     /**
      * This endpoint returns all modules
      */
     @RequestMapping(value = "modules", method = RequestMethod.GET)
     public String getModules(ModelMap model, @RequestParam(defaultValue="") String searchTerm) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.info("Attempt made to access module page while not logged in");
             return ("redirect_to_login");
         }
 

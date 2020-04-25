@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +26,13 @@ public class HomeController {
 
     @Autowired
     EnrollmentRepository enrollmentRepository;
+    Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
     public String viewHomePage(Model model) throws StudentNotFoundException, ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.info("Attempt made to access home page while not logged in");
             return ("redirect_to_login");
         }
         if (model.containsAttribute("student")) {

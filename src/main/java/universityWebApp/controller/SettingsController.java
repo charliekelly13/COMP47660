@@ -1,5 +1,7 @@
 package universityWebApp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +39,12 @@ public class SettingsController {
     @Autowired
     GradesRepository gradesRepository;
 
+    Logger logger = LoggerFactory.getLogger(SettingsController.class);
+
     @RequestMapping(value="/settings",method= RequestMethod.GET)
     public String viewSettingsPage(Model model) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.info("Attempt made to access settings page while not logged in");
             return ("redirect_to_login");
         }
         return "settings";
@@ -48,6 +53,7 @@ public class SettingsController {
     @RequestMapping(value="/settings/deactivate",method= RequestMethod.POST)
     public String deactivate(ModelMap model, SessionStatus status) throws StudentNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.warn("Attempt made to delete account while not logged in");
             return ("login");
         }
 
@@ -60,7 +66,7 @@ public class SettingsController {
         }
 
         gradesRepository.deleteInBatch(gradesRepository.findByStudentID(student.getId()));
-
+        logger.info(String.format("Student %s deleted",student.getId()));
         studentRepository.delete(student);
 
         status.setComplete();

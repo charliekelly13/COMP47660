@@ -1,6 +1,8 @@
 package universityWebApp.controller;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,12 +25,16 @@ public class StatsController {
 
     @Autowired
     StudentRepository studentRepository;
+
+    Logger logger = LoggerFactory.getLogger(StatsController.class);
+
     /**
      * This endpoint returns all distribution of user details
      */
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
     public String getUserDistribtuion(Model model) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.info("Attempt made to access stats page while not logged in");
             return ("redirect_to_login");
         }
 

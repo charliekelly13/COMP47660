@@ -1,5 +1,7 @@
 package universityWebApp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.support.SessionStatus;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
@@ -24,7 +26,9 @@ public class LoginController {
 
 	@Autowired
 	StaffRepository staffRepository;
-	
+
+	Logger logger = LoggerFactory.getLogger(LoginController.class);
+
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
 		return "login";
@@ -32,8 +36,10 @@ public class LoginController {
 
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String showWelcomePage(ModelMap model, @RequestParam String name, @RequestParam String password) {
+		logger.info("Login attempt made for user " + name);
 		if (!password.equals(studentRepository.findPasswordByUsername(name))) {
 			if (!password.equals(staffRepository.findPasswordByUsername(name))) {
+				logger.warn("Login failed for user " + name);
 				model.put("errorMessage", "Invalid Credentials");
 				return "login";
 			} else {
