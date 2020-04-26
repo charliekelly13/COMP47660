@@ -40,7 +40,7 @@ public class ModuleController {
     @RequestMapping(value = "modules", method = RequestMethod.GET)
     public String getModules(ModelMap model, @RequestParam(defaultValue="") String searchTerm) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            logger.info("Attempt made to access module page while not logged in");
+            logger.info("Attempt made to access modules page while not logged in");
             return ("redirect_to_login");
         }
 
@@ -76,6 +76,7 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}", method = RequestMethod.GET)
     public String getModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.info(String.format("Attempt made to access module page %s while not logged in", moduleId));
             return ("redirect_to_login");
         }
 
@@ -95,6 +96,8 @@ public class ModuleController {
             }
 
             Student student = ((Student) model.getAttribute("student"));
+            logger.info(String.format("Student %s viewed module %s", student.getId(),moduleId));
+
             Grade grade = gradesRepository.findByModuleAndStudentID(moduleId, student.getId());
 
             if (grade != null) {
@@ -117,21 +120,25 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.GET)
     public String editModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.warn(String.format("Attempt made to access module %s edit page while not logged in", moduleId));
             return ("redirect_to_login");
         }
 
         if (!(Boolean) model.getAttribute("isStaff")) {
+            logger.warn(String.format("Non Staff Attempt made to access module %s edit page by student %s ", moduleId,((Student) model.getAttribute("student")).getId()));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
         Optional<Module> module = moduleRepository.findById(moduleId);
 
         if (!module.isPresent()) {
+            logger.info(String.format("Staff Attempt made to access non existing module %s edit page ", moduleId));
+
             throw new ModuleNotFoundException(moduleId);
         }
 
         model.addAttribute("module", module.get());
-
+        logger.info(String.format("Staff accessed non existing module %s edit page ", moduleId));
         return "edit_module";
     }
 
@@ -141,10 +148,12 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
     public String editModule(ModelMap model, Module module) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.warn(String.format("Attempt made to edit module %s while not logged in", module.getId()));
             return ("redirect_to_login");
         }
 
         if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
+            logger.warn(String.format("Non Staff Attempt made to Edit module %s, by student %s ", module.getId() ,((Student) model.getAttribute("student")).getId()));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -162,6 +171,7 @@ public class ModuleController {
     public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException,
             ModuleFullException, FeesNotPaidException, StudentAlreadyEnrolledException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.info(String.format("Attempt made to enrol in module %s while not logged in", moduleId));
             return ("redirect_to_login");
         }
 
@@ -169,10 +179,12 @@ public class ModuleController {
         Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
         if (enrollmentRepository.findById(new EnrollmentId(moduleId, student.getId())).isPresent()) {
+            logger.info(String.format("Attempt made to enrol in module %s while already enrolled in it by student %s", moduleId,student.getId()));
             throw new StudentAlreadyEnrolledException(student.getId(), moduleId);
         }
 
         if (!student.hasPaidFees()) {
+            logger.info(String.format("Attempt made to enrol in module %s while fees are owed by student %s", moduleId,student.getId()));
             throw new FeesNotPaidException();
         }
 
@@ -183,12 +195,14 @@ public class ModuleController {
         long countEnrolledStudents = enrollmentRepository.findByModuleID(moduleId).size();
 
         if (countEnrolledStudents >= module.getMaximumStudents()) {
+            logger.info(String.format("Attempt made to enrol in module %s while it is full by student %s", moduleId,student.getId()));
             throw new ModuleFullException(moduleId);
         }
 
         enrollmentRepository.save(enrollment);
 
         addModuleViewDetailsToModel(model, module);
+        logger.info(String.format("Student %s enrolled in module %s",student.getId() , moduleId));
 
         model.addAttribute("status", "enrol");
 
@@ -202,10 +216,12 @@ public class ModuleController {
     public String unEnrol(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
 
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.info(String.format("Attempt made to unenrol in module %s while not logged in", moduleId));
             return ("redirect_to_login");
         }
 
         Student student = (Student) model.getAttribute("student");
+        logger.info(String.format("Student %s unenrolled from module %s",student.getId() , moduleId));
 
         Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
@@ -236,10 +252,12 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}/grade", method = RequestMethod.POST)
     public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID, @RequestParam int grade) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.warn(String.format("Attempt made to add grade in module %s while not logged in", moduleId));
             return ("redirect_to_login");
         }
 
         if (!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")) {
+            logger.warn(String.format("Non Staff Attempt made to Edit module %s, by student %s ", moduleId ,((Student) model.getAttribute("student")).getId()));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -252,9 +270,12 @@ public class ModuleController {
             if (gradesRepository.findById(new GradeId(moduleId, studentID)).isPresent()) {
                 gradesRepository.deleteById(new GradeId(moduleId, studentID));
             }
+            logger.info(String.format("Staff member %s added a grade to module %s for student %s", coordinator.getId(), moduleId, studentID));
+
             gradesRepository.save(new Grade(moduleId, studentID, grade));
             return "grade_confirmation";
         }
+        logger.warn(String.format("Staff Attempt made to Edit module %s, by non-coordinator Staff %s ", moduleId ,((Student) model.getAttribute("student")).getId()));
 
         throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
     }
@@ -262,6 +283,7 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}/", method = RequestMethod.POST)
     public String getGradeStats(@PathVariable("id") String moduleCode, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.warn(String.format("Attempt made to modify module %s while not logged in", moduleCode));
             return ("redirect_to_login");
         }
 

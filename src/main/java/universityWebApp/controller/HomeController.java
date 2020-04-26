@@ -37,6 +37,7 @@ public class HomeController {
         }
         if (model.containsAttribute("student")) {
             Student student = (Student) model.getAttribute("student");
+            logger.info(String.format("Student %s accessed home page " , student.getId()));
 
             List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
             List<Module> modules = new ArrayList<>();
@@ -49,6 +50,8 @@ public class HomeController {
             model.addAttribute("modules", modules);
         } else if (model.containsAttribute("staff")) {
             Staff staff = (Staff) model.getAttribute("staff");
+            logger.info(String.format("Staff member %s accessed home page " , staff.getId()));
+
 
             List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
 

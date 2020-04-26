@@ -43,6 +43,7 @@ public class LoginController {
 				model.put("errorMessage", "Invalid Credentials");
 				return "login";
 			} else {
+				logger.info("Logged in successfully as staff " + name);
 				model.put("staff", staffRepository.findStaffByUsername(name));
 				model.put("loggedIn", true);
 				model.put("isStaff", true);
@@ -50,6 +51,7 @@ public class LoginController {
 				return "welcome";
 			}
 		}
+		logger.info("Logged in successfully as student " + name);
 
 		model.put("student", studentRepository.findStudentByUsername(name));
 
