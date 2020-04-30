@@ -14,6 +14,9 @@ import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,9 +35,9 @@ public class StatsController {
      * This endpoint returns all distribution of user details
      */
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
-    public String getUserDistribtuion(Model model) {
+    public String getUserDistribtuion(HttpServletRequest request, Model model) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            logger.info("Attempt made to access stats page while not logged in");
+            logger.info("Attempt made to access stats page while not logged in by IP "+ getIP(request));
             return ("redirect_to_login");
         }
 
@@ -49,8 +52,8 @@ public class StatsController {
         gender.put("Other", 0);
 
 
-        for(Staff s: staffRepository.findAll()) {
-            String genderValue = s.getGender().substring(0,1).toUpperCase() + s.getGender().substring(1).toLowerCase();
+        for (Staff s : staffRepository.findAll()) {
+            String genderValue = s.getGender().substring(0, 1).toUpperCase() + s.getGender().substring(1).toLowerCase();
 
             gender.put(genderValue, (Integer) gender.get(genderValue) + 1);
             staffGender.put(genderValue, (Integer) staffGender.get(genderValue) + 1);
@@ -61,8 +64,8 @@ public class StatsController {
         studentGender.put("Female", 0);
         studentGender.put("Other", 0);
 
-        for(Student s: studentRepository.findAll()) {
-            String genderValue = s.getGender().substring(0,1).toUpperCase() + s.getGender().substring(1).toLowerCase();
+        for (Student s : studentRepository.findAll()) {
+            String genderValue = s.getGender().substring(0, 1).toUpperCase() + s.getGender().substring(1).toLowerCase();
 
             gender.put(genderValue, (Integer) gender.get(genderValue) + 1);
             studentGender.put(genderValue, (Integer) studentGender.get(genderValue) + 1);
@@ -76,8 +79,8 @@ public class StatsController {
         JSONObject staffNationality = new JSONObject();
         JSONObject studentNationality = new JSONObject();
 
-        for(Staff s : staffRepository.findAll()) {
-            String nationalityValue = s.getNationality().substring(0,1).toUpperCase() + s.getNationality().substring(1).toLowerCase();
+        for (Staff s : staffRepository.findAll()) {
+            String nationalityValue = s.getNationality().substring(0, 1).toUpperCase() + s.getNationality().substring(1).toLowerCase();
 
             if (nationality.has(nationalityValue)) {
                 nationality.put(nationalityValue, (Integer) nationality.get(nationalityValue) + 1);
@@ -92,8 +95,8 @@ public class StatsController {
             }
         }
 
-        for(Student s : studentRepository.findAll()) {
-            String nationalityValue = s.getNationality().substring(0,1).toUpperCase() + s.getNationality().substring(1).toLowerCase();
+        for (Student s : studentRepository.findAll()) {
+            String nationalityValue = s.getNationality().substring(0, 1).toUpperCase() + s.getNationality().substring(1).toLowerCase();
 
             if (nationality.has(nationalityValue)) {
                 nationality.put(nationalityValue, (Integer) nationality.get(nationalityValue) + 1);
@@ -113,6 +116,18 @@ public class StatsController {
         model.addAttribute("nationality", nationality);
 
         return "stats";
+    }
+
+    public String getIP(HttpServletRequest request) {
+        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")) {
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                return null;
+            }
+        }
+
+        return request.getRemoteAddr();
     }
 
 }

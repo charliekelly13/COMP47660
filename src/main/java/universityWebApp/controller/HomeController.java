@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +31,23 @@ public class HomeController {
     EnrollmentRepository enrollmentRepository;
     Logger logger = LoggerFactory.getLogger(HomeController.class);
 
+    public String getIP(HttpServletRequest request){
+        if(request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            }
+            catch (UnknownHostException e) {
+                return null;
+            }
+        }
+
+        return request.getRemoteAddr();
+    }
+
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
-    public String viewHomePage(Model model) throws StudentNotFoundException, ModuleNotFoundException {
+    public String viewHomePage(HttpServletRequest request, Model model) throws StudentNotFoundException, ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            logger.info("Attempt made to access home page while not logged in");
             return ("redirect_to_login");
         }
         if (model.containsAttribute("student")) {

@@ -14,6 +14,10 @@ import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @Controller
 @SessionAttributes({"name"})
 public class RegistrationController {
@@ -32,15 +36,28 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String postRegisterPage(ModelMap model, Student student) {
+    public String postRegisterPage(HttpServletRequest request,ModelMap model, Student student) {
         if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
             logger.info(String.format("student %s was registered",student.getId()));
             studentRepository.save(student);
             return "register_confirmation";
         } else {
-            logger.warn(String.format("An attempt was made to register a user with id %s which is already taken"),student.getId());
+            logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip"),student.getId(),getIP(request));
             model.put("errorMessage", "Username Already Exists");
             return "register";
         }
+    }
+
+    public String getIP(HttpServletRequest request){
+        if(request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            }
+            catch (UnknownHostException e) {
+                return null;
+            }
+        }
+
+        return request.getRemoteAddr();
     }
 }

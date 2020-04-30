@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @Controller
 @SessionAttributes({"loggedIn", "isStaff", "student", "staff"})
 public class LoginController {
@@ -29,17 +33,18 @@ public class LoginController {
 
 	Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
 		return "login";
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.POST)
-	public String showWelcomePage(ModelMap model, @RequestParam String name, @RequestParam String password) {
-		logger.info("Login attempt made for user " + name);
+	public String showWelcomePage(ModelMap model, HttpServletRequest request, @RequestParam String name, @RequestParam String password) {
+		logger.info("Login attempt made for user " + name + " by the IP " + getIP(request));
 		if (!password.equals(studentRepository.findPasswordByUsername(name))) {
 			if (!password.equals(staffRepository.findPasswordByUsername(name))) {
-				logger.warn("Login failed for user " + name);
+				logger.warn("Login failed for user " + name+ " by the IP " + getIP(request));
 				model.put("errorMessage", "Invalid Credentials");
 				return "login";
 			} else {
@@ -67,4 +72,18 @@ public class LoginController {
 
 		return "logout";
 	}
+
+	public String getIP(HttpServletRequest request){
+		if(request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+			try {
+				return InetAddress.getLocalHost().getHostAddress();
+			}
+			catch (UnknownHostException e) {
+				return null;
+			}
+		}
+
+		return request.getRemoteAddr();
+	}
+
 }
