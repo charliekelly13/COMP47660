@@ -49,7 +49,7 @@ public class RegistrationController {
     }
 
     public String getIP(HttpServletRequest request){
-        if(request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")|| request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
             try {
                 return InetAddress.getLocalHost().getHostAddress();
             }

@@ -31,18 +31,6 @@ public class HomeController {
     EnrollmentRepository enrollmentRepository;
     Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    public String getIP(HttpServletRequest request){
-        if(request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")){
-            try {
-                return InetAddress.getLocalHost().getHostAddress();
-            }
-            catch (UnknownHostException e) {
-                return null;
-            }
-        }
-
-        return request.getRemoteAddr();
-    }
 
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
