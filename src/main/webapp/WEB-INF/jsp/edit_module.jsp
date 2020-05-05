@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
     <head>
         <title>Edit Module</title>
@@ -28,22 +29,22 @@
                 <input type="hidden" name="id" value="${module.id}"  />
 
                 <input type="text" name="moduleCode"
-                       value="${module.moduleCode}"/><br/>
+                       value="${fn:escapeXml(module.moduleCode)}"/><br/>
 
                 <input type="text" name="moduleYear"
-                       value="${module.moduleYear}"/><br/>
+                       value="${fn:escapeXml(module.moduleYear)}"/><br/>
 
                 <input type="text" name="moduleName"
-                       value="${module.moduleName}"/><br/>
+                       value="${fn:escapeXml(module.moduleName)}"/><br/>
 
                 <input type="text" name="moduleDescription"
-                       value="${module.moduleDescription}"/><br/>
+                       value="${fn:escapeXml(module.moduleDescription)}"/><br/>
 
                 <input type="number" name="maximumStudents" size="45"
-                       value="${module.maximumStudents}"/><br/>
+                       value="${fn:escapeXml(module.maximumStudents)}"/><br/>
 
                 <input type="hidden" name="coordinatorId" size="45"
-                       value="${module.coordinatorId}"/><br/>
+                       value="${fn:escapeXml(module.coordinatorId)}"/><br/>
 
                 <input type="submit" value="Submit" /><br>
             </form>
