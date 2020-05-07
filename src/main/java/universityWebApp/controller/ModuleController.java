@@ -15,7 +15,7 @@ import universityWebApp.repository.*;
 import java.util.*;
 
 @Controller
-@SessionAttributes({"student", "loggedIn", "isStaff", "status", "enrolled", "staff", "module"})
+@SessionAttributes({"student", "loggedIn", "isStaff", "status", "enrolled", "staff", "module", "csrfToken"})
 public class ModuleController {
 
     @Autowired
@@ -134,9 +134,13 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
-    public String editModule(ModelMap model, Module module) {
+    public String editModule(ModelMap model, Module module, String csrfToken) {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
+        }
+
+        if (!csrfToken.equals(model.get("csrfToken"))) {
+            throw new ForbiddenException();
         }
 
         if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
@@ -154,10 +158,14 @@ public class ModuleController {
      * enroll student in a module
      */
     @RequestMapping(value = "modules/{id}/enrol", method = RequestMethod.POST)
-    public String enroll(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException,
+    public String enroll(@PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException,
             ModuleFullException, FeesNotPaidException, StudentAlreadyEnrolledException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
+        }
+
+        if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
+            throw new ForbiddenException();
         }
 
         Student student = (Student) model.getAttribute("student");
@@ -194,10 +202,14 @@ public class ModuleController {
      * enrol student in a module
      */
     @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.POST)
-    public String unEnrol(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+    public String unEnrol(@PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException {
 
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
+        }
+
+        if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
+            throw new ForbiddenException();
         }
 
         Student student = (Student) model.getAttribute("student");
@@ -229,9 +241,14 @@ public class ModuleController {
      * set a students grades if your a coordinator
      */
     @RequestMapping(value = "modules/{id}/grade", method = RequestMethod.POST)
-    public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID, @RequestParam int grade) throws ModuleNotFoundException {
+    public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID,
+                           @RequestParam int grade, String csrfToken) throws ModuleNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             return ("redirect_to_login");
+        }
+
+        if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
+            throw new ForbiddenException();
         }
 
         if (!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")) {

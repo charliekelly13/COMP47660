@@ -26,6 +26,7 @@
             </caption>
             <form method="post">
                 <input type="hidden" name="id" value="${module.id}"  />
+                <input type="hidden" name="csrfToken" value="${csrfToken}"/>
 
                 <input type="text" name="moduleCode"
                        value="${module.moduleCode}"/><br/>
