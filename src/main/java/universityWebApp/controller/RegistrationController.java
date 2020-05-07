@@ -12,6 +12,8 @@ import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
+import java.util.UUID;
+
 @Controller
 @SessionAttributes({"name"})
 public class RegistrationController {
@@ -31,6 +33,7 @@ public class RegistrationController {
     public String postRegisterPage(ModelMap model, Student student) {
         if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
             studentRepository.save(student);
+            model.put("csrfToken", UUID.randomUUID());
             return "register_confirmation";
         } else {
             model.put("errorMessage", "Username Already Exists");
