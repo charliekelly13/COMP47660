@@ -12,7 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +31,8 @@ public class HomeController {
 
     @Autowired
     EnrollmentRepository enrollmentRepository;
+    Logger logger = LoggerFactory.getLogger(HomeController.class);
+
 
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
@@ -36,6 +43,7 @@ public class HomeController {
         if (role.equals("student")) {
             Student student = ((MyStudentPrincipal) authentication.getPrincipal()).getStudent();
             model.addAttribute("student", student);
+            logger.info(String.format("Student %s accessed home page " , student.getId()));
 
             List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
             List<Module> modules = new ArrayList<>();
@@ -49,6 +57,7 @@ public class HomeController {
         } else {
             Staff staff = ((MyStaffPrincipal) authentication.getPrincipal()).getStaff();
             model.addAttribute("staff", staff);
+            logger.info(String.format("Staff member %s accessed home page " , staff.getId()));
 
             List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
 

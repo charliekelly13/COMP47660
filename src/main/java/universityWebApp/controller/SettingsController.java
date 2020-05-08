@@ -1,5 +1,7 @@
 package universityWebApp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,9 @@ import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
 import universityWebApp.repository.StudentRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,14 +45,18 @@ public class SettingsController {
     @Autowired
     GradesRepository gradesRepository;
 
-    @RequestMapping(value="/settings",method= RequestMethod.GET)
-    public String viewSettingsPage(Model model) {
+
+    Logger logger = LoggerFactory.getLogger(SettingsController.class);
+
+    @RequestMapping(value = "/settings", method = RequestMethod.GET)
+    public String viewSettingsPage(HttpServletRequest request, Model model) {
         return "settings";
     }
 
-    @RequestMapping(value="/settings/deactivate",method= RequestMethod.POST)
-    public String deactivate(ModelMap model, SessionStatus status, String csrfToken) throws StudentNotFoundException {
+    @RequestMapping(value = "/settings/deactivate", method = RequestMethod.POST)
+    public String deactivate(HttpServletRequest request, ModelMap model, SessionStatus status, String csrfToken) throws StudentNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
+            logger.warn("Attempt made to delete account while not logged in by IP " + getIP(request));
             return ("login");
         }
 
@@ -59,12 +68,12 @@ public class SettingsController {
 
         List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
 
-        for (Long moduleId: enrolledModules) {
-            enrollmentRepository.delete(new Enrollment(moduleId,student.getId()));
+        for (Long moduleId : enrolledModules) {
+            enrollmentRepository.delete(new Enrollment(moduleId, student.getId()));
         }
 
         gradesRepository.deleteInBatch(gradesRepository.findByStudentID(student.getId()));
-
+        logger.info(String.format("Student %s deactivated", student.getId()));
         studentRepository.delete(student);
 
         status.setComplete();
@@ -72,4 +81,15 @@ public class SettingsController {
         return "deactivated";
     }
 
+    public String getIP(HttpServletRequest request) {
+        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")|| request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                return null;
+            }
+        }
+
+        return request.getRemoteAddr();
+    }
 }
