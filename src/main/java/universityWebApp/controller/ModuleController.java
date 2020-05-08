@@ -35,9 +35,6 @@ public class ModuleController {
      */
     @RequestMapping(value = "modules", method = RequestMethod.GET)
     public String getModules(ModelMap model, @RequestParam(defaultValue="") String searchTerm) {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
 
         List<Module> modules = moduleRepository.findAll();
 
@@ -70,9 +67,6 @@ public class ModuleController {
      */
     @RequestMapping(value = "modules/{id}", method = RequestMethod.GET)
     public String getModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
 
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
@@ -111,10 +105,6 @@ public class ModuleController {
 
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.GET)
     public String editModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
         if (!(Boolean) model.getAttribute("isStaff")) {
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
@@ -135,10 +125,6 @@ public class ModuleController {
      */
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
     public String editModule(ModelMap model, Module module, String csrfToken) {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
         if (!csrfToken.equals(model.get("csrfToken"))) {
             throw new ForbiddenException();
         }
@@ -160,10 +146,6 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}/enrol", method = RequestMethod.POST)
     public String enroll(@PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException,
             ModuleFullException, FeesNotPaidException, StudentAlreadyEnrolledException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
         if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
             throw new ForbiddenException();
         }
@@ -203,11 +185,6 @@ public class ModuleController {
      */
     @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.POST)
     public String unEnrol(@PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException {
-
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
         if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
             throw new ForbiddenException();
         }
@@ -243,10 +220,6 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}/grade", method = RequestMethod.POST)
     public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID,
                            @RequestParam int grade, String csrfToken) throws ModuleNotFoundException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
         if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
             throw new ForbiddenException();
         }
@@ -273,11 +246,6 @@ public class ModuleController {
 
     @RequestMapping(value = "modules/{id}/", method = RequestMethod.POST)
     public String getGradeStats(@PathVariable("id") String moduleCode, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
-
         model.addAttribute("gradeMap", getGradeMap(moduleCode));
 
         return "module";

@@ -28,10 +28,6 @@ public class StatsController {
      */
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
     public String getUserDistribtuion(Model model) {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-
         JSONObject staffGender = new JSONObject();
         staffGender.put("Male", 0);
         staffGender.put("Female", 0);

@@ -1,10 +1,11 @@
 package universityWebApp.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import universityWebApp.exception.ModuleNotFoundException;
 import universityWebApp.exception.StudentNotFoundException;
+import universityWebApp.model.*;
 import universityWebApp.model.Module;
-import universityWebApp.model.Staff;
-import universityWebApp.model.Student;
 import universityWebApp.repository.EnrollmentRepository;
 import universityWebApp.repository.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @SessionAttributes({"loggedIn", "student", "staff"})
@@ -27,12 +29,13 @@ public class HomeController {
 
     //this should show the modules a student is in but idk how to get that in the DB
     @RequestMapping("/")
-    public String viewHomePage(Model model) throws StudentNotFoundException, ModuleNotFoundException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
-        if (model.containsAttribute("student")) {
-            Student student = (Student) model.getAttribute("student");
+    public String viewHomePage(Model model, Authentication authentication) throws StudentNotFoundException, ModuleNotFoundException {
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
+        String role = authorities.get(0).getAuthority();
+
+        if (role.equals("student")) {
+            Student student = ((MyStudentPrincipal) authentication.getPrincipal()).getStudent();
+            model.addAttribute("student", student);
 
             List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
             List<Module> modules = new ArrayList<>();
@@ -43,8 +46,9 @@ public class HomeController {
             }
 
             model.addAttribute("modules", modules);
-        } else if (model.containsAttribute("staff")) {
-            Staff staff = (Staff) model.getAttribute("staff");
+        } else {
+            Staff staff = ((MyStaffPrincipal) authentication.getPrincipal()).getStaff();
+            model.addAttribute("staff", staff);
 
             List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
 

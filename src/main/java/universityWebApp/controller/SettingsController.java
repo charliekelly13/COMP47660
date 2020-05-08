@@ -42,9 +42,6 @@ public class SettingsController {
 
     @RequestMapping(value="/settings",method= RequestMethod.GET)
     public String viewSettingsPage(Model model) {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            return ("redirect_to_login");
-        }
         return "settings";
     }
 
