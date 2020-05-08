@@ -3,6 +3,7 @@ package universityWebApp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.client.HttpClientErrorException;
+import universityWebApp.exception.ForbiddenException;
 import universityWebApp.exception.ModuleNotFoundException;
 import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Enrollment;
@@ -28,7 +31,7 @@ import java.util.List;
 
 
 @Controller
-@SessionAttributes({"loggedIn", "student"})
+@SessionAttributes({"loggedIn", "student", "csrfToken"})
 public class SettingsController {
     @Autowired
     StudentRepository studentRepository;
@@ -54,10 +57,14 @@ public class SettingsController {
     }
 
     @RequestMapping(value = "/settings/deactivate", method = RequestMethod.POST)
-    public String deactivate(HttpServletRequest request, ModelMap model, SessionStatus status) throws StudentNotFoundException {
+    public String deactivate(HttpServletRequest request, ModelMap model, SessionStatus status, String csrfToken) throws StudentNotFoundException {
         if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
             logger.warn("Attempt made to delete account while not logged in by IP " + getIP(request));
             return ("login");
+        }
+
+        if (!csrfToken.equals(model.get("csrfToken"))) {
+            throw new ForbiddenException();
         }
 
         Student student = (Student) model.getAttribute("student");
