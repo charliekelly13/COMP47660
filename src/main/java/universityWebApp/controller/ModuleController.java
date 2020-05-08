@@ -1,5 +1,7 @@
 package universityWebApp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,9 @@ import universityWebApp.model.*;
 import universityWebApp.model.Module;
 import universityWebApp.repository.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 @Controller
@@ -30,12 +35,13 @@ public class ModuleController {
     @Autowired
     StaffRepository staffRepository;
 
+    Logger logger = LoggerFactory.getLogger(ModuleController.class);
+
     /**
      * This endpoint returns all modules
      */
     @RequestMapping(value = "modules", method = RequestMethod.GET)
-    public String getModules(ModelMap model, @RequestParam(defaultValue="") String searchTerm) {
-
+    public String getModules(HttpServletRequest request, ModelMap model, @RequestParam(defaultValue = "") String searchTerm) {
         List<Module> modules = moduleRepository.findAll();
 
         if (searchTerm.isEmpty()) {
@@ -66,15 +72,14 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}", method = RequestMethod.GET)
-    public String getModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
-
+    public String getModule(HttpServletRequest request, @PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
         model.addAttribute("module", module);
 
 
-        if(model.containsAttribute("student")) {
+        if (model.containsAttribute("student")) {
             EnrollmentId enrollmentId = new EnrollmentId(moduleId, ((Student) model.getAttribute("student")).getId());
 
             if (enrollmentRepository.findById(enrollmentId).isPresent()) {
@@ -84,6 +89,8 @@ public class ModuleController {
             }
 
             Student student = ((Student) model.getAttribute("student"));
+            logger.info(String.format("Student %s viewed module %s", student.getId(), moduleId));
+
             Grade grade = gradesRepository.findByModuleAndStudentID(moduleId, student.getId());
 
             if (grade != null) {
@@ -104,19 +111,24 @@ public class ModuleController {
     }
 
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.GET)
-    public String editModule(@PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+
+    public String editModule(HttpServletRequest request, @PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+        
         if (!(Boolean) model.getAttribute("isStaff")) {
+            logger.warn(String.format("Student Attempt made to access module %s edit page by student %s ", moduleId, ((Student) model.getAttribute("student")).getId()));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
         Optional<Module> module = moduleRepository.findById(moduleId);
 
         if (!module.isPresent()) {
+            logger.info(String.format("Staff Attempt made to access non existing module %s edit page ", moduleId));
+
             throw new ModuleNotFoundException(moduleId);
         }
 
         model.addAttribute("module", module.get());
-
+        logger.info(String.format("Staff accessed non existing module %s edit page ", moduleId));
         return "edit_module";
     }
 
@@ -124,12 +136,13 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
-    public String editModule(ModelMap model, Module module, String csrfToken) {
+    public String editModule(HttpServletRequest request, ModelMap model, Module module, String csrfToken) {
         if (!csrfToken.equals(model.get("csrfToken"))) {
             throw new ForbiddenException();
         }
 
-        if(!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")){
+        if (!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")) {
+            logger.warn(String.format("Student Attempt made to Edit module %s, by student %s ", module.getId(), ((Student) model.getAttribute("student")).getId()));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -144,8 +157,9 @@ public class ModuleController {
      * enroll student in a module
      */
     @RequestMapping(value = "modules/{id}/enrol", method = RequestMethod.POST)
-    public String enroll(@PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException,
+    public String enroll(HttpServletRequest request, @PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException,
             ModuleFullException, FeesNotPaidException, StudentAlreadyEnrolledException {
+
         if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
             throw new ForbiddenException();
         }
@@ -154,10 +168,12 @@ public class ModuleController {
         Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
         if (enrollmentRepository.findById(new EnrollmentId(moduleId, student.getId())).isPresent()) {
+            logger.info(String.format("Attempt made to enrol in module %s while already enrolled in it by student %s", moduleId, student.getId()));
             throw new StudentAlreadyEnrolledException(student.getId(), moduleId);
         }
 
         if (!student.hasPaidFees()) {
+            logger.info(String.format("Attempt made to enrol in module %s while fees are owed by student %s", moduleId, student.getId()));
             throw new FeesNotPaidException();
         }
 
@@ -168,12 +184,14 @@ public class ModuleController {
         long countEnrolledStudents = enrollmentRepository.findByModuleID(moduleId).size();
 
         if (countEnrolledStudents >= module.getMaximumStudents()) {
+            logger.info(String.format("Attempt made to enrol in module %s while it is full by student %s", moduleId, student.getId()));
             throw new ModuleFullException(moduleId);
         }
 
         enrollmentRepository.save(enrollment);
 
         addModuleViewDetailsToModel(model, module);
+        logger.info(String.format("Student %s enrolled in module %s", student.getId(), moduleId));
 
         model.addAttribute("status", "enrol");
 
@@ -184,12 +202,13 @@ public class ModuleController {
      * enrol student in a module
      */
     @RequestMapping(value="modules/{id}/unenrol",method= RequestMethod.POST)
-    public String unEnrol(@PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException {
+    public String unEnrol(HttpServletRequest request, @PathVariable("id") long moduleId, Model model, String csrfToken) throws ModuleNotFoundException {
         if (!csrfToken.equals(model.getAttribute("csrfToken"))) {
             throw new ForbiddenException();
         }
 
         Student student = (Student) model.getAttribute("student");
+        logger.info(String.format("Student %s unenrolled from module %s", student.getId(), moduleId));
 
         Enrollment enrollment = new Enrollment(moduleId, student.getId());
 
@@ -225,27 +244,32 @@ public class ModuleController {
         }
 
         if (!model.containsAttribute("isStaff") || !(boolean) model.getAttribute("isStaff")) {
+            logger.warn(String.format("Student Attempt made to Edit module %s, by student %s ", moduleId, ((Student) model.getAttribute("student")).getId()));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
         Module module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
-        
+
         Staff coordinator = ((Staff) model.getAttribute("staff"));
 
         if (coordinator.getId().equals(module.getCoordinatorId())) {
             if (gradesRepository.findById(new GradeId(moduleId, studentID)).isPresent()) {
                 gradesRepository.deleteById(new GradeId(moduleId, studentID));
             }
+            logger.info(String.format("Staff member %s added a grade to module %s for student %s", coordinator.getId(), moduleId, studentID));
+
             gradesRepository.save(new Grade(moduleId, studentID, grade));
             return "grade_confirmation";
         }
+        logger.warn(String.format("Staff Attempt made to Edit module %s, by non-coordinator Staff %s ", moduleId, ((Student) model.getAttribute("student")).getId()));
 
         throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "modules/{id}/", method = RequestMethod.POST)
     public String getGradeStats(@PathVariable("id") String moduleCode, Model model, @RequestParam String studentID, @RequestParam String grade) throws ModuleNotFoundException {
+
         model.addAttribute("gradeMap", getGradeMap(moduleCode));
 
         return "module";
@@ -276,7 +300,7 @@ public class ModuleController {
 
     private Map<String, Integer> getGradeMap(String moduleCode) {
         List<Long> moduleIds = moduleRepository.findIDByCode(moduleCode);
-        Map<String, Integer> gradeRange = new  TreeMap<>();
+        Map<String, Integer> gradeRange = new TreeMap<>();
 
         populateGradeMap(gradeRange);
 
@@ -334,5 +358,17 @@ public class ModuleController {
         }
 
         return gradeRange;
+    }
+
+    public String getIP(HttpServletRequest request) {
+        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")|| request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                return null;
+            }
+        }
+
+        return request.getRemoteAddr();
     }
 }
