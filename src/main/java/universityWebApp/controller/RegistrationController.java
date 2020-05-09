@@ -18,6 +18,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
@@ -39,7 +40,13 @@ public class RegistrationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegisterPage(HttpServletRequest request,ModelMap model, Student student) {
-        if(Pattern.matches("(?=.*[a-z])", student.getEmailAddress())&&Pattern.matches("(?=.*[A-Z])", student.getEmailAddress())&&Pattern.matches("(?=.*[0-9])", student.getEmailAddress()) && Pattern.matches("(?=.*[!@#$%^&*])", student.getEmailAddress()) && Pattern.matches("(?=.{8,})", student.getEmailAddress())) {
+        Pattern pattern;
+        Matcher matcher;
+
+        String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(student.getPassword());
+        if(matcher.matches()) {
             if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
                 logger.info(String.format("student %s was registered", student.getId()));
                 studentRepository.save(student);
@@ -53,6 +60,7 @@ public class RegistrationController {
         }
         else{
             //logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip"), student.getId(), getIP(request));
+            //model.put("errorMessage", student.getPassword());
             model.put("errorMessage", "Password must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters");
             return "register";
         }
