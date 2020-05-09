@@ -45,14 +45,11 @@ public class SettingsController {
     @Autowired
     GradesRepository gradesRepository;
 
+
     Logger logger = LoggerFactory.getLogger(SettingsController.class);
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String viewSettingsPage(HttpServletRequest request, Model model) {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            logger.info("Attempt made to access settings page while not logged in");
-            return ("redirect_to_login");
-        }
         return "settings";
     }
 

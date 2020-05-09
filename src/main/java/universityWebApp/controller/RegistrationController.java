@@ -3,6 +3,8 @@ package universityWebApp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,9 @@ public class RegistrationController {
     @Autowired
     StaffRepository staffRepository;
 
+    @Autowired
+    PasswordEncoder bCryptPasswordEncoder;
+
     Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -39,8 +44,11 @@ public class RegistrationController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegisterPage(HttpServletRequest request,ModelMap model, Student student) {
         if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
-            logger.info(String.format("student %s was registered",student.getId()));
+            student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
+          
             studentRepository.save(student);
+            logger.info(String.format("student %s was registered",student.getId()));
+          
             model.put("csrfToken", UUID.randomUUID());
             return "register_confirmation";
         } else {
