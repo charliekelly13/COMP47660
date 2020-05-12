@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import java.util.HashMap;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
@@ -34,6 +35,8 @@ public class LoginController {
 
 	Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+	HashMap<String, Integer> ipTracker = new HashMap<String, Integer>();
+
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String showLoginPage(ModelMap model){
@@ -43,10 +46,16 @@ public class LoginController {
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String showWelcomePage(ModelMap model, HttpServletRequest request, @RequestParam String name, @RequestParam String password) {
 		logger.info("Login attempt made for user " + name + " by the IP " + getIP(request));
+		if(ipTracker.get(getIP(request))<3){
 		if (!password.equals(studentRepository.findPasswordByUsername(name))) {
 			if (!password.equals(staffRepository.findPasswordByUsername(name))) {
-				logger.warn("Login failed for user " + name+ " by the IP " + getIP(request));
+				logger.warn("Login failed for user " + name + " by the IP " + getIP(request));
 				model.put("errorMessage", "Invalid Credentials");
+				if (ipTracker.containsValue(getIP(request))) {
+					ipTracker.put(getIP(request), ipTracker.get(getIP(request)) + 1);
+				} else {
+					ipTracker.put(getIP(request), 1);
+				}
 				return "login";
 			} else {
 				logger.info("Logged in successfully as staff " + name);
@@ -54,9 +63,13 @@ public class LoginController {
 				model.put("loggedIn", true);
 				model.put("isStaff", true);
 				model.put("csrfToken", UUID.randomUUID());
-        
+
 				return "welcome";
 			}
+		}
+		else{
+
+		}
 		}
 		logger.info("Logged in successfully as student " + name);
 
