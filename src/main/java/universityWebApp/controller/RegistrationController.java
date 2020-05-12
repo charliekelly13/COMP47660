@@ -40,16 +40,15 @@ public class RegistrationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegisterPage(HttpServletRequest request,ModelMap model, Student student) {
-        Pattern pattern;
-        Matcher matcher;
+        String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
 
-        String PASSWORD_PATTERN = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-        matcher = pattern.matcher(student.getPassword());
+        Pattern pattern = Pattern.compile(passwordPattern);
+        Matcher matcher = pattern.matcher(student.getPassword());
+
         if(matcher.matches()) {
             if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
-                logger.info(String.format("student %s was registered", student.getId()));
                 studentRepository.save(student);
+                logger.info(String.format("student %s was registered", student.getId()));
                 model.put("csrfToken", UUID.randomUUID());
                 return "register_confirmation";
             } else {
@@ -59,8 +58,6 @@ public class RegistrationController {
             }
         }
         else{
-            //logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip"), student.getId(), getIP(request));
-            //model.put("errorMessage", student.getPassword());
             model.put("errorMessage", "Password must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters");
             return "register";
         }
