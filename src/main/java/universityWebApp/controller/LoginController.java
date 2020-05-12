@@ -3,6 +3,10 @@ package universityWebApp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.support.SessionStatus;
+import universityWebApp.exception.IpNotFoundException;
+import universityWebApp.exception.ModuleNotFoundException;
+import universityWebApp.model.Blacklist;
+import universityWebApp.repository.BlacklistRepository;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 import universityWebApp.service.LoginService;
@@ -33,9 +37,10 @@ public class LoginController {
 	@Autowired
 	StaffRepository staffRepository;
 
-	Logger logger = LoggerFactory.getLogger(LoginController.class);
+	@Autowired
+	BlacklistRepository blacklistRepository;
 
-	HashMap<String, Integer> ipTracker = new HashMap<String, Integer>();
+	Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
@@ -46,16 +51,26 @@ public class LoginController {
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String showWelcomePage(ModelMap model, HttpServletRequest request, @RequestParam String name, @RequestParam String password) {
 		logger.info("Login attempt made for user " + name + " by the IP " + getIP(request));
-		if(ipTracker.get(getIP(request))<3){
-		if (!password.equals(studentRepository.findPasswordByUsername(name))) {
+		int attempts=0;
+		Blacklist black;
+		try{
+			attempts =blacklistRepository.findAttemptsByIp(getIP(request));
+			black =  blacklistRepository.findById(getIP(request)).orElseThrow(IpNotFoundException::new);
+		}
+		catch(IpNotFoundException i) {
+			black = new Blacklist(getIP(request), 0);
+			blacklistRepository.save(black);
+		}
+		if(attempts<3){
+			model.put("errorMessage", attempts);
+			if (!password.equals(studentRepository.findPasswordByUsername(name))) {
 			if (!password.equals(staffRepository.findPasswordByUsername(name))) {
-				logger.warn("Login failed for user " + name + " by the IP " + getIP(request));
+				logger.warn("Login failed for user " + name + " by the IP " + getIP(request) + " attempt"+attempts+" of 3");
 				model.put("errorMessage", "Invalid Credentials");
-				if (ipTracker.containsValue(getIP(request))) {
-					ipTracker.put(getIP(request), ipTracker.get(getIP(request)) + 1);
-				} else {
-					ipTracker.put(getIP(request), 1);
-				}
+				attempts++;
+				blacklistRepository.delete(black);
+				Blacklist temp = new Blacklist(getIP(request), attempts);
+				blacklistRepository.save(temp);
 				return "login";
 			} else {
 				logger.info("Logged in successfully as staff " + name);
@@ -67,9 +82,9 @@ public class LoginController {
 				return "welcome";
 			}
 		}
-		else{
-
 		}
+		else{
+			model.put("errorMessage", "You have failed to login in too many times. You're IP address is now blacklisted.");
 		}
 		logger.info("Logged in successfully as student " + name);
 
