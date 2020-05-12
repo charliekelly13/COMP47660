@@ -3,6 +3,8 @@ package universityWebApp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,9 @@ public class RegistrationController {
 
     @Autowired
     StaffRepository staffRepository;
+
+    @Autowired
+    PasswordEncoder bCryptPasswordEncoder;
 
     Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
@@ -59,6 +64,18 @@ public class RegistrationController {
         }
         else{
             model.put("errorMessage", "Password must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters");
+
+          if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
+            student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
+          
+            studentRepository.save(student);
+            logger.info(String.format("student %s was registered",student.getId()));
+          
+            model.put("csrfToken", UUID.randomUUID());
+            return "register_confirmation";
+        } else {
+            logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip"),student.getId(),getIP(request));
+            model.put("errorMessage", "Username Already Exists");
             return "register";
         }
     }
