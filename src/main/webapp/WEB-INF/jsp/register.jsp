@@ -224,6 +224,8 @@
             <option value="other">Other</option>
         </select><br/>
         Address: <input type="text" name="address" required/><br>
+            <br>
+            Passwords must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight character <type=text" name="requirements" required/><br>
         Username: <input type="text" name="username" required/><br>
         Password: <input type="password" name="password" required/><br>
         <input type="submit" value="Submit"/><br>

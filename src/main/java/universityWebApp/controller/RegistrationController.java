@@ -20,6 +20,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @SessionAttributes({"name"})
@@ -43,17 +45,27 @@ public class RegistrationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegisterPage(HttpServletRequest request,ModelMap model, Student student) {
-        if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
-            student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
-          
-            studentRepository.save(student);
-            logger.info(String.format("student %s was registered",student.getId()));
-          
-            model.put("csrfToken", UUID.randomUUID());
-            return "register_confirmation";
-        } else {
-            logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip"),student.getId(),getIP(request));
-            model.put("errorMessage", "Username Already Exists");
+        String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,40})";
+
+        Pattern pattern = Pattern.compile(passwordPattern);
+        Matcher matcher = pattern.matcher(student.getPassword());
+
+        if(matcher.matches()) {
+            if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
+                student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
+
+                studentRepository.save(student);
+                logger.info(String.format("student %s was registered", student.getId()));
+                model.put("csrfToken", UUID.randomUUID());
+                return "register_confirmation";
+            } else {
+                logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip %s", student.getId(), getIP(request)));
+                model.put("errorMessage", "Username Already Exists");
+                return "register";
+            }
+        }
+        else {
+            model.put("errorMessage", "Password must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters");
             return "register";
         }
     }
