@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>${module.moduleCode}: ${module.moduleName}</title>
+    <title>${fn:escapeXml(module.moduleCode)}: ${fn:escapeXml(module.moduleName)}</title>
     <link rel="stylesheet" type="text/css" href="../../css/main.css">
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
 </head>
@@ -18,21 +19,22 @@
             <a href="/logout">Log out</a>
         </div>
     </div>
-    <h1>${module.moduleCode}: ${module.moduleName}</h1>
+    <h1>${fn:escapeXml(module.moduleCode)}: ${fn:escapeXml(module.moduleName)}</h1>
     <p>
-        Academic year: ${module.moduleYear}<br/>
-        Description: ${module.moduleDescription}<br/>
-        Co-ordinator: ${coordinator}<br/>
-        <c:if test="${module.terminated}">
+        Academic year: ${fn:escapeXml(module.moduleYear)}<br/>
+        Description: ${fn:escapeXml(module.moduleDescription)}<br/>
+        Co-ordinator: ${fn:escapeXml(coordinator)}<br/>
+        <c:if test="${fn:escapeXml(module.terminated)}">
             <b>Module is terminated.</b><br/>
         </c:if>
     ${amountOfStudents} student enrolled out of ${module.maximumStudents} available places<br/>
         <c:choose>
             <c:when test="${isStaff}">
-                <a href="${module.id}/edit">Edit module details</a>
+                <a href="${fn:escapeXml(module.id)}/edit">Edit module details</a>
                 <c:if test="${module.terminated}">
                     <h3>Add grade</h3>
-                    <form method="post" action="${module.id}/grade" class="inline">
+                    <form method="post" action="${fn:escapeXml(module.id)}/grade" class="inline">
+
                         <input type="hidden" name="csrfToken" value="${csrfToken}"/>
                         Student ID: <input type="text" name="studentID"/>
                         Grade (as percentage): <input type="text" name="grade"/>
@@ -42,8 +44,11 @@
                 </c:if>
             </c:when>
             <c:otherwise>
-                <form method="post" action="${module.id}/${status}" class="inline">
+
+                <form method="post" action="${fn:escapeXml(module.id)}/${status}" class="inline">
+
                     <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+
                     <c:choose>
                         <c:when test="${module.terminated}">
                             Students can't enrol in a terminated module.
