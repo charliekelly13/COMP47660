@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Controller
-@SessionAttributes({"loggedIn", "isStaff", "student", "staff"})
+@SessionAttributes({"loggedIn", "isStaff", "student", "staff", "csrfToken"})
 public class LoginController {
 	
 	@Autowired
@@ -52,6 +53,7 @@ public class LoginController {
 				model.put("staff", staffRepository.findStaffByUsername(name));
 				model.put("loggedIn", true);
 				model.put("isStaff", true);
+				model.put("csrfToken", UUID.randomUUID());
         
 				return "welcome";
 			}
@@ -62,6 +64,7 @@ public class LoginController {
 
 		model.put("loggedIn", true);
 		model.put("isStaff", false);
+		model.put("csrfToken", UUID.randomUUID());
 
 		return "welcome";
 	}

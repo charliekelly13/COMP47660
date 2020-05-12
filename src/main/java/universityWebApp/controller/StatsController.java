@@ -36,11 +36,6 @@ public class StatsController {
      */
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
     public String getUserDistribtuion(HttpServletRequest request, Model model) {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            logger.info("Attempt made to access stats page while not logged in by IP "+ getIP(request));
-            return ("redirect_to_login");
-        }
-
         JSONObject staffGender = new JSONObject();
         staffGender.put("Male", 0);
         staffGender.put("Female", 0);

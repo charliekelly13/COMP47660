@@ -19,7 +19,7 @@
 		<h4>You must log in to view this page.</h4>
 		<font color="red">${errorMessage}</font>
 		<form method="post">
-			Name:  <input type="text" name="name" /><br>
+			Name:  <input type="text" name="username" /><br>
 			Password: <input type="password" name="password" /> <br>
 			<input type="submit"value="Submit" /><br>
 		</form>
