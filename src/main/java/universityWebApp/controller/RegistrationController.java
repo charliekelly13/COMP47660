@@ -52,6 +52,8 @@ public class RegistrationController {
 
         if(matcher.matches()) {
             if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
+                student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
+
                 studentRepository.save(student);
                 logger.info(String.format("student %s was registered", student.getId()));
                 model.put("csrfToken", UUID.randomUUID());
@@ -62,20 +64,8 @@ public class RegistrationController {
                 return "register";
             }
         }
-        else{
+        else {
             model.put("errorMessage", "Password must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters");
-
-          if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
-            student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
-          
-            studentRepository.save(student);
-            logger.info(String.format("student %s was registered",student.getId()));
-          
-            model.put("csrfToken", UUID.randomUUID());
-            return "register_confirmation";
-        } else {
-            logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip"),student.getId(),getIP(request));
-            model.put("errorMessage", "Username Already Exists");
             return "register";
         }
     }
