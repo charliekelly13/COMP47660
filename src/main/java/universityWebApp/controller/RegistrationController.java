@@ -45,7 +45,7 @@ public class RegistrationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegisterPage(HttpServletRequest request,ModelMap model, Student student) {
-        String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})";
+        String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!£^*=+'#~().,/`¬]).{8,40})";
 
         Pattern pattern = Pattern.compile(passwordPattern);
         Matcher matcher = pattern.matcher(student.getPassword());
@@ -59,7 +59,7 @@ public class RegistrationController {
                 model.put("csrfToken", UUID.randomUUID());
                 return "register_confirmation";
             } else {
-                logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip"), student.getId(), getIP(request));
+                logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip %s", student.getId(), getIP(request)));
                 model.put("errorMessage", "Username Already Exists");
                 return "register";
             }
