@@ -29,7 +29,7 @@
     <c:otherwise>
         <h3>De-activate your account</h3>
         <form action="settings/deactivate" method="post">
-            <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <input type="submit" value="Deactivate" />
         </form>
         <br />
