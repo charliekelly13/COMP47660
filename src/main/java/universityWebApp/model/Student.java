@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "students")
 @NamedQuery(name= "Student.findPasswordByUsername",
         query= "select a.password from Student a where a.username =?1")
-public class Student {
+public class Student implements User {
     @NotBlank
     private String username;
 
