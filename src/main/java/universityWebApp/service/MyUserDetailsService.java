@@ -12,6 +12,8 @@ import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -21,8 +23,19 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+
+    @Autowired
+    private HttpServletRequest request;
+
     @Override
     public UserDetails loadUserByUsername(String username) {
+        String ip = getClientIP();
+        if (loginAttemptService.isBlocked(ip)) {
+            throw new RuntimeException("blocked");
+        }
+
         Student student = studentRepository.findStudentByUsername(username);
         Staff staff = staffRepository.findStaffByUsername(username);
 
@@ -33,5 +46,13 @@ public class MyUserDetailsService implements UserDetailsService {
         if (student != null) return new MyStudentPrincipal(student);
 
         return new MyStaffPrincipal(staff);
+    }
+
+    private String getClientIP() {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null){
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
     }
 }
