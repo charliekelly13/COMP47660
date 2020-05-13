@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>${module.moduleCode}: ${module.moduleName}</title>
+    <title>${fn:escapeXml(module.moduleCode)}: ${fn:escapeXml(module.moduleName)}</title>
     <link rel="stylesheet" type="text/css" href="../../css/main.css">
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
 </head>
@@ -19,15 +20,15 @@
         <a href="/logout">Log out</a>
     </div>
 </div>
-<h1>${module.moduleCode}: ${module.moduleName}</h1>
+<h1>${fn:escapeXml(module.moduleCode)}: ${fn:escapeXml(module.moduleName)}</h1>
 <p>
-    Academic year: ${module.moduleYear}<br/>
-    Description: ${module.moduleDescription}<br/>
-    Co-ordinator: ${coordinator}<br/>
-    <c:if test="${module.terminated}">
+    Academic year: ${fn:escapeXml(module.moduleYear)}<br/>
+    Description: ${fn:escapeXml(module.moduleDescription)}<br/>
+    Co-ordinator: ${fn:escapeXml(coordinator)}<br/>
+    <c:if test="${fn:escapeXml(module.terminated)}">
     <b>Module is terminated.</b><br/>
     </c:if>
-    ${amountOfStudents} student enrolled out of ${module.maximumStudents} available places<br/>
+    ${fn:escapeXml(amountOfStudents)} student enrolled out of ${fn:escapeXml(module.maximumStudents)} available places<br/>
     <c:choose>
     <c:when test="${isStaff}">
     <a href="${module.id}/edit">Edit module details</a>

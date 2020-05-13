@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <title>Home</title>
@@ -21,7 +22,7 @@
 </div>
 <div align="center">
     <h1>Home</h1>
-    <p>Welcome ${student == null ? staff.firstName : student.firstName}!</p>
+    <p>Welcome ${student == null ? fn:escapeXml(staff.firstName) : fn:escapeXml(student.firstName)}!</p>
     <table border="1" cellpadding="5">
         <caption><h2>Your ${student == null ? "Taught" : "Enrolled"} Modules</h2></caption>
         <tr>
@@ -32,11 +33,11 @@
 
         <c:forEach var="module" items="${modules}">
             <tr>
-                <td><c:out value="${module.moduleCode}" /></td>
+                <td><c:out value="${fn:escapeXml(module.moduleCode)}" /></td>
 
-                <td><c:out value="${module.moduleName}" /></td>
+                <td><c:out value="${fn:escapeXml(module.moduleName)}" /></td>
 
-                <td><a href="/modules/${module.id}">View details</a></td>
+                <td><a href="/modules/${fn:escapeXml(module.id)}">View details</a></td>
             </tr>
         </c:forEach>
     </table>

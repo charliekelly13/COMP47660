@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <title>Settings</title>
@@ -22,7 +23,7 @@
 <h1>Settings</h1>
 
 <c:choose>
-    <c:when test="${isStaff}">
+    <c:when test="${fn:escapeXml(isStaff)}">
         <h3>No settings are currently available for staff.</h3>
     </c:when>
     <c:otherwise>

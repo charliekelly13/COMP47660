@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <title>Fees</title>
@@ -32,7 +33,7 @@
             <h3>There are no fees for staff.</h3>
         </c:when>
         <c:otherwise>
-            <font color="red">${errorMessage}</font>
+            <font color="red">${fn:escapeXml(errorMessage)}</font>
             <table border="1" cellpadding="5">
                 <caption><h2>Your Current Fees</h2></caption>
                 <tr>
