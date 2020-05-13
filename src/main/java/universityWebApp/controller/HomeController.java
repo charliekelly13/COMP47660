@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"loggedIn", "student", "staff"})
+@SessionAttributes({"student", "staff"})
 public class HomeController {
 
     @Autowired
@@ -36,29 +36,29 @@ public class HomeController {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
 
-        if (role.equals("student")) {
-            Student student = ((MyStudentPrincipal) authentication.getPrincipal()).getStudent();
-            model.addAttribute("student", student);
-            logger.info(String.format("Student %s accessed home page " , student.getId()));
-
-            List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
-            List<Module> modules = new ArrayList<>();
-
-            for (Long moduleId : enrolledModules) {
-                modules.add(moduleRepository.findById(moduleId)
-                        .orElseThrow(() -> new ModuleNotFoundException(moduleId)));
-            }
-
-            model.addAttribute("modules", modules);
-        } else {
-            Staff staff = ((MyStaffPrincipal) authentication.getPrincipal()).getStaff();
-            model.addAttribute("staff", staff);
-            logger.info(String.format("Staff member %s accessed home page " , staff.getId()));
-
-            List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
-
-            model.addAttribute("modules", coordinatedModules);
-        }
+        model.addAttribute("hi", "yo");
+//        if (role.equals("student")) {
+//            Student student = ((MyStudentPrincipal) authentication.getPrincipal()).getStudent();
+//            logger.info(String.format("Student %s accessed home page " , student.getId()));
+//
+//            List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
+//            List<Module> modules = new ArrayList<>();
+//
+//            for (Long moduleId : enrolledModules) {
+//                modules.add(moduleRepository.findById(moduleId)
+//                        .orElseThrow(() -> new ModuleNotFoundException(moduleId)));
+//            }
+//
+//            model.addAttribute("modules", modules);
+//        } else {
+//            Staff staff = ((MyStaffPrincipal) authentication.getPrincipal()).getStaff();
+//            model.addAttribute("staff", staff);
+//            logger.info(String.format("Staff member %s accessed home page " , staff.getId()));
+//
+//            List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
+//
+//            model.addAttribute("modules", coordinatedModules);
+//        }
 
         return "home";
     }

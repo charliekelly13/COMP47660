@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.support.SessionStatus;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
-import universityWebApp.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,11 +19,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Controller
-@SessionAttributes({"loggedIn", "isStaff", "student", "staff", "csrfToken"})
+//@SessionAttributes({"isStaff", "student", "staff", "csrfToken"})
 public class LoginController {
-	
-	@Autowired
-	LoginService service;
 
 	@Autowired
 	StudentRepository studentRepository;
@@ -36,10 +32,11 @@ public class LoginController {
 
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
-	public String showLoginPage(ModelMap model){
+	public String showLoginPage(){
 		return "login";
 	}
 
+	/* TODO: THIS IS NOT USED ANY MORE */
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public String showWelcomePage(ModelMap model, HttpServletRequest request, @RequestParam String name, @RequestParam String password) {
 		logger.info("Login attempt made for user " + name + " by the IP " + getIP(request));
