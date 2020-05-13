@@ -70,11 +70,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getClaim("role").asString();
 
+            String id = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                    .build()
+                    .verify(token.replace(TOKEN_PREFIX, ""))
+                    .getClaim("id").asString();
+
             if (user != null && role != null) {
                 List<GrantedAuthority> roles = new ArrayList<>();
                 roles.add(new SimpleGrantedAuthority(role));
 
-                return new UsernamePasswordAuthenticationToken(user, null, roles);
+                return new UsernamePasswordAuthenticationToken(user, id, roles);
             }
             return null;
         }

@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" session="false"
+         pageEncoding="UTF-8"%>
+
 <html>
     <head>
         <title>Log out</title>

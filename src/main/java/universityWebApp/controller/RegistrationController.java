@@ -3,15 +3,11 @@ package universityWebApp.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import universityWebApp.model.Staff;
 import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
@@ -24,7 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Controller
-@SessionAttributes({"name"})
 public class RegistrationController {
 
     @Autowired
@@ -39,7 +34,7 @@ public class RegistrationController {
     Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String showRegisterPage(ModelMap model) {
+    public String showRegisterPage() {
         return "register";
     }
 

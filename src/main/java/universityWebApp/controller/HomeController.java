@@ -14,19 +14,26 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import universityWebApp.repository.StaffRepository;
+import universityWebApp.repository.StudentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"student", "staff"})
 public class HomeController {
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
+    StaffRepository staffRepository;
 
     @Autowired
     ModuleRepository moduleRepository;
 
     @Autowired
     EnrollmentRepository enrollmentRepository;
+
     Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 
@@ -35,30 +42,34 @@ public class HomeController {
     public String viewHomePage(Model model, Authentication authentication) throws StudentNotFoundException, ModuleNotFoundException {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
+        String id = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
 
-        model.addAttribute("hi", "yo");
-//        if (role.equals("student")) {
-//            Student student = ((MyStudentPrincipal) authentication.getPrincipal()).getStudent();
-//            logger.info(String.format("Student %s accessed home page " , student.getId()));
-//
-//            List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
-//            List<Module> modules = new ArrayList<>();
-//
-//            for (Long moduleId : enrolledModules) {
-//                modules.add(moduleRepository.findById(moduleId)
-//                        .orElseThrow(() -> new ModuleNotFoundException(moduleId)));
-//            }
-//
-//            model.addAttribute("modules", modules);
-//        } else {
-//            Staff staff = ((MyStaffPrincipal) authentication.getPrincipal()).getStaff();
-//            model.addAttribute("staff", staff);
-//            logger.info(String.format("Staff member %s accessed home page " , staff.getId()));
-//
-//            List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
-//
-//            model.addAttribute("modules", coordinatedModules);
-//        }
+        if (role.equals("student")) {
+            logger.info(String.format("Student %s accessed home page ", username));
+
+            Student student = studentRepository.findStudentByUsername(username);
+            model.addAttribute("student", student);
+
+            List<Long> enrolledModules = enrollmentRepository.findByStudentID(id);
+            List<Module> modules = new ArrayList<>();
+
+            for (Long moduleId : enrolledModules) {
+                modules.add(moduleRepository.findById(moduleId)
+                        .orElseThrow(() -> new ModuleNotFoundException(moduleId)));
+            }
+
+            model.addAttribute("modules", modules);
+        } else {
+            logger.info(String.format("Staff member %s accessed home page " , authentication.getPrincipal()));
+
+            Staff staff = staffRepository.findStaffByUsername(username);
+            model.addAttribute("staff", staff);
+
+            List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(id);
+
+            model.addAttribute("modules", coordinatedModules);
+        }
 
         return "home";
     }

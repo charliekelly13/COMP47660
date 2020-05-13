@@ -1,5 +1,7 @@
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" session="false"
+		 pageEncoding="UTF-8"%>
 
+<html>
 	<head>
 		<title>Login</title>
 		<link href="https://fonts.googleapis.com/css2" rel="stylesheet">

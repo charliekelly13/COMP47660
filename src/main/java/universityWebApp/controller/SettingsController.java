@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -23,6 +24,7 @@ import universityWebApp.repository.GradesRepository;
 import universityWebApp.repository.ModuleRepository;
 import universityWebApp.repository.StudentRepository;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -31,7 +33,6 @@ import java.util.List;
 
 
 @Controller
-@SessionAttributes({"loggedIn", "student", "csrfToken"})
 public class SettingsController {
     @Autowired
     StudentRepository studentRepository;
@@ -49,34 +50,26 @@ public class SettingsController {
     Logger logger = LoggerFactory.getLogger(SettingsController.class);
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public String viewSettingsPage(HttpServletRequest request, Model model) {
+    public String viewSettingsPage() {
         return "settings";
     }
 
     @RequestMapping(value = "/settings/deactivate", method = RequestMethod.POST)
-    public String deactivate(HttpServletRequest request, ModelMap model, SessionStatus status, String csrfToken) throws StudentNotFoundException {
-        if (!model.containsAttribute("loggedIn") || !(boolean) model.getAttribute("loggedIn")) {
-            logger.warn("Attempt made to delete account while not logged in by IP " + getIP(request));
-            return ("login");
-        }
+    public String deactivate(Authentication authentication, HttpServletRequest request) throws StudentNotFoundException, ServletException {
+        String id = (String) authentication.getCredentials();
 
-        if (!csrfToken.equals(model.get("csrfToken"))) {
-            throw new ForbiddenException();
-        }
-
-        Student student = (Student) model.getAttribute("student");
-
-        List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
+        List<Long> enrolledModules = enrollmentRepository.findByStudentID(id);
 
         for (Long moduleId : enrolledModules) {
-            enrollmentRepository.delete(new Enrollment(moduleId, student.getId()));
+            enrollmentRepository.delete(new Enrollment(moduleId, id));
         }
 
-        gradesRepository.deleteInBatch(gradesRepository.findByStudentID(student.getId()));
-        logger.info(String.format("Student %s deactivated", student.getId()));
-        studentRepository.delete(student);
+        gradesRepository.deleteInBatch(gradesRepository.findByStudentID(id));
+        logger.info(String.format("Student %s deactivated", id));
 
-        status.setComplete();
+        studentRepository.deleteById(id);
+
+        request.logout();
 
         return "deactivated";
     }

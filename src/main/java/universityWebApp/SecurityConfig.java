@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .deleteCookies(SecurityConstants.COOKIE_NAME)
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), getApplicationContext()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
         ;
     }

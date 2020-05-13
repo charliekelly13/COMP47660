@@ -3,6 +3,8 @@ package universityWebApp.filter;
 
 
 import com.auth0.jwt.JWT;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,6 +12,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import universityWebApp.model.Student;
+import universityWebApp.model.User;
+import universityWebApp.repository.StaffRepository;
+import universityWebApp.repository.StudentRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.Cookie;
@@ -26,10 +32,17 @@ import static universityWebApp.filter.SecurityConstants.*;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private StaffRepository staffRepository;
 
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx) {
         this.authenticationManager = authenticationManager;
+        this.studentRepository = ctx.getBean(StudentRepository.class);
+        this.staffRepository = ctx.getBean(StaffRepository.class);
     }
 
     @Override
@@ -50,10 +63,24 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication auth) throws IOException {
+        String role;
+        String id;
+
+        String username = ((UserDetails) auth.getPrincipal()).getUsername();
+
+        if (auth.getAuthorities().iterator().next().getAuthority().equals("student")) {
+            role = "student";
+            id = studentRepository.findStudentByUsername(username).getId();
+        } else {
+            role = "staff";
+            id = staffRepository.findStaffByUsername(username).getId();
+        }
+
         String token = JWT.create()
-                .withSubject(((UserDetails) auth.getPrincipal()).getUsername())
+                .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .withClaim("role", auth.getAuthorities().iterator().next().getAuthority())
+                .withClaim("role", role)
+                .withClaim("id", id)
                 .sign(HMAC512(SECRET.getBytes()));
 
         addCookie(token, response);
