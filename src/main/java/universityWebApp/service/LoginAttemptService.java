@@ -1,49 +1,58 @@
 package universityWebApp.service;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import universityWebApp.exception.IpNotFoundException;
+import universityWebApp.model.Blacklist;
+import universityWebApp.repository.BlacklistRepository;
 
 @Service
 public class LoginAttemptService {
 
-    private final int MAX_ATTEMPT = 3;
-    private LoadingCache<String, Integer> attemptsCache;
+    @Autowired
+    BlacklistRepository blacklistRepository;
 
     public LoginAttemptService() {
         super();
-        attemptsCache = CacheBuilder.newBuilder().
-                expireAfterWrite(30, TimeUnit.DAYS).build(new CacheLoader<String, Integer>() {
-            public Integer load(String key) {
-                return 0;
-            }
-        });
     }
 
     public void loginSucceeded(String key) {
-        attemptsCache.invalidate(key);
+        Blacklist black;
+        try {
+            black = blacklistRepository.findById(key).orElseThrow(IpNotFoundException::new);
+            black.setAttempts(0);
+        }
+        catch(IpNotFoundException i){
+            black = new Blacklist(key, 0);
+            blacklistRepository.save(black);
+
+        }
     }
 
     public void loginFailed(String key) {
         int attempts = 0;
-        try {
-            attempts = attemptsCache.get(key);
-        } catch (ExecutionException e) {
-            attempts = 0;
+        Blacklist black;
+        try{
+            black =  blacklistRepository.findById(key).orElseThrow(IpNotFoundException::new);
+            attempts =black.getAttempts();
+            black.setAttempts(attempts++);
         }
-        attempts++;
-        attemptsCache.put(key, attempts);
+        catch(IpNotFoundException i) {
+            black = new Blacklist(key, 1);
+            blacklistRepository.save(black);
+        }
+
     }
 
     public boolean isBlocked(String key) {
         try {
-            return attemptsCache.get(key) >= MAX_ATTEMPT;
-        } catch (ExecutionException e) {
+            Blacklist black =  blacklistRepository.findById(key).orElseThrow(IpNotFoundException::new);
+            int MAX_ATTEMPT = 3;
+            return black.getAttempts() >= MAX_ATTEMPT;
+        } catch (IpNotFoundException e) {
             return false;
         }
     }
+
+
 }
