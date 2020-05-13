@@ -36,7 +36,7 @@
             <th></th>
         </tr>
 
-        <c:forEach var="module" items="${fn:escapeXml(modules)}">
+        <c:forEach var="module" items="${modules}">
             <tr>
                 <td><c:out value="${fn:escapeXml(module.moduleCode)}" /></td>
 
