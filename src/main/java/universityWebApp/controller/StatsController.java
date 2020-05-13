@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"loggedIn", "staff", "student", "gender", "nationality"})
 public class StatsController {
     @Autowired
     StaffRepository staffRepository;

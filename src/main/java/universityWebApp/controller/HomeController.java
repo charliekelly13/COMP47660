@@ -14,23 +14,26 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import universityWebApp.repository.StaffRepository;
+import universityWebApp.repository.StudentRepository;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
-@SessionAttributes({"loggedIn", "student", "staff"})
 public class HomeController {
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
+    StaffRepository staffRepository;
 
     @Autowired
     ModuleRepository moduleRepository;
 
     @Autowired
     EnrollmentRepository enrollmentRepository;
+
     Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 
@@ -39,13 +42,16 @@ public class HomeController {
     public String viewHomePage(Model model, Authentication authentication) throws StudentNotFoundException, ModuleNotFoundException {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
+        String id = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
 
         if (role.equals("student")) {
-            Student student = ((MyStudentPrincipal) authentication.getPrincipal()).getStudent();
-            model.addAttribute("student", student);
-            logger.info(String.format("Student %s accessed home page " , student.getId()));
+            logger.info(String.format("Student %s accessed home page ", username));
 
-            List<Long> enrolledModules = enrollmentRepository.findByStudentID(student.getId());
+            Student student = studentRepository.findStudentByUsername(username);
+            model.addAttribute("student", student);
+
+            List<Long> enrolledModules = enrollmentRepository.findByStudentID(id);
             List<Module> modules = new ArrayList<>();
 
             for (Long moduleId : enrolledModules) {
@@ -55,11 +61,12 @@ public class HomeController {
 
             model.addAttribute("modules", modules);
         } else {
-            Staff staff = ((MyStaffPrincipal) authentication.getPrincipal()).getStaff();
-            model.addAttribute("staff", staff);
-            logger.info(String.format("Staff member %s accessed home page " , staff.getId()));
+            logger.info(String.format("Staff member %s accessed home page " , authentication.getPrincipal()));
 
-            List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(staff.getId());
+            Staff staff = staffRepository.findStaffByUsername(username);
+            model.addAttribute("staff", staff);
+
+            List<Module> coordinatedModules = moduleRepository.findModulesByCoordinatorIds(id);
 
             model.addAttribute("modules", coordinatedModules);
         }

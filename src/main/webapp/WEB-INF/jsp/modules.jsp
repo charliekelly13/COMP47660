@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8" session="false"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -36,7 +36,7 @@
             <th></th>
         </tr>
 
-        <c:forEach var="module" items="${fn:escapeXml(modules)}">
+        <c:forEach var="module" items="${modules}">
             <tr>
                 <td><c:out value="${fn:escapeXml(module.moduleCode)}" /></td>
 

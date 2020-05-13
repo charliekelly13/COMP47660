@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" session="false"
+         pageEncoding="UTF-8"%>
+
 <html>
 
 <head>
@@ -18,6 +21,6 @@
         <a href="/logout">Log out</a>
     </div>
 </div>
-<p>You have payment was successful. <a href="/fee_payment">Click here</a> to view your current fees</p>
+<p>Your payment was successful. <a href="/fee_payment">Click here</a> to view your current fees</p>
 </body>
 </html>
