@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import universityWebApp.exception.StudentNotFoundException;
@@ -39,7 +41,14 @@ public class SettingsController {
     Logger logger = LoggerFactory.getLogger(SettingsController.class);
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public String viewSettingsPage() {
+    public String viewSettingsPage(ModelMap model, Authentication authentication) {
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
+        String role = authorities.get(0).getAuthority();
+
+        if (role.equals("staff")) {
+            model.put("isStaff", true);
+        }
+
         return "settings";
     }
 

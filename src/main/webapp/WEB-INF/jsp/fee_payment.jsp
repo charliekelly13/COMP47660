@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8" session="false"
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -39,19 +39,19 @@
                 <tr>
                     <td>Total Fee Amount</td>
 
-                    <td><c:out value="${student.feesTotal}" /></td>
+                    <td><c:out value="${feesTotal}" /></td>
 
                 </tr>
                 <tr>
                     <td>Total Owed</td>
 
-                    <td><c:out value="${student.feesOwed}" /></td>
+                    <td><c:out value="${feesOwed}" /></td>
                 </tr>
                 <tr>
                     <td>Make a Payment</td>
                     <td> <form method="post">
                         <input type="hidden" name="csrfToken" value="${csrfToken}"/>
-                        <input type="number" name="feePayment"  required/>
+                        <input type="number" name="feePayment" required/>
                         <input type="submit" value="Pay"/><br>
                     </form></td>
                 </tr>

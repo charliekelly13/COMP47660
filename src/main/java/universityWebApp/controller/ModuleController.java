@@ -106,6 +106,8 @@ public class ModuleController {
             } else {
                 model.addAttribute("grade", "Not yet graded");
             }
+        } else {
+            model.addAttribute("isStaff", true);
         }
 
         Staff coordinator = staffRepository.findStaffById(module.getCoordinatorId());

@@ -85,8 +85,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         addCookie(token, response);
 
-
-
         new DefaultRedirectStrategy().sendRedirect(request, response, "/");
     }
 
@@ -106,11 +104,3 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addCookie(cookie);
     }
 }
-
-
-
-
-
-
-
-
