@@ -2,7 +2,7 @@
          pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %><html>
 <head>
     <title>Fees</title>
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
@@ -38,14 +38,11 @@
                 <caption><h2>Your Current Fees</h2></caption>
                 <tr>
                     <td>Total Fee Amount</td>
-
-                    <td><c:out value="${feesTotal}" /></td>
-
+                    <td>€<fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${feesTotal}"/></td>
                 </tr>
                 <tr>
-                    <td>Total Owed</td>
-
-                    <td><c:out value="${feesOwed}" /></td>
+                    <td>Amount Owed</td>
+                    <td>€<fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${feesOwed}"/></td>
                 </tr>
                 <tr>
                     <td>Make a Payment</td>
@@ -53,14 +50,12 @@
                         <form method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="hidden" name="csrfToken" value="${csrfToken}"/>
-                            <input type="number" name="feePayment" required/>
+                            <input type="number" name="feePayment" step="0.01" required/>
                             <input type="submit" value="Pay"/><br>
                         </form>
                     </td>
                 </tr>
-
             </table>
-
         </c:otherwise>
     </c:choose>
 </div>
