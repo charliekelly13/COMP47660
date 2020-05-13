@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS `university`.`students` (
   `address` VARCHAR(45) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
-  `fees_total` INT DEFAULT 0 NOT NULL,
-  `fees_owed` INT DEFAULT 0 NOT NULL,
+  `fees_total` DOUBLE DEFAULT 0 NOT NULL,
+  `fees_owed` DOUBLE DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE (`id`),
   UNIQUE (`username`));

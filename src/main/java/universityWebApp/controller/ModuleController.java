@@ -187,7 +187,7 @@ public class ModuleController {
         Optional<Student> studentOptional = studentRepository.findById(userId);
 
         if (!studentOptional.isPresent()) {
-            throw new StudentNotFoundException("Student does not exist for ID");
+            throw new StudentNotFoundException(userId);
         }
 
         Student student = studentOptional.get();
