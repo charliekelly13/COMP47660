@@ -54,7 +54,7 @@ public class FeesController {
 
 
     @RequestMapping(value = "/fee_payment", method = RequestMethod.POST)
-    public String payFees(ModelMap model, Student student, @RequestParam int feePayment) {
+    public String payFees(ModelMap model, Student student, @RequestParam double feePayment) {
         model.addAttribute("feesTotal", student.getFeesTotal());
         model.addAttribute("feesOwed", student.getFeesOwed());
 

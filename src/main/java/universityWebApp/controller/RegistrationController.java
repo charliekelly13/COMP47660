@@ -38,16 +38,17 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public String postRegisterPage(HttpServletRequest request,ModelMap model, Student student) {
+    public String postRegisterPage(HttpServletRequest request, ModelMap model, Student student) {
         String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,40})";
 
         Pattern pattern = Pattern.compile(passwordPattern);
         Matcher matcher = pattern.matcher(student.getPassword());
 
-        if(matcher.matches()) {
+        if (matcher.matches()) {
             if (staffRepository.findStaffByUsername(student.getUsername()) == null && studentRepository.findStudentByUsername(student.getUsername()) == null) {
                 student.setPassword(bCryptPasswordEncoder.encode(student.getPassword()));
-
+                student.setFeesOwed(3000);
+                student.setFeesTotal(3000);
                 studentRepository.save(student);
                 logger.info(String.format("student %s was registered", student.getId()));
                 return "register_confirmation";
@@ -56,19 +57,17 @@ public class RegistrationController {
                 model.put("errorMessage", "Username Already Exists");
                 return "register";
             }
-        }
-        else {
+        } else {
             model.put("errorMessage", "Password must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters");
             return "register";
         }
     }
 
-    public String getIP(HttpServletRequest request){
-        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")|| request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
+    public String getIP(HttpServletRequest request) {
+        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1") || request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
             try {
                 return InetAddress.getLocalHost().getHostAddress();
-            }
-            catch (UnknownHostException e) {
+            } catch (UnknownHostException e) {
                 return null;
             }
         }

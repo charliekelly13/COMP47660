@@ -40,10 +40,10 @@ public class Student implements User {
     private String emailAddress;
 
     @NotNull
-    private int feesTotal;
+    private double feesTotal;
 
     @NotNull
-    private int feesOwed;
+    private double feesOwed;
 
 
     public Student() {
@@ -59,8 +59,6 @@ public class Student implements User {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
-        this.feesTotal = 3000;
-        this.feesOwed = 3000;
     }
 
     public String getUsername() {
@@ -143,19 +141,19 @@ public class Student implements User {
         this.emailAddress = emailAddress;
     }
 
-    public void setFeesOwed(int feesOwed) {
+    public void setFeesOwed(double feesOwed) {
         this.feesOwed = feesOwed;
     }
 
-    public void setFeesTotal(int feesTotal) {
+    public void setFeesTotal(double feesTotal) {
         this.feesTotal = feesTotal;
     }
 
-    public int getFeesOwed() {
+    public double getFeesOwed() {
         return feesOwed;
     }
 
-    public int getFeesTotal() {
+    public double getFeesTotal() {
         return feesTotal;
     }
 }
