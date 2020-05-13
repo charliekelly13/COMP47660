@@ -12,7 +12,6 @@ import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
-import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -51,7 +50,6 @@ public class RegistrationController {
 
                 studentRepository.save(student);
                 logger.info(String.format("student %s was registered", student.getId()));
-                model.put("csrfToken", UUID.randomUUID());
                 return "register_confirmation";
             } else {
                 logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip %s", student.getId(), getIP(request)));
