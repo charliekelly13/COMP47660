@@ -35,7 +35,7 @@
     <c:if test="${module.terminated}">
 <h3>Add grade</h3>
 <form method="post" action="${module.id}/grade" class="inline">
-    <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     Student ID: <input type="text" name="studentID"/>
     Grade (as percentage): <input type="text" name="grade"/>
     <button type="submit">Submit grade</button>
@@ -45,7 +45,7 @@
 </c:when>
 <c:otherwise>
     <form method="post" action="${module.id}/${status}" class="inline">
-        <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <c:choose>
             <c:when test="${module.terminated}">
                 Students can't enrol in a terminated module.

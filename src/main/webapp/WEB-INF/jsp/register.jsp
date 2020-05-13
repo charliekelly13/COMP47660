@@ -18,7 +18,7 @@
     </div>
     <font color="red">${errorMessage}</font>
     <form method="post">
-        <%--    name, surname,  student ID, address, phone number, email address--%>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         First name: <input type="text" name="firstName" required/><br>
         Surname: <input type="text" name="lastName" required/><br>
         Student ID: <input type="text" name="id" required/><br>
@@ -227,9 +227,9 @@
         </select><br/>
         Address: <input type="text" name="address" required/><br>
             <br>
-            Passwords must contain a Uppercase letter, Lowercase letter, number, special character (.,?!#@ etc) and contain at least eight character <type=text" name="requirements" required/><br>
         Username: <input type="text" name="username" required/><br>
         Password: <input type="password" name="password" required/><br>
+        Note: passwords must contain a uppercase letter, lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters.<br>
         <input type="submit" value="Submit"/><br>
     </form>
     Already have an account? <a href="/login">Login</a>

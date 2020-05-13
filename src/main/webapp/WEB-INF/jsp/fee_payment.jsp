@@ -49,11 +49,14 @@
                 </tr>
                 <tr>
                     <td>Make a Payment</td>
-                    <td> <form method="post">
-                        <input type="hidden" name="csrfToken" value="${csrfToken}"/>
-                        <input type="number" name="feePayment" required/>
-                        <input type="submit" value="Pay"/><br>
-                    </form></td>
+                    <td>
+                        <form method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+                            <input type="number" name="feePayment" required/>
+                            <input type="submit" value="Pay"/><br>
+                        </form>
+                    </td>
                 </tr>
 
             </table>

@@ -25,6 +25,7 @@
     Search:
 
     <form method="get" class="inline">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input type="text" name="searchTerm"/>
         <button>Search</button>
     </form>
