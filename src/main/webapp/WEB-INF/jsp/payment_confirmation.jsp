@@ -1,9 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" session="false"
-         pageEncoding="UTF-8"%>
 <html>
 
 <head>
-    <title>Register Confirmation</title>
+    <title>Payment Confirmation</title>
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
@@ -20,6 +18,6 @@
         <a href="/logout">Log out</a>
     </div>
 </div>
-You have now registered! Please <a href="/login">login</a> with your new account.
+<p>You have payment was successful. <a href="/fee_payment">Click here</a> to view your current fees</p>
 </body>
 </html>

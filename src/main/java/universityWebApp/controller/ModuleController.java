@@ -195,7 +195,7 @@ public class ModuleController {
             throw new StudentAlreadyEnrolledException(student.getId(), moduleId);
         }
 
-        if (!student.hasPaidFees()) {
+        if (student.getFeesOwed()!=0) {
             logger.info(String.format("Attempt made to enrol in module %s while fees are owed by student %s", moduleId, student.getId()));
             throw new FeesNotPaidException();
         }

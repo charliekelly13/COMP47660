@@ -16,6 +16,7 @@
         <a href="/">Home</a>
         <a href="/modules">All Modules</a>
         <a href="/stats">Stats</a>
+        <a href="/fee_payment">Fees</a>
         <a href="/settings">Settings</a>
         <a href="/logout">Log out</a>
     </div>
