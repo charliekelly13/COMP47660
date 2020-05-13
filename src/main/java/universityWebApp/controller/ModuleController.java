@@ -113,7 +113,7 @@ public class ModuleController {
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.GET)
 
     public String editModule(HttpServletRequest request, @PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
-        
+
         if (!(Boolean) model.getAttribute("isStaff")) {
             logger.warn(String.format("Student Attempt made to access module %s edit page by student %s ", moduleId, ((Student) model.getAttribute("student")).getId()));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
@@ -172,7 +172,7 @@ public class ModuleController {
             throw new StudentAlreadyEnrolledException(student.getId(), moduleId);
         }
 
-        if (!student.hasPaidFees()) {
+        if (student.getFeesOwed()!=0) {
             logger.info(String.format("Attempt made to enrol in module %s while fees are owed by student %s", moduleId, student.getId()));
             throw new FeesNotPaidException();
         }

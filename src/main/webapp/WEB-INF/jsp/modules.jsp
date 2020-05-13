@@ -9,42 +9,43 @@
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
 </head>
 <body>
-    <div id="header">
-        <img src="../img/logo.png" width="200" alt="Logo"/>
-        <div align="right">
-            <a href="/">Home</a>
-            <a href="/modules">All Modules</a>
-            <a href="/stats">Stats</a>
-            <a href="/settings">Settings</a>
-            <a href="/logout">Log out</a>
-        </div>
+<div id="header">
+    <img src="../img/logo.png" width="200" alt="Logo"/>
+    <div align="right">
+        <a href="/">Home</a>
+        <a href="/modules">All Modules</a>
+        <a href="/stats">Stats</a>
+        <a href="/fee_payment">Fees</a>
+        <a href="/settings">Settings</a>
+        <a href="/logout">Log out</a>
     </div>
-    <div align="center">
-        <h1>All Modules</h1>
-        Search:
+</div>
+<div align="center">
+    <h1>All Modules</h1>
+    Search:
 
-        <form method="get" class="inline">
-            <input type="text" name="searchTerm"/>
-            <button>Search</button>
-        </form>
+    <form method="get" class="inline">
+        <input type="text" name="searchTerm"/>
+        <button>Search</button>
+    </form>
 
-        <table border="1" cellpadding="5">
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Module code</th>
+            <th>Module name</th>
+            <th></th>
+        </tr>
+
+        <c:forEach var="module" items="${fn:escapeXml(modules)}">
             <tr>
-                <th>Module code</th>
-                <th>Module name</th>
-                <th></th>
+                <td><c:out value="${fn:escapeXml(module.moduleCode)}" /></td>
+
+                <td><c:out value="${fn:escapeXml(module.moduleName)}" /></td>
+
+                <td><a href="/modules/${fn:escapeXml(module.id)}">View details</a></td>
             </tr>
-
-            <c:forEach var="module" items="${modules}">
-                <tr>
-                    <td><c:out value="${fn:escapeXml(module.moduleCode)}" /></td>
-
-                    <td><c:out value="${fn:escapeXml(module.moduleName)}" /></td>
-
-                    <td><a href="/modules/${fn:escapeXml(module.id)}">View details</a></td>
-                </tr>
-            </c:forEach>
-        </table>
-    </div>
+        </c:forEach>
+    </table>
+</div>
 </body>
 </html>

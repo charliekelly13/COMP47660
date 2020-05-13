@@ -40,7 +40,11 @@ public class Student {
     private String emailAddress;
 
     @NotNull
-    private boolean feesPaid;
+    private int feesTotal;
+
+    @NotNull
+    private int feesOwed;
+
 
     public Student() {
         super();
@@ -55,7 +59,8 @@ public class Student {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
-        this.feesPaid = false;
+        this.feesTotal = 3000;
+        this.feesOwed = 3000;
     }
 
     public String getUsername() {
@@ -110,10 +115,6 @@ public class Student {
         return nationality;
     }
 
-    public boolean isFeesPaid() {
-        return feesPaid;
-    }
-
     public void setNationality(String nationality) {
         this.nationality = nationality;
     }
@@ -142,11 +143,19 @@ public class Student {
         this.emailAddress = emailAddress;
     }
 
-    public boolean hasPaidFees() {
-        return feesPaid;
+    public void setFeesOwed(int feesOwed) {
+        this.feesOwed = feesOwed;
     }
 
-    public void setFeesPaid(boolean feesPaid) {
-        this.feesPaid = feesPaid;
+    public void setFeesTotal(int feesTotal) {
+        this.feesTotal = feesTotal;
+    }
+
+    public int getFeesOwed() {
+        return feesOwed;
+    }
+
+    public int getFeesTotal() {
+        return feesTotal;
     }
 }
