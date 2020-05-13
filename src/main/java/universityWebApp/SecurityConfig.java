@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import universityWebApp.filter.JWTAuthenticationFilter;
 import universityWebApp.filter.JWTAuthorizationFilter;
+import universityWebApp.filter.SecurityConstants;
 
 @Configuration
 @EnableWebSecurity
@@ -35,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .deleteCookies()
+                .deleteCookies("JSESSIONID")
+                .deleteCookies(SecurityConstants.COOKIE_NAME)
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))

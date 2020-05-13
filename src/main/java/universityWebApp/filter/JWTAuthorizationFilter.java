@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -16,7 +18,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import static universityWebApp.filter.SecurityConstants.*;
 
@@ -34,13 +38,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         Cookie [] cookies = request.getCookies();
         String token = null;
 
+        if(cookies != null) {
+            for(Cookie cookie: cookies) {
+                if(cookie.getName().equals(COOKIE_NAME))
+                    token = cookie.getValue();
+            }
+        }
 
-        if(cookies!=null){
-
-            for(Cookie cookie: cookies){
-            if(cookie.getName().equals(COOKIE_NAME))
-                token = cookie.getValue();
-        }}
         if (token == null) {
             filterChain.doFilter(request, response);
             return;
@@ -61,8 +65,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getSubject();
 
-            if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+            String role = JWT.require(Algorithm.HMAC512(SECRET.getBytes()))
+                    .build()
+                    .verify(token.replace(TOKEN_PREFIX, ""))
+                    .getClaim("role").asString();
+
+            if (user != null && role != null) {
+                List<GrantedAuthority> roles = new ArrayList<>();
+                roles.add(new SimpleGrantedAuthority(role));
+
+                return new UsernamePasswordAuthenticationToken(user, null, roles);
             }
             return null;
         }

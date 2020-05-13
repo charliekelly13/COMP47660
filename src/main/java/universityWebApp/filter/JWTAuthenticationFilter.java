@@ -53,6 +53,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = JWT.create()
                 .withSubject(((UserDetails) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withClaim("role", auth.getAuthorities().iterator().next().getAuthority())
                 .sign(HMAC512(SECRET.getBytes()));
 
         addCookie(token, response);
