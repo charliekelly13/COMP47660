@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import universityWebApp.filter.JWTAuthenticationFilter;
 import universityWebApp.filter.JWTAuthorizationFilter;
 import universityWebApp.filter.SecurityConstants;
@@ -19,15 +20,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
+        CsrfTokenRepository repo = new CookieCsrfTokenRepository();
+
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().csrf().ignoringAntMatchers("/login").and()
+                .and()
+                .csrf().csrfTokenRepository(repo).ignoringAntMatchers("/login", "/css/**", "/img/**", "/register*")
+                .sessionAuthenticationStrategy(new MyCsrfSessionAuthenticationStrategy(repo))
+                .and()
                 .requiresChannel().anyRequest().requiresSecure()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login*").permitAll()
                 .antMatchers("/register*").permitAll()
                 .antMatchers("/css/**", "/img/**").permitAll()
+                .antMatchers("/favicon.ico").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
