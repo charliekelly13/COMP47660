@@ -6,6 +6,62 @@
     <title>Register</title>
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script type="text/javascript">
+        function updatePasswordStrength(password) {
+            var password_strength = document.getElementById("password_strength");
+
+            //TextBox left blank.
+            if (password.length == 0) {
+                password_strength.innerHTML = "";
+                return;
+            }
+
+            let strengthValue = 0;
+
+            if (password.length >= 8)
+                strengthValue += 1;
+
+            if (password.match(/(?=.*[0-9])/))
+                strengthValue += 1;
+
+            if (password.match(/(?=.*[^A-Za-z0-9])/))
+                strengthValue += 1;
+
+            if (password.match(/(?=.*[a-z])/))
+                strengthValue += 1;
+
+            if (password.match(/(?=.*[A-Z])/))
+                strengthValue += 1;
+
+            //Display status.
+            var color = "";
+            var strength = "";
+            switch (strengthValue) {
+                case 0:
+                case 1:
+                    strength = "Very Weak";
+                    color = "darkred";
+                    break;
+                case 2:
+                case 3:
+                    strength = "Weak";
+                    color = "red";
+                    break;
+                case 4:
+                    strength = "Fair";
+                    color = "darkorange";
+                    break;
+                case 5:
+                    strength = "Strong";
+                    color = "green";
+                    break;
+            }
+
+            password_strength.innerHTML = strength;
+            password_strength.style.color = color;
+        }
+
+    </script>
 </head>
 
 <body>
@@ -228,7 +284,11 @@
         Address: <input type="text" name="address" required/><br>
             <br>
         Username: <input type="text" name="username" required/><br>
-        Password: <input type="password" name="password" required/><br>
+        Password: <input type="password" name="password" onkeyup="updatePasswordStrength(this.value)" required/><br>
+
+        Current password strength: <span id="password_strength"></span><br/>
+
+
         Note: passwords must contain a uppercase letter, lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters.<br>
         <input type="submit" value="Submit"/><br>
     </form>
