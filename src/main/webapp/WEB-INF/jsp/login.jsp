@@ -1,5 +1,7 @@
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" session="false"
+		 pageEncoding="UTF-8"%>
 
+<html>
 	<head>
 		<title>Login</title>
 		<link href="https://fonts.googleapis.com/css2" rel="stylesheet">
@@ -19,6 +21,7 @@
 		<h4>You must log in to view this page.</h4>
 		<font color="red">${errorMessage}</font>
 		<form method="post">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			Name:  <input type="text" name="username" /><br>
 			Password: <input type="password" name="password" /> <br>
 			<input type="submit"value="Submit" /><br>

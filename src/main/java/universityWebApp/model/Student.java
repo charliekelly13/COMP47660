@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "students")
 @NamedQuery(name= "Student.findPasswordByUsername",
         query= "select a.password from Student a where a.username =?1")
-public class Student {
+public class Student implements User {
     @NotBlank
     private String username;
 
@@ -40,7 +40,11 @@ public class Student {
     private String emailAddress;
 
     @NotNull
-    private boolean feesPaid;
+    private double feesTotal;
+
+    @NotNull
+    private double feesOwed;
+
 
     public Student() {
         super();
@@ -55,7 +59,6 @@ public class Student {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
-        this.feesPaid = false;
     }
 
     public String getUsername() {
@@ -110,10 +113,6 @@ public class Student {
         return nationality;
     }
 
-    public boolean isFeesPaid() {
-        return feesPaid;
-    }
-
     public void setNationality(String nationality) {
         this.nationality = nationality;
     }
@@ -142,11 +141,19 @@ public class Student {
         this.emailAddress = emailAddress;
     }
 
-    public boolean hasPaidFees() {
-        return feesPaid;
+    public void setFeesOwed(double feesOwed) {
+        this.feesOwed = feesOwed;
     }
 
-    public void setFeesPaid(boolean feesPaid) {
-        this.feesPaid = feesPaid;
+    public void setFeesTotal(double feesTotal) {
+        this.feesTotal = feesTotal;
+    }
+
+    public double getFeesOwed() {
+        return feesOwed;
+    }
+
+    public double getFeesTotal() {
+        return feesTotal;
     }
 }

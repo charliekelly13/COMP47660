@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "staff")
-public class Staff {
+public class Staff implements User {
   
     @Id
     @NotBlank
