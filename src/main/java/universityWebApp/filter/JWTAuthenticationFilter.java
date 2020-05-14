@@ -18,6 +18,7 @@ import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -84,6 +85,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         addCookie(token, response);
 
         new DefaultRedirectStrategy().sendRedirect(request, response, "/");
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        String errorType = "";
+
+        if (failed.getMessage().contains("blocked")) {
+            errorType = "blocked";
+        } else {
+            errorType = "invalid";
+        }
+
+        new DefaultRedirectStrategy().sendRedirect(request, response, "/login?error=" + errorType);
     }
 
     private void addCookie(String token, HttpServletResponse response) {
