@@ -1,19 +1,15 @@
 package universityWebApp.controller;
 
-import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
-
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String showLoginPage(Model model, HttpServletRequest request, @RequestParam(required = false) String error) {
