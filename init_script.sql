@@ -17,6 +17,12 @@ CREATE TABLE IF NOT EXISTS `university`.`students` (
   PRIMARY KEY (`id`),
   UNIQUE (`id`),
   UNIQUE (`username`));
+  
+  CREATE TABLE IF NOT EXISTS `university`.`blacklist` (
+  `ip` VARCHAR(45) NOT NULL,
+  `attempts` INT NOT NULL,
+  PRIMARY KEY (`ip`),
+  UNIQUE (`ip`));
 
   CREATE TABLE IF NOT EXISTS `university`.`blacklist` (
   `ip` VARCHAR(45) NOT NULL,

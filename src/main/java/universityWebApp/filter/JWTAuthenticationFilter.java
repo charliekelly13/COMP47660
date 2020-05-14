@@ -48,14 +48,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                request.getParameter("username"),
+                request.getParameter("password"),
+                new ArrayList<>());
 
-
-        return authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getParameter("username"),
-                        request.getParameter("password"),
-                        new ArrayList<>())
-        );
+        return authenticationManager.authenticate(token);
     }
 
     @Override
