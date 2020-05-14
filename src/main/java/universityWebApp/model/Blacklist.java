@@ -12,7 +12,7 @@ public class Blacklist {
     @Id
     private String ip;
 
-    @NotBlank
+    @NotNull
     private int attempts;
 
     public Blacklist() {

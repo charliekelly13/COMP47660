@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `university`.`students` (
   
   CREATE TABLE IF NOT EXISTS `university`.`blacklist` (
   `ip` VARCHAR(45) NOT NULL,
-  `attempts` VARCHAR(45) NOT NULL,
+  `attempts` INT NOT NULL,
   PRIMARY KEY (`ip`),
   UNIQUE (`ip`));
 
