@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .csrf().csrfTokenRepository(repo).ignoringAntMatchers("/login", "/css/**", "/img/**", "/register*")
+                .csrf().csrfTokenRepository(repo).ignoringAntMatchers("/css/**", "/img/**", "/register*")
                 .sessionAuthenticationStrategy(new MyCsrfSessionAuthenticationStrategy(repo))
                 .and()
                 .requiresChannel().anyRequest().requiresSecure()
