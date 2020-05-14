@@ -1,9 +1,11 @@
 package universityWebApp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Service;
 import universityWebApp.model.MyStaffPrincipal;
 import universityWebApp.model.MyStudentPrincipal;
@@ -31,9 +33,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        String ip = getClientIP();
         if (loginAttemptService.isBlocked()) {
-            throw new RuntimeException("blocked");
+            throw new SessionAuthenticationException("Your IP Address has been blocked due to repeated failed login attempts. Contact an administrator to unblock your IP address.");
         }
 
         Student student = studentRepository.findStudentByUsername(username);
