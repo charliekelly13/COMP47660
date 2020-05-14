@@ -32,7 +32,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         String ip = getClientIP();
-        if (loginAttemptService.isBlocked(ip)) {
+        if (loginAttemptService.isBlocked()) {
             throw new RuntimeException("blocked");
         }
 
