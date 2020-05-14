@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import universityWebApp.filter.JWTAuthenticationFilter;
 import universityWebApp.filter.JWTAuthorizationFilter;
 import universityWebApp.filter.SecurityConstants;
@@ -20,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .and().csrf().ignoringAntMatchers("/login").and()
                 .requiresChannel().anyRequest().requiresSecure()
                 .and()
                 .authorizeRequests()
@@ -41,6 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), getApplicationContext()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
         ;
+    }
+
+    CookieCsrfTokenRepository getCsrfTokenRepository() {
+        CookieCsrfTokenRepository repo = new CookieCsrfTokenRepository();
+        return repo;
     }
 
     @Bean
