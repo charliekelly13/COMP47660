@@ -26,9 +26,7 @@ public class LoginAttemptService {
 
         if (blacklistOptional.isPresent()) {
             Blacklist blacklist = blacklistOptional.get();
-
-            blacklist.setAttempts(0);
-            blacklistRepository.save(blacklist);
+            blacklistRepository.delete(blacklist);
         }
     }
 

@@ -15,17 +15,8 @@
     <link href="https://fonts.googleapis.com/css2" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../css/main.css">
 </head>
-<div id="header">
-    <img src="../../../img/logo.png" width="200" alt="Logo"/>
-    <div align="right">
-        <a href="/">Home</a>
-        <a href="/modules">All Modules</a>
-        <a href="/stats">Stats</a>
-        <a href="/fee_payment">Fees</a>
-        <a href="/settings">Settings</a>
-        <a href="/logout">Log out</a>
-    </div>
-</div>
+
+<%@ include file="header_logged_in.jsp" %>
 
 <div align="center">
     <c:choose>

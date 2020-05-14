@@ -8,18 +8,10 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
-            <div id="header">
-            <img src="img/logo.png" width="200" alt="Logo"/>
-            <div align="right">
-            <a href="/">Home</a>
-            <a href="/modules">All Modules</a>
-            <a href="/stats">Stats</a>
-            <a href="/settings">Settings</a>
-            <a href="/logout">Log out</a>
-            </div>
-        </div>
-        <h1>An Error Occured</h1>
-        <p>Please try again</p>
+    <%@ include file="header_logged_in.jsp" %>
+
+    <h1>An Error Occured</h1>
+    <p>Please try again</p>
 
 </body>
 </html>

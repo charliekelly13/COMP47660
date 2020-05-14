@@ -10,17 +10,7 @@
 </head>
 
 <body>
-<div id="header">
-    <img src="img/logo.png" width="200" alt="Logo"/>
-    <div align="right">
-        <a href="/">Home</a>
-        <a href="/modules">All Modules</a>
-        <a href="/stats">Stats</a>
-        <a href="/fee_payment">Fees</a>
-        <a href="/settings">Settings</a>
-        <a href="/logout">Log out</a>
-    </div>
-</div>
+<%@ include file="header_logged_in.jsp" %>
 <p>Your payment was successful. <a href="/fee_payment">Click here</a> to view your current fees</p>
 </body>
 </html>

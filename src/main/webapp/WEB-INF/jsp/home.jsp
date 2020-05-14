@@ -9,17 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
-<div id="header">
-    <img src="img/logo.png" width="200" alt="Logo"/>
-    <div align="right">
-        <a href="/">Home</a>
-        <a href="/modules">All Modules</a>
-        <a href="/stats">Stats</a>
-        <a href="/fee_payment">Fees</a>
-        <a href="/settings">Settings</a>
-        <a href="/logout">Log out</a>
-    </div>
-</div>
+<%@ include file="header_logged_in.jsp" %>
 <div align="center">
     <h1>Home</h1>
     <p>Welcome ${student == null ? fn:escapeXml(staff.firstName) : fn:escapeXml(student.firstName)}!</p>
