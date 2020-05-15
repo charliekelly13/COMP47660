@@ -21,6 +21,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
 
+import static universityWebApp.Utilities.getIP;
+
 @Controller
 public class ModuleController {
 
@@ -109,7 +111,7 @@ public class ModuleController {
                 throw new StudentNotFoundException(userId);
             }
 
-            logger.info(String.format("Student %s viewed module %s", userId, moduleId));
+            logger.info(String.format("Student %s with ID %s viewed module %s", username, userId, moduleId));
 
             Grade grade = gradesRepository.findByModuleAndStudentID(moduleId, userId);
 
@@ -134,27 +136,31 @@ public class ModuleController {
 
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.GET)
 
-    public String editModule(@PathVariable("id") long moduleId, Model model, Authentication authentication) throws ModuleNotFoundException {
+    public String editModule(@PathVariable("id") long moduleId, Model model, Authentication authentication,
+    HttpServletRequest request) throws ModuleNotFoundException {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
         String userId = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
 
         if (role.equals("student")) {
-            logger.warn(String.format("Student Attempt made to access module %s edit page by student %s ", moduleId, userId));
+            logger.warn(String.format("Student %s with ID %s attempted to access edit page for module ID %s with IP address %s",
+                    username, userId, moduleId, getIP(request)));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
         Optional<Module> module = moduleRepository.findById(moduleId);
 
         if (!module.isPresent()) {
-            logger.info(String.format("Staff Attempt made to access non existing module %s edit page ", moduleId));
+            logger.info(String.format("Staff %s with ID %s attempted to access edit page of non-existing module with ID %s",
+                    username, userId, moduleId));
 
             throw new ModuleNotFoundException(moduleId);
         }
 
         model.addAttribute("module", module.get());
 
-        logger.info(String.format("Staff accessed their module's %s edit page", moduleId));
+        logger.info(String.format("Staff %s with ID %s accessed their module's %s edit page", username, userId, moduleId));
 
         return "edit_module";
     }
@@ -163,13 +169,15 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}/edit", method = RequestMethod.POST)
-    public String editModule(Authentication authentication, ModelMap model, Module module) {
+    public String editModule(Authentication authentication, ModelMap model, Module module, HttpServletRequest request) {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
         String userId = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
 
         if (role.equals("student")) {
-            logger.warn(String.format("Student %s attempted to edit module %s", module.getId(), userId));
+            logger.warn(String.format("Student %s with ID %s attempted to edit module %s from IP address %s",
+                    username, userId, module.getId(), getIP(request)));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -189,6 +197,7 @@ public class ModuleController {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
         String userId = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
 
         if (role.equals("staff")) {
             return "modules";
@@ -205,12 +214,14 @@ public class ModuleController {
         Student student = studentOptional.get();
 
         if (enrollmentRepository.findById(new EnrollmentId(moduleId,userId)).isPresent()) {
-            logger.info(String.format("Attempt made to enrol in module %s while already enrolled in it by student %s", moduleId, student.getId()));
+            logger.info(String.format("Student %s with ID %s attempted to enrol in module %s while already enrolled in it",
+                    username, userId, moduleId));
             throw new StudentAlreadyEnrolledException(student.getId(), moduleId);
         }
 
         if (student.getFeesOwed()!=0) {
-            logger.info(String.format("Attempt made to enrol in module %s while fees are owed by student %s", moduleId, student.getId()));
+            logger.info(String.format("Student %s with ID %s attempted to enrol in module %s while fees are owed",
+                    username, userId, moduleId));
             throw new FeesNotPaidException();
         }
 
@@ -221,14 +232,14 @@ public class ModuleController {
         long countEnrolledStudents = enrollmentRepository.findByModuleID(moduleId).size();
 
         if (countEnrolledStudents >= module.getMaximumStudents()) {
-            logger.info(String.format("Attempt made to enrol in module %s while it is full by student %s", moduleId, student.getId()));
-            throw new ModuleFullException(moduleId);
+            logger.info(String.format("Student %s with ID %s attempted to enrol in module %s while the module is full",
+                    username, userId, moduleId));throw new ModuleFullException(moduleId);
         }
 
         enrollmentRepository.save(enrollment);
 
         addModuleViewDetailsToModel(model, module);
-        logger.info(String.format("Student %s enrolled in module %s", student.getId(), moduleId));
+        logger.info(String.format("Student %s with ID %s successfully enrolled in module %s", username, userId, moduleId));
 
         model.addAttribute("status", "enrol");
 
@@ -242,6 +253,7 @@ public class ModuleController {
     public String unEnrol(Authentication authentication, @PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String userId = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
         String role = authorities.get(0).getAuthority();
 
         if (role.equals("staff")) {
@@ -252,7 +264,7 @@ public class ModuleController {
 
         enrollmentRepository.delete(enrollment);
 
-        logger.info(String.format("Student %s unenrolled from module %s", userId, moduleId));
+        logger.info(String.format("Student %s with ID %s successfully unenrolled in module %s", username, userId, moduleId));
 
         model.addAttribute("status", "unenrol");
 
@@ -278,14 +290,16 @@ public class ModuleController {
      */
     @RequestMapping(value = "modules/{id}/grade", method = RequestMethod.POST)
     public String setGrade(@PathVariable("id") long moduleId, Model model, @RequestParam String studentID,
-                           @RequestParam int grade, Authentication authentication) throws ModuleNotFoundException {
+                           @RequestParam int grade, Authentication authentication, HttpServletRequest request)
+            throws ModuleNotFoundException {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
-
+        String username = (String) authentication.getPrincipal();
         String userId = (String) authentication.getCredentials();
 
         if (role.equals("student")) {
-            logger.warn(String.format("Student %s attempted to edit grades for module %s", userId, moduleId));
+            logger.warn(String.format("Student %s with ID %s attempted to edit grades for module %s from IP address %s",
+                    username, userId, moduleId, getIP(request)));
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -296,12 +310,14 @@ public class ModuleController {
             if (gradesRepository.findById(new GradeId(moduleId, studentID)).isPresent()) {
                 gradesRepository.deleteById(new GradeId(moduleId, studentID));
             }
-            logger.info(String.format("Staff member %s added a grade to module %s for student %s", userId, moduleId, studentID));
+            logger.info(String.format("Staff member %s with ID %s added a grade to module %s for student ID %s",
+                    username, userId, moduleId, studentID));
 
             gradesRepository.save(new Grade(moduleId, studentID, grade));
             return "grade_confirmation";
         } else {
-            logger.warn(String.format("Staff Attempt made to Edit module %s, by non-coordinator Staff %s ", moduleId, userId));
+            logger.warn(String.format("Non-coordinator staff member %s with ID %s attempted to set grades for module %s for student ID %s from IP address %s",
+                    moduleId, username, userId, studentID, getIP(request)));
 
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED);
         }
@@ -398,17 +414,5 @@ public class ModuleController {
         }
 
         return gradeRange;
-    }
-
-    public String getIP(HttpServletRequest request) {
-        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")|| request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
-            try {
-                return InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                return null;
-            }
-        }
-
-        return request.getRemoteAddr();
     }
 }

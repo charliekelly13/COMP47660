@@ -1,24 +1,15 @@
 package universityWebApp.controller;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import universityWebApp.model.Staff;
 import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
-
-import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 public class StatsController {
@@ -28,13 +19,11 @@ public class StatsController {
     @Autowired
     StudentRepository studentRepository;
 
-    Logger logger = LoggerFactory.getLogger(StatsController.class);
-
     /**
      * This endpoint returns all distribution of user details
      */
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
-    public String getUserDistribtuion(HttpServletRequest request, Model model) {
+    public String getUserDistribtuion(Model model) {
         JSONObject staffGender = new JSONObject();
         staffGender.put("Male", 0);
         staffGender.put("Female", 0);
@@ -111,17 +100,4 @@ public class StatsController {
 
         return "stats";
     }
-
-    public String getIP(HttpServletRequest request) {
-        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")|| request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
-            try {
-                return InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                return null;
-            }
-        }
-
-        return request.getRemoteAddr();
-    }
-
 }

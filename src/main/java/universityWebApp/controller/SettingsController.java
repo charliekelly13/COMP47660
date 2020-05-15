@@ -55,6 +55,7 @@ public class SettingsController {
     @RequestMapping(value = "/settings/deactivate", method = RequestMethod.POST)
     public String deactivate(Authentication authentication, HttpServletRequest request) throws StudentNotFoundException, ServletException {
         String id = (String) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
 
         List<Long> enrolledModules = enrollmentRepository.findByStudentID(id);
 
@@ -63,24 +64,12 @@ public class SettingsController {
         }
 
         gradesRepository.deleteInBatch(gradesRepository.findByStudentID(id));
-        logger.info(String.format("Student %s deactivated", id));
+        logger.info(String.format("Student %s with ID %s deactivated", username, id));
 
         studentRepository.deleteById(id);
 
         request.logout();
 
         return "deactivated";
-    }
-
-    public String getIP(HttpServletRequest request) {
-        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1")|| request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
-            try {
-                return InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                return null;
-            }
-        }
-
-        return request.getRemoteAddr();
     }
 }

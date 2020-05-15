@@ -18,6 +18,8 @@ import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static universityWebApp.Utilities.getIP;
+
 @Controller
 public class RegistrationController {
 
@@ -50,10 +52,10 @@ public class RegistrationController {
                 student.setFeesOwed(3000);
                 student.setFeesTotal(3000);
                 studentRepository.save(student);
-                logger.info(String.format("student %s was registered", student.getId()));
+                logger.info(String.format("student %s with ID %s was registered", student.getUsername(), student.getId()));
                 return "register_confirmation";
             } else {
-                logger.warn(String.format("An attempt was made to register a user with id %s which is already taken by ip %s", student.getId(), getIP(request)));
+                logger.warn(String.format("An attempt was made to register a user with username %s which is already taken, by IP address %s", student.getUsername(), getIP(request)));
                 model.put("errorMessage", "Username Already Exists");
                 return "register";
             }
@@ -63,15 +65,4 @@ public class RegistrationController {
         }
     }
 
-    public String getIP(HttpServletRequest request) {
-        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1") || request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
-            try {
-                return InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                return null;
-            }
-        }
-
-        return request.getRemoteAddr();
-    }
 }

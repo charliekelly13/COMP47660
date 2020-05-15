@@ -14,12 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import universityWebApp.controller.FeesController;
-import universityWebApp.model.Student;
-import universityWebApp.model.User;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
-import universityWebApp.service.LoginAttemptService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,12 +23,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static universityWebApp.Utilities.getIP;
 import static universityWebApp.filter.SecurityConstants.*;
 
 
@@ -115,24 +110,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Cookie cookie = new Cookie("JWT", token);
 
         // expires in 1 day
-        cookie.setMaxAge(1 * 24 * 60 * 60);
+        cookie.setMaxAge(EXPIRATION_TIME);
 
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
 
         response.addCookie(cookie);
-    }
-
-    public String getIP(HttpServletRequest request) {
-        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1") || request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
-            try {
-                return InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                return null;
-            }
-        }
-
-        return request.getRemoteAddr();
     }
 }

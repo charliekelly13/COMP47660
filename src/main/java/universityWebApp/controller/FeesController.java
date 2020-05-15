@@ -18,8 +18,11 @@ import universityWebApp.exception.StudentNotFoundException;
 import universityWebApp.model.Student;
 import universityWebApp.repository.StudentRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+
+import static universityWebApp.Utilities.getIP;
 
 
 @Controller
@@ -31,12 +34,11 @@ public class FeesController {
     Logger logger = LoggerFactory.getLogger(FeesController.class);
 
     @RequestMapping(value = "/fee_payment", method = RequestMethod.GET)
-    public String viewFeesPage(Model model, Authentication authentication) throws StudentNotFoundException {
+    public String viewFeesPage(Model model, Authentication authentication, HttpServletRequest request) throws StudentNotFoundException {
         String userId = (String) authentication.getCredentials();
+        Student student = getStudentFromAuth(authentication, request);
 
-        Student student = getStudentFromAuth(authentication);
-
-        logger.info(String.format("Student %s accessed fee page ", userId));
+        logger.info(String.format("Student %s with ID %s accessed fee page ", student.getUsername(), student.getId()));
         model.addAttribute("feesTotal", student.getFeesTotal());
         model.addAttribute("feesOwed", student.getFeesOwed());
 
@@ -44,27 +46,31 @@ public class FeesController {
     }
 
     @RequestMapping(value = "/fee_payment", method = RequestMethod.POST)
-    public String payFees(ModelMap model, @RequestParam double feePayment, Authentication authentication)
+    public String payFees(ModelMap model, @RequestParam double feePayment, Authentication authentication, HttpServletRequest request)
             throws StudentNotFoundException {
-        Student student = getStudentFromAuth(authentication);
+        Student student = getStudentFromAuth(authentication, request);
 
         model.addAttribute("feesTotal", student.getFeesTotal());
         model.addAttribute("feesOwed", student.getFeesOwed());
 
         if (feePayment < 0) {
-            logger.info("attempt made to pay negative amount by student " +student.getId());
+            logger.info(String.format("Student %s with ID %s attempted to pay a negative amount of fees.",
+                    student.getUsername(), student.getId()));
             model.put("errorMessage", "Can't make negative or zero payments");
             return "fee_payment";
         } else if (feePayment > student.getFeesOwed()) {
-            logger.info("attempt made to pay more than owed by student " +student.getId());
+            logger.info(String.format("Student %s with ID %s attempted to pay more fees than owed.",
+                    student.getUsername(), student.getId()));
             model.put("errorMessage", "Amount paid greater than fees owed");
             return "fee_payment";
         } else if (student.getFeesOwed() == 0) {
-            logger.info("attempt made to pay while no fees are outstanding by student" +student.getId());
+            logger.info(String.format("Student %s with ID %s attempted to pay fees while no fees were outstanding.",
+                    student.getUsername(), student.getId()));
             model.put("errorMessage", "You have already paid off your fees");
             return "fee_payment";
         } else {
-            logger.info("attempt made to pay negative amount by student " +student.getId());
+            logger.info(String.format("Student %s with ID %s successfully paid fees amounting to %f. Their new balance is %f",
+                    student.getUsername(), student.getId(), feePayment, student.getFeesOwed() - feePayment));
             student.setFeesOwed(student.getFeesOwed() - feePayment);
 
             studentRepository.save(student);
@@ -72,12 +78,14 @@ public class FeesController {
         }
     }
 
-    public Student getStudentFromAuth(Authentication authentication) throws StudentNotFoundException, ForbiddenException {
+    public Student getStudentFromAuth(Authentication authentication, HttpServletRequest request) throws StudentNotFoundException, ForbiddenException {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
         String userId = (String) authentication.getCredentials();
 
         if (role.equals("staff")) {
+            String username = (String) authentication.getPrincipal();
+            logger.warn(String.format("Staff member with ID %s and IP address %s tried to access fee page", userId, getIP(request)));
             throw new ForbiddenException();
         }
 
