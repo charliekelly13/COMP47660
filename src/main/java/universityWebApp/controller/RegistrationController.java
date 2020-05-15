@@ -39,7 +39,7 @@ public class RegistrationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String postRegisterPage(HttpServletRequest request, ModelMap model, Student student) {
-        String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,40})";
+        String passwordPattern = "((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,64})";
 
         Pattern pattern = Pattern.compile(passwordPattern);
         Matcher matcher = pattern.matcher(student.getPassword());
