@@ -42,7 +42,7 @@
             </c:when>
             <c:otherwise>
                 <c:choose>
-                    <c:when test="${student.feesPaid}">
+                    <c:when test="${feesPaid}">
                         <button type="submit">${status}</button>
                     </c:when>
                     <c:otherwise>
