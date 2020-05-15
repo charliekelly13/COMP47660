@@ -102,7 +102,7 @@ public class ModuleController {
 
             if (studentOptional.isPresent()) {
                 Student student = studentOptional.get();
-                boolean feesPaid = (student.getFeesTotal() - student.getFeesOwed()) == 0.0;
+                boolean feesPaid = student.getFeesOwed() == 0.0;
 
                 model.addAttribute("feesPaid", feesPaid);
             } else {
