@@ -59,6 +59,11 @@
 
             password_strength.innerHTML = strength;
             password_strength.style.color = color;
+
+
+            let submit_button = document.getElementById("reg_submit_button");
+
+            submit_button.disabled = strengthValue !== 5;
         }
 
     </script>
@@ -290,7 +295,7 @@
 
 
         Note: passwords must contain a uppercase letter, lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters.<br>
-        <input type="submit" value="Submit"/><br>
+        <input id="reg_submit_button" type="submit" value="Submit" disabled/><br>
     </form>
     Already have an account? <a href="/login">Login</a>
 </body>
