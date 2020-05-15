@@ -77,7 +77,8 @@ public class ModuleController {
      * This endpoint gets a specific module's details if it exists
      */
     @RequestMapping(value = "modules/{id}", method = RequestMethod.GET)
-    public String getModule(Authentication authentication, @PathVariable("id") long moduleId, Model model) throws ModuleNotFoundException {
+    public String getModule(Authentication authentication, @PathVariable("id") long moduleId, Model model)
+            throws ModuleNotFoundException, StudentNotFoundException {
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         String role = authorities.get(0).getAuthority();
         String userId = (String) authentication.getCredentials();
@@ -95,6 +96,17 @@ public class ModuleController {
                 model.addAttribute("status", "unenrol");
             } else {
                 model.addAttribute("status", "enrol");
+            }
+
+            Optional<Student> studentOptional = studentRepository.findById(userId);
+
+            if (studentOptional.isPresent()) {
+                Student student = studentOptional.get();
+                boolean feesPaid = student.getFeesOwed() == 0.0;
+
+                model.addAttribute("feesPaid", feesPaid);
+            } else {
+                throw new StudentNotFoundException(userId);
             }
 
             logger.info(String.format("Student %s viewed module %s", userId, moduleId));
