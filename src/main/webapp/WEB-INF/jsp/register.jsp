@@ -25,6 +25,11 @@
             else
                 helpMessage = "Your password must be at least 8 characters long";
 
+            if (password.length > 64) {
+                strengthValue -= 1;
+                helpMessage = "Your password must be less than 64 characters long";
+            }
+
             if (password.match(/(?=.*[0-9])/))
                 strengthValue += 1;
             else
