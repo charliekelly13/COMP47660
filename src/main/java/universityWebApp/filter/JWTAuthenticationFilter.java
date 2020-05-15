@@ -3,6 +3,8 @@ package universityWebApp.filter;
 
 
 import com.auth0.jwt.JWT;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import universityWebApp.controller.FeesController;
 import universityWebApp.model.Student;
 import universityWebApp.model.User;
 import universityWebApp.repository.StaffRepository;
@@ -23,6 +26,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -39,7 +44,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Autowired
     private StaffRepository staffRepository;
 
-
+    Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter .class);
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx) {
         this.authenticationManager = authenticationManager;
         this.studentRepository = ctx.getBean(StudentRepository.class);
@@ -74,7 +79,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             role = "staff";
             id = staffRepository.findStaffByUsername(username).getId();
         }
-
+        logger.info(String.format("Successful login to %s %s by IP %s", role, username, getIP(request)));
         String token = JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -96,7 +101,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         } else {
             errorType = "invalid";
         }
-
+        String[] username = request.getParameterMap().get("username");
+        logger.warn(String.format("Unsuccesful login to username %s by IP %s with error %s", username[0], getIP(request),errorType));
         new DefaultRedirectStrategy().sendRedirect(request, response, "/login?error=" + errorType);
     }
 
@@ -115,4 +121,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // add cookie to response
         response.addCookie(cookie);
     }
+
+
+    public String getIP(HttpServletRequest request) {
+        if (request.getRemoteAddr().equalsIgnoreCase("0:0:0:0:0:0:0:1") || request.getRemoteAddr().equalsIgnoreCase("127.0.0.1")) {
+            try {
+                return InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                return null;
+            }
+        }
+
+        return request.getRemoteAddr();
+    }
+
 }
