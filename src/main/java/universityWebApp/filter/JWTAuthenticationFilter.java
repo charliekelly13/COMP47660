@@ -106,7 +106,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
 
         String[] username = request.getParameterMap().get("username");
-        logger.warn(String.format("Unsuccesful login to username %s by IP %s with error %s", username[0], getIP(request),errorType));
+        logger.warn(String.format("Unsuccessful login to username %s by IP %s with error: %s", username[0], getIP(request),errorType));
 
         new DefaultRedirectStrategy().sendRedirect(request, response, "/login?error=" + errorType);
     }
