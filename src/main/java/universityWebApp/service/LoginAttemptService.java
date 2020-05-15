@@ -28,7 +28,7 @@ public class LoginAttemptService {
 
     public void loginSucceeded() {
         Optional<Blacklist> blacklistOptional = blacklistRepository.findById(getIP());
-        logger.info("Successful login IP " + getIP());
+        logger.info("Successful login by IP " + getIP());
         if (blacklistOptional.isPresent()) {
             Blacklist blacklist = blacklistOptional.get();
             blacklistRepository.delete(blacklist);
