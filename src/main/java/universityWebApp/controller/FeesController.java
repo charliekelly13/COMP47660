@@ -28,7 +28,7 @@ public class FeesController {
     @Autowired
     StudentRepository studentRepository;
 
-    Logger logger = LoggerFactory.getLogger(HomeController.class);
+    Logger logger = LoggerFactory.getLogger(FeesController.class);
 
     @RequestMapping(value = "/fee_payment", method = RequestMethod.GET)
     public String viewFeesPage(Model model, Authentication authentication) throws StudentNotFoundException {
@@ -51,16 +51,20 @@ public class FeesController {
         model.addAttribute("feesTotal", student.getFeesTotal());
         model.addAttribute("feesOwed", student.getFeesOwed());
 
-        if (feePayment <= 0) {
+        if (feePayment < 0) {
+            logger.info("attempt made to pay negative amount by student " +student.getId());
             model.put("errorMessage", "Can't make negative or zero payments");
             return "fee_payment";
         } else if (feePayment > student.getFeesOwed()) {
+            logger.info("attempt made to pay more than owed by student " +student.getId());
             model.put("errorMessage", "Amount paid greater than fees owed");
             return "fee_payment";
         } else if (student.getFeesOwed() == 0) {
+            logger.info("attempt made to pay while no fees are outstanding by student" +student.getId());
             model.put("errorMessage", "You have already paid off your fees");
             return "fee_payment";
         } else {
+            logger.info("attempt made to pay negative amount by student " +student.getId());
             student.setFeesOwed(student.getFeesOwed() - feePayment);
 
             studentRepository.save(student);
