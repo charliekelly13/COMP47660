@@ -18,6 +18,8 @@ import java.util.Optional;
 @Service
 public class LoginAttemptService {
 
+    private static final int MAX_NUMBER_OF_ATTEMPTS = 3;
+
     @Autowired
     BlacklistRepository blacklistRepository;
 
@@ -28,7 +30,6 @@ public class LoginAttemptService {
 
     public void loginSucceeded() {
         Optional<Blacklist> blacklistOptional = blacklistRepository.findById(getIP());
-        logger.info("Successful login by IP " + getIP());
         if (blacklistOptional.isPresent()) {
             Blacklist blacklist = blacklistOptional.get();
             blacklistRepository.delete(blacklist);
@@ -37,7 +38,6 @@ public class LoginAttemptService {
 
     public void loginFailed() {
         Optional<Blacklist> blacklistOptional = blacklistRepository.findById(getIP());
-        logger.warn("Unsuccessful login attempt by IP " + getIP());
         if (blacklistOptional.isPresent()) {
             Blacklist blacklist = blacklistOptional.get();
             blacklist.setAttempts(blacklist.getAttempts() + 1);
@@ -50,12 +50,7 @@ public class LoginAttemptService {
     public boolean isBlocked() {
         try {
             Blacklist black = blacklistRepository.findById(getIP()).orElseThrow(IPNotFoundException::new);
-            if(black.getAttempts() >=3){
-                logger.warn("Unsuccessful login attempt by IP which is blacklisted " + getIP());
-                return true;
-            } else {
-                return false;
-            }
+            return black.getAttempts() >= MAX_NUMBER_OF_ATTEMPTS;
         } catch (IPNotFoundException e) {
             return false;
         }
@@ -72,5 +67,4 @@ public class LoginAttemptService {
 
         return request.getRemoteAddr();
     }
-
 }
