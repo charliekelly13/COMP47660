@@ -16,22 +16,34 @@
                 return;
             }
 
+            let helpMessage = "";
+
             let strengthValue = 0;
 
             if (password.length >= 8)
                 strengthValue += 1;
+            else
+                helpMessage = "Your password must be at least 8 characters long";
 
             if (password.match(/(?=.*[0-9])/))
                 strengthValue += 1;
+            else
+                helpMessage = "Your password must contain at least 1 number";
 
             if (password.match(/(?=.*[^A-Za-z0-9])/))
                 strengthValue += 1;
+            else
+                helpMessage = "Your password must contain at least 1 special character (e.g. ?, !, #, ~, /, £, £, @, etc)";
 
             if (password.match(/(?=.*[a-z])/))
                 strengthValue += 1;
+            else
+                helpMessage = "Your password must contain at least 1 lowercase letter";
 
             if (password.match(/(?=.*[A-Z])/))
                 strengthValue += 1;
+            else
+                helpMessage = "Your password must contain at least 1 uppercase letter";
 
             //Display status.
             var color = "";
@@ -62,8 +74,10 @@
 
 
             let submit_button = document.getElementById("reg_submit_button");
-
             submit_button.disabled = strengthValue !== 5;
+
+            let password_message = document.getElementById("password_message");
+            password_message.innerHTML = helpMessage;
         }
 
     </script>
@@ -291,7 +305,9 @@
         Username: <input type="text" name="username" required/><br>
         Password: <input type="password" name="password" onkeyup="updatePasswordStrength(this.value)" required/><br>
 
-        Current password strength: <span id="password_strength"></span><br/>
+        Current password strength: <span id="password_strength"></span>.<br/>
+
+        <span id="password_message"></span><br/>
 
 
         Note: passwords must contain a uppercase letter, lowercase letter, number, special character (.,?!#@ etc) and contain at least eight characters.<br>
