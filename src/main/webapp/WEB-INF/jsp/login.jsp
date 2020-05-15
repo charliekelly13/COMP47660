@@ -23,7 +23,7 @@
 		<font color="red">${errorMessage}</font>
 		<form method="post">
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-			Name:  <input type="text" name="username" /><br>
+			Username:  <input type="text" name="username" /><br>
 			Password: <input type="password" name="password" /> <br>
 			<input type="submit"value="Submit" /><br>
 		</form>

@@ -1,7 +1,6 @@
 package universityWebApp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,8 +13,6 @@ import universityWebApp.model.Student;
 import universityWebApp.repository.StaffRepository;
 import universityWebApp.repository.StudentRepository;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -27,9 +24,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private LoginAttemptService loginAttemptService;
-
-    @Autowired
-    private HttpServletRequest request;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -47,13 +41,5 @@ public class MyUserDetailsService implements UserDetailsService {
         if (student != null) return new MyStudentPrincipal(student);
 
         return new MyStaffPrincipal(staff);
-    }
-
-    private String getClientIP() {
-        String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null){
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
     }
 }
